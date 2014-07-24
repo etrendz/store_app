@@ -1,0 +1,51 @@
+
+    <script type="text/javascript">
+$(document).ready(function(){  
+      function generateBarcode(){
+		var value = $("#bcode").val();
+		var bcode_qty = $("#bcode_qty").val();
+			
+		for(i=0; i < bcode_qty; i++){
+			$("#barcodeTarget").html("").show().barcode(value, "code39");
+			$("#ediv").append("<div class='eblock' style='float:left'>"+$('#barcodeTarget').html()+"</div>");
+			$("#canvasTarget").remove();
+		}
+		$("#barcodeTarget").remove();
+		$(".form-horizontal").remove();
+		$('#print_barcode').click();
+      }
+	  
+
+</script>
+
+	<style>
+	.eblock {
+	float:left;
+	padding-top:20px;
+	padding-left:40px;
+	}
+	</style>
+  
+
+								<form class="form-horizontal" role="form">
+									<hr />
+									<div class="row">
+										<div class="col-sm-6">
+														
+											<input class="input-sm" type="text" id="bcode" />
+											<input class="input-sm" type="text" id="bcode_qty" />
+										</div>
+										
+										<button type="button"  class="btn btn-info btn-sm" onClick="generateBarcode();"/><i class="icon-ok bigger-110"> </i>Print</button>
+									</div>
+
+								</form>
+	<div class='barcode_page' style="float:left;">
+		<div style="float:left;">
+			<div id="barcodeTarget" class="barcodeTarget"></div>
+				<canvas id="canvasTarget"></canvas> 
+				<div id='ediv' style="float:left;"></div>
+				<button id="print_barcode" class="btn hidden" type="button" onclick = "print_barcode()">Print</button>
+			</div>
+		</div>
+	</div>

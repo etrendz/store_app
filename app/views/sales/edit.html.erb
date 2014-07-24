@@ -1,0 +1,111 @@
+<h1>Editing sale</h1>
+<style>
+#etable_header {
+border:#ccc 1px solid;
+padding: 3px 2px;
+text-align: center;
+background: #438EB9;
+color:#fff;
+}
+#etable_header1 {
+border:#ccc 1px solid;
+padding: 3px 2px;
+color:#000;
+text-align:center;
+}
+#etable_header_plain {
+text-align: center;
+padding: 3px 2px;
+background: #438EB9;
+color:#fff;
+}
+#sale_price{
+padding: 3px 2px;
+background: #438EB9;
+color:#fff;
+}
+#total_sale_price{
+text-align: right;
+padding: 3px 2px;
+background: #438EB9;
+color:#fff;
+}
+#total_qty{
+text-align: right;
+padding: 3px 2px;
+background: #438EB9;
+color:#fff;
+}
+.dactions {
+	position: fixed;
+	width:100px;
+	height:40px;
+	left:228px;
+	top:630px;
+}
+</style>
+
+<%= form_for(@sale) do |f| %>
+  <% if @sale.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sale.errors.count, "error") %> prohibited this sale from being saved:</h2>
+
+      <ul>
+      <% @sale.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field" style='float:left'>
+    <%= f.label :customer_id %><br/>
+    <%= f.collection_select :customer_id, Customer.all, :id, :name %>
+  </div>
+  <div class="field" style='float:left'>
+    <%= f.label :sale_date %><br/>
+    <%= f.text_field :sale_date, value: Date.today %>
+  </div>
+
+  <div class="field" style='float:left'>
+    <%= f.label :remark %><br/>
+    <%= f.text_field :remark %>
+  </div>
+  <div class="field" style='float:left; margin-left:20px'>
+    <%= f.label :paid, "Payment" %>
+	<div><%= f.radio_button :paid, 1, :checked => "checked" %>Cash </div>
+	 <div><%= f.radio_button :paid, 0 %>Credit </div>
+  </div>
+  <div id="content_1" class="content_1" style= "position:fixed; left:227px;top:350px;width:760px"> 
+    <div class="result_sale_product">
+		<div id='etable_header' class="col-xs-2"><span>Product Code</span></div>
+		<div id='etable_header' class="col-xs-2"><span>Product Name</span></div>
+		<div id='etable_header' class="col-xs-1"><span>Qty</span></div>
+		<div id='etable_header' class="col-xs-2"><span>Price</span></div>
+		<div id='etable_header' class="col-xs-2"><span>Sum</span></div>
+		<div id='etable_header' class="col-xs-1"><span>Delete</span></div>
+	</div>
+	<% @sale.sale_products.each do |sp| %>
+	 <div style='clear:both'>	
+		<div id='etable_header1' class="col-xs-2"><span><%= sp.product.code %></span></div>
+		<div id='etable_header1' class="col-xs-2"><span><%= sp.product.name %></span></div>
+		<div id='etable_header1' class="col-xs-1"><span><%= sp.qty %></span></div>
+		<div id='etable_header1' class="col-xs-2"><span><%= sp.price / sp.qty %></span></div>
+		<div id='etable_header1' class="col-xs-2"><span><%= sp.price %></span></div>
+		<div id='etable_header1' class="col-xs-1"><span><%= link_to 'Edit', edit_sale_product_path(sp) %></span></div>
+	 </div>
+	<% end %>
+	<div class="sum_sales_product" style="position:fixed; left:228px;top:550px;width:760px"> <br/>
+		<div id='etable_header_plain' class="col-xs-2"><span>Total</span></div>
+		<div id='etable_header_plain' class="col-xs-2"><span>&nbsp;</span></div>
+		<div id='total_qty' class="col-xs-1"><%= @sale.sale_products.map(&:qty).sum %></div>
+		<div id='sale_price' class="col-xs-2">&nbsp;</div>
+		<div id='total_sale_price' class="col-xs-2">Rs. <%= @sale.sale_products.map(&:price).sum %></div>
+		<div id='etable_header_plain' class="col-xs-1"><span>&nbsp;</span></div>
+	</div>
+  </div>
+  
+	<div class='dactions'>
+		<%= f.submit :class => 'btn btn-pink btn-sm' %>
+	</div>
+<% end %>

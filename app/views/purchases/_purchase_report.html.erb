@@ -1,0 +1,59 @@
+<br/>
+	
+	<h3>Purchase Report From <%= @from.strftime('%d %b, %Y') %> - <%= @to.strftime('%d %b, %Y') %></h3>
+<h4>Print <%= link_to 'Report', {:controller => 'purchases', :action => 'purchase_report_pdf', :format => 'pdf', :from => @from, :to => @to} %></h4>
+<table class='table' style="width:60%">
+  <tr style = 'background:#438EB9;color:#ffffff'>
+    <th>Date</th>
+    <th>Supplier</th>
+    <th>Invoice</th>
+    <th>Paid</th>
+    <th>Product</th>
+    <th>Qty</th>
+    <th style="text-align:right">Price</th>
+    <th>Action</th>
+  </tr>
+
+  <% 
+  @purchases.each do |purchase| 
+  total_sum = 0 
+  %>
+  <tr class="success">
+    <td><%= purchase.purchase_date.strftime('%d %b') %></td>
+    <td><%= purchase.supplier.name if purchase.supplier %></td>
+    <td><%= purchase.invoice %></td>
+    <td><%= purchase.paid ? "Yes" : "No" %></td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td><%= link_to 'Show', purchase %></td>
+  </tr>
+	
+	<% purchase.purchase_products.each do |pp| %>
+	<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td><%= pp.product.name %></td>
+    <td><%= pp.qty %></td>
+	<% sum = pp.cprice.round(2) * pp.qty
+		total_sum += sum %>
+    <td style="text-align:right"><%= sum.round(2) %></td>
+	</tr>
+	<% end %>
+<tr style="font-weight:bold;color:#431E29">
+<td>Total</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<%@total_purchase += total_sum %>
+<td style="text-align:right"><%= total_sum.round(2) %></td>
+</tr>
+<% end %>
+</table>
+	<h4 style='position:fixed;top:107px;right:50px;font-weight:bold;background:#438EB9;padding:5px 10px;color:#fff;border:5px solid #6fb3e0 ;'>Total Purchase: Rs. <%= @total_purchase.round(2) %> </h4>
+
+<br />

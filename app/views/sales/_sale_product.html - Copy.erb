@@ -1,0 +1,28 @@
+<style>
+.visible_ehti {
+}
+.hidden_ehti {
+	display:none;
+}
+</style>
+<div class="estyleb" style="clear:both; padding:0px;margin-top:0px;">
+
+ <%= fields_for "sale[new_sale_product_attributes[]]",sale_product_object do |sale_product| %>  
+ <fieldset style="border: 0px; margin:0px; padding:0px;">
+ 
+	<div class="col-xs-5"><span><%= @product.name %></span></div>
+	<div class="col-xs-1" id='visible_qty'><%= @qty %></div>
+  <div id='edittable' class='hidden_ehti'>
+	<%= sale_product.hidden_field :product_id,:readonly => true %>
+	<%= sale_product.hidden_field :qty, :class => "col-xs-1",:readonly => true%>
+	<%= sale_product.text_field :price, :class => "col-xs-2" %>
+	&nbsp;<%= link_to image_tag("save.png", :class => "img_save_icon"), '#', class: "save_sale_field" %>
+ </div>
+ <div id='non_edittable' class='visible_ehti'>
+ <!--	<div class="col-xs-2"><span><%= @product.code %></span></div>  -->
+	<div class="col-xs-2" id='visible_sum_price'><%= @price %></div>
+	<div class="col-xs-2"> &nbsp;<span><%= link_to image_tag("edit-icon.png", :class => "img_del_icon"), '#', class: "edit_sale_field" %>&nbsp;<%= link_to image_tag("delete-icon.png", :class => "img_del_icon"), '#', class: "remove_sale_field" %></span> </div>
+	</div>
+  </fieldset>
+ <% end %>
+</div>

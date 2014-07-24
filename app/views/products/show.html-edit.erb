@@ -1,0 +1,63 @@
+<p id="notice"><%= notice %></p>
+<div class='row'>
+<p class='col-sm-3'>
+  <b>Name:</b>
+  <%= @product.name %>
+</p>
+
+<p class='col-sm-3'>
+  <b>Code:</b>
+  <%= @product.code %>
+</p>
+
+<p class='col-sm-3'>
+  <b>Category:</b>
+  <%= @product.category_id %>
+</p>
+
+<p class='col-sm-3'>
+  <b>Unit:</b>
+  <%= @product.unit %>
+</p>
+
+<p class='col-sm-3'>
+  <b>Available Qty:</b>
+  <%= @product.qty %>
+</p>
+
+<p class='col-sm-3'>
+  <b>Cost Price:</b>
+  <%  if @product.qty > 0 %>
+  <%= @product.stock_products.last.cprice %>
+  <% else %>
+  Not Available
+  <% end %>
+</p>
+<p class='col-sm-3'>
+  <b>Latest Sales Price:</b>
+  <%  if @product.qty > 0 %>
+  <%= @product.stock_products.last.price %>
+  <% else %>
+  Not Available
+  <% end %>
+</p>
+
+</div>
+<h3> Purchase and Sales Details</h3>
+<table class='table'>
+  <tr>
+	<td>Date</td>
+	<td>Purchased</td>
+	<td>Sold</td>
+	<td>Available</td>
+  </r>
+  
+  <% @product.purchase_products.each do |pp| %>
+  <tr>
+	<td>Date</td>
+	<td><%= pp.qty %></td>
+	<td><%#= @product.sale_products.sum(:qty) %></td>
+	<td><%#= @product.purchase_products.sum(:qty) - @product.sale_products.sum(:qty) %></td>
+  </tr>
+  <% end  %>
+</table>

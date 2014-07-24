@@ -1,0 +1,25 @@
+<h2>Payables</h2>
+
+<table class='table' style="width:60%">
+  <tr>
+    <th>Invoice</th>
+    <th>Supplier</th>
+    <th>Purchase date</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @purchases.each do |purchase| %>
+  <tr>
+    <td><%= purchase.invoice %></td>
+    <td><%= purchase.supplier.name %></td>
+    <td><%= purchase.purchase_date.strftime('%d %b') %></td>
+    <td><%= link_to 'Show', purchase %></td>
+<!--    <td><%= link_to 'Edit', edit_purchase_path(purchase) %></td>
+    <td><%= link_to 'Destroy', purchase, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+-->  </tr>
+<% end %>
+</table>
+
+<br />

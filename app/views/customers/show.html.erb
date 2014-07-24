@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @customer.name %>
+</p>
+
+<p>
+  <b>Mobile:</b>
+  <%= @customer.mobile %>
+</p>
+<table class='table table-bordered'>
+<tr>
+	<td>Sale Date</td>
+	<td>Amount </td>
+</tr>
+<tr>
+<% @customer.sales.each do |sale| %>
+<tr>
+	<td><%=sale.sale_date%></td>
+	<td><%=sale.sale_amount %>
+</tr>
+<% end %>
+</table>
+<%= link_to 'Edit', edit_customer_path(@customer) %> |
+<%= link_to 'Back', customers_path %>

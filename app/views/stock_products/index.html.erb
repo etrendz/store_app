@@ -1,0 +1,29 @@
+<h1>Listing stock_products</h1>
+
+<table>
+  <tr>
+    <th>Product</th>
+    <th>Purchase Product</th>
+    <th>Sale Product</th>
+    <th>Price</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @stock_products.each do |stock_product| %>
+  <tr>
+    <td><%= stock_product.product_id %></td>
+    <td><%= stock_product.purchase_product_id %></td>
+    <td><%= stock_product.sale_product_id %></td>
+    <td><%= stock_product.price %></td>
+    <td><%= link_to 'Show', stock_product %></td>
+    <td><%= link_to 'Edit', edit_stock_product_path(stock_product) %></td>
+    <td><%= link_to 'Destroy', stock_product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Stock product', new_stock_product_path %>

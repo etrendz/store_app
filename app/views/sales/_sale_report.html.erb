@@ -1,0 +1,54 @@
+<br/>
+	
+	<h3>Sale Report From <%= @from.strftime('%d %b, %Y') %> - <%= @to.strftime('%d %b, %Y') %></h3>
+<h4>Print </h4>
+<table class='table' style="width:60%">
+  <tr style = 'background:#438EB9;color:#ffffff'>
+    <th>Date</th>
+    <th>Customer</th>
+    <th>Remark</th>
+    <th>Paid</th>
+    <th>Product</th>
+    <th>Qty</th>
+    <th style="text-align:right">Price</th>
+    <th>Action</th>
+  </tr>
+
+<% @sales.each do |sale| %>
+  <tr class="success">
+    <td><%= sale.sale_date.strftime('%d %b') %></td>
+    <td><%= sale.customer.name if sale.customer %></td>
+    <td><%= sale.remark %></td>
+    <td><%= sale.paid ? "Yes" : "No" %></td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td><%= link_to 'Show', sale %></td>
+  </tr>
+	
+	<% sale.sale_products.each do |pp| %>
+	<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td><%= pp.product.name %></td>
+    <td><%= pp.qty %></td>
+    <td style="text-align:right"><%= pp.price %></td>
+	</tr>
+	<% end %>
+<tr style=";font-weight:bold;color:#330088">
+<td>Total</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<%@total_sale += sale.sale_products.sum(:price) %>
+<td style="text-align:right;font-weight: bold;"><%= sale.sale_products.sum(:price) %></td>
+</tr>
+<% end %>
+</table>
+
+	<h4 style='position:fixed;top:107px;right:50px;font-weight:bold;background:#438EB9;padding:5px 10px;color:#fff;border:5px solid #6fb3e0 ;'>Total Sales: Rs. <%= @total_sale.round(2) if @total_sale %> </h4>
+<br />

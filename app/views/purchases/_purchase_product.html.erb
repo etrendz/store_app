@@ -1,0 +1,20 @@
+<style>
+.estyleb .col-xs-2 {
+padding: 3px 2px;
+}
+.estyleb .col-xs-1 {
+padding: 3px 2px;
+text-align: center;
+}
+</style>
+<div class="estyleb" style="clear:both; padding:0px;margin-top:0px;">
+ <%= fields_for "purchase[new_purchase_product_attributes[]]",purchase_product_object do |purchase_product| %>  
+ <fieldset style="border: 0px; margin:0px; padding:0px;">
+	<%= purchase_product.hidden_field :product_id %>
+    <%= purchase_product.hidden_field :qty%>
+    <%= purchase_product.hidden_field :cprice %>
+    <%= purchase_product.hidden_field :price %>
+	<div class="col-xs-2"><span><%= @product.code %></span></div><div class="col-xs-2"><span><%= @product.name %></span></div><div class="col-xs-1"><span><%= @qty %></span></div><div class="col-xs-2"><span><%= @cprice %></span></div><div class="col-xs-2"><span><%= @cprice.to_f * @qty.to_i %></span></div><div class="col-xs-1"><span><%= link_to image_tag("delete-icon.png", :class => "img_del_icon"), '#', class: "remove_ext_field" %></span></div>
+  </fieldset>
+ <% end %>
+</div>

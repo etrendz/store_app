@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  stock_product_id: 1
+  product_id: 1
+  purchase_product_id: 1
+  sale_product_id: 1
+  price: 1.5
+  cprice: 1.5
+
+two:
+  stock_product_id: 1
+  product_id: 1
+  purchase_product_id: 1
+  sale_product_id: 1
+  price: 1.5
+  cprice: 1.5

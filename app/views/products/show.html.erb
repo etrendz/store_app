@@ -1,0 +1,109 @@
+
+<p id="notice"><%= notice %></p>
+
+
+
+<div class='row'>
+	<div class="profile-user-info profile-user-info-striped">
+		<div class="profile-info-row">
+			<div class="profile-info-name"> Name </div>
+
+			<div class="profile-info-value">
+				<span class="editable" id="username"><%= @product.name %></span>
+			</div>
+		</div>
+
+		<div class="profile-info-row">
+			<div class="profile-info-name"> Barcode </div>
+
+			<div class="profile-info-value">
+				<span class="editable" id="city"><%= @product.code %></span>
+			</div>
+		</div>
+
+		<div class="profile-info-row">
+			<div class="profile-info-name"> Category </div>
+
+			<div class="profile-info-value">
+				<span class="editable" id="age"><%= @product.category.name %></span>
+			</div>
+		</div>
+
+		<div class="profile-info-row">
+			<div class="profile-info-name"> Unit </div>
+
+			<div class="profile-info-value">
+				<span class="editable" id="login"><%= @product.unit %></span>
+			</div>
+		</div>
+
+		<div class="profile-info-row">
+			<div class="profile-info-name"> Available Qty</div>
+
+			<div class="profile-info-value">
+				<span class="editable" id="about"><%= @product.qty %></span>
+			</div>
+		</div>
+		
+		<div class="profile-info-row">
+			<div class="profile-info-name"> Latest Cost Price </div>
+
+			<div class="profile-info-value">
+				<span class="editable" id="signup">
+				  <%  if @product.qty > 0 %>
+					<%= @product.stock_products.last.cprice %>
+				  <% else %>
+					Not Available
+				  <% end %>
+				</span>
+			</div>
+		</div>
+		<div class="profile-info-row">
+			<div class="profile-info-name"> Latest Sales Price </div>
+
+			<div class="profile-info-value">
+				<span class="editable" id="signup">
+				  <%  if @product.qty > 0 %>
+					<%= @product.stock_products.last.price %>
+				  <% else %>
+					Not Available
+				  <% end %>
+				</span>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+
+<h3> Purchase & Sales Details</h3>
+
+<table class='table table-bordered table-striped'>
+ <thead class="thin-border-bottom">
+  <tr>
+	<th><i class="icon-caret-right blue"></i>Date</th>
+	<th><i class="icon-caret-right blue"></i>Purchase</th>
+	<th><i class="icon-caret-right blue"></i>Sale</th>
+  </r>
+ </thead>
+ <tbody>
+<% @transactions.sort_by { |hsh| hsh[:date] }.reverse.each do |transaction| %>
+  <tr>
+	<td><%= transaction[:date].strftime('%b %d, %Y') %></td>
+	<% if transaction[:type] == 'Purchase' %>
+		<td><span class="label label-success arrowed-left arrowed"><%= transaction[:qty] %></span> &nbsp;<%= transaction[:qty] * transaction[:cprice] %></td><td></td>
+	<% elsif transaction[:type] == 'Sale' %>
+		<td></td><td><span class="label label-info arrowed-right arrowed-in"><%= transaction[:qty] %></span> &nbsp;<%= transaction[:price] %></td>
+	<% end %>
+  </tr>
+  <% end %>
+
+  <tr>
+	<td><b>Total</b></td>
+	<td><b><%= @product.purchase_products.sum(:qty)%></b></td>
+	<td><b><%= @product.sale_products.sum(:qty) %></b></td>
+  </tr>
+ </tbody>
+</table>
+

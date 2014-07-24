@@ -1,0 +1,62 @@
+
+		<%= javascript_include_tag "jquery-barcode.js" %>
+
+    <script type="text/javascript">
+      function generateBarcode(){
+		var value = $("#bcode").val();
+		var bcode_qty = $("#bcode_qty").val();
+			
+		for(i=0; i < bcode_qty; i++){
+			$("#barcodeTarget").html("").show().barcode(value, "code39");
+			$("#ediv").append("<div class='eblock' style='float:left'>"+$('#barcodeTarget').html()+"</div>");
+		$("#canvasTarget").remove();
+		}
+		$("#barcodeTarget").remove();
+		$("#bcode_submit").removeClass('display');
+		$(".form-horizontal").submit();
+      }
+
+</script>
+
+	<style>
+	.eblock {
+	float:left;
+	padding-top:20px;
+	padding-left:40px;
+	}
+	.display {
+		display:none;
+	}
+	</style>
+  
+								<%= form_tag '/barby_barcode_single', :authenticity_token => "cf50faa3fe97702ca1ae", :class => "form-horizontal"  do %>
+									<hr />
+									<div class="row">
+										<div class="col-sm-6">
+										<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Product Code </label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Qty </label>
+										</div>
+										<div class="form-group">
+											<input class="input-sm" type="text" id="bcode" name="bcode" />
+											<input class="input-sm" type="text" id="bcode_qty" name="bcode_qty" />
+										</div>
+										</div>
+										<br/><br/>
+										<button type="button"  class="btn btn-info btn-sm" onClick="generateBarcode();"/><i class="icon-ok bigger-110"> </i>Print</button>
+									</div>
+									
+									
+										<div class='barcode_page' style="float:left;">
+		<div style="float:left;">
+			<div id="barcodeTarget" class="barcodeTarget"></div>
+				<canvas id="canvasTarget"></canvas> 
+				<div id='ediv' style="float:left;"></div>
+				<button id="print_barcode" class="btn hidden" type="button" onclick = "print_barcode()">Print</button>
+			</div>
+		</div>
+	</div>
+	
+	
+									<input class="btn btn-sm display" type="submit" id="bcode_submit" />
+								<% end %>

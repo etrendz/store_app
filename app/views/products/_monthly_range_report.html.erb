@@ -1,0 +1,42 @@
+
+	
+	<h3>Sales Report From <%= @from.strftime('%d %b, %Y') %> - <%= @to.strftime('%d %b, %Y') %></h3>
+	
+<table class="table">
+  <tr>
+    <th>Product</th>
+    <th>Code</th>
+    <th>Qty</th>
+    <th>Cost Price</th>
+    <th>Sale Price</th>
+    <th>Profit</th>
+  </tr>
+
+<% 
+	  profit = 0.0
+	  gross_profit = 0.0
+	  @products.each do |product| 
+	  tot_sales = product.sale_on_date_range(@from, @to)
+	  profit = tot_sales["price"].to_f - tot_sales["cprice"].to_f
+	  gross_profit += profit
+%>
+  <tr>
+    <td><%= product.name %></td>
+    <td><%= product.code %></td>
+    <td><%= tot_sales["qty"] %></td>
+    <td><%= tot_sales["cprice"] %></td>
+    <td><%= tot_sales["price"] %></td>
+    <td><%= profit %></td>
+  </tr>
+<% end %>
+
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>Total Profit</td>
+    <td><%= gross_profit %></td>
+  </tr>
+</table>
+
+<br /><h4><%= link_to 'PDF Report', {:controller => 'products', :action => 'monthly_report_pdf', :format => 'pdf', :from => @from, :to => @to} %></h4>

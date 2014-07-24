@@ -1,0 +1,128 @@
+<style>
+.btn-success-editted {
+visibility: hidden;
+}
+</style>
+		
+	<script type="text/javascript">
+		jQuery(function($) {
+			$(".sale_return_edit").bind("ajax:success",
+                   function(evt, data, status, xhr){
+                        //this assumes the action returns an HTML snippet
+                        $(".modal-content").html(data);
+           }).bind("ajax:error", function(evt, data, status, xhr){
+                    //do something with the error here
+                    $("div#errors p").text(data);
+           });
+		});
+	</script>
+	
+	<h3>Sales </h3>
+<table class='table' style="width:60%">
+  <tr style = 'background:#438EB9;color:#ffffff'>
+    <th>Date</th>
+    <th>Customer</th>
+    <th>Remark</th>
+    <th>Paid</th>
+    <th>Product</th>
+    <th>Qty</th>
+    <th style="text-align:center">Price</th>
+    <th style="text-align:center">Sum</th>
+  </tr>
+
+  <tr class='success'>
+    <td><%= @sale.sale_date.strftime('%d %b') %></td>
+    <td><%= @sale.customer.name if @sale.customer %></td>
+    <td><%= @sale.remark %></td>
+    <td><%= @sale.paid ? "Yes" : "No" %></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+  </tr>
+	
+	<% @sale.sale_products.each do |sp| %>
+	<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td><%= sp.product.name %></td>
+    <td><a href="/products#modal-form" role="button" class="blue" data-toggle="modal"><%= sp.qty %></a></td>
+    <td style="text-align:right"><%= sp.price / sp.qty %></td>
+    <td style="text-align:right"><%= sp.price %></td>
+		<td><span><%#= link_to 'Edit', edit_sale_product_path(sp)+'#modal-form', remote: :true, toggle: 'modal', class: 'sale_return_edit' %>
+		<a class="sale_return_edit" data-remote="true" href="/sale_products/<%=sp.id %>/edit#modal-form" data-toggle="modal">Return few <%=sp.product.name %></a>
+		</span></td>
+		<td><span><%= link_to "Return all #{sp.product.name.pluralize}", sp, method: :delete, data: { confirm: 'Are you sure?' } %></span></td>
+	</tr>
+	<% end %>
+	
+	
+	<tr>
+	<td>Total</td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right"></td>
+    <td style="text-align:right"><%= @total_sales %></td>
+	</tr>
+	
+	<tr>
+	<td>Discount</td>
+	<td><%= @sale.discount %> %</td>
+	<td></td>
+	<td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right"></td>
+    <td style="text-align:right"><%= @discount %></td>
+	</tr>
+	
+	<tr>
+	<td>Total</td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right"></td>
+    <td style="text-align:right"><%= @total_sales - @discount %></td>
+	</tr>
+	
+	<tr>
+	<td>VAT</td>
+	<td><%= @sale.vat %> %</td>
+	<td></td>
+	<td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right"></td>
+    <td style="text-align:right"><%= @vat %></td>
+	</tr>
+	
+<tr class='success'>
+<td style="font-weight: bold;">Total</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td style="text-align:right;font-weight: bold;"><%= (@total_sales - @discount + @vat).round(2) %></td>
+</tr>
+</table>
+
+<br />
+
+<%= @sale.paid ? "" : (link_to "Collect Money Now", "/receive-now/#{@sale.id}")%>
+
+
+<div id="modal-form" class="modal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div>
+	</div>
+</div><!-- PAGE CONTENT ENDS -->

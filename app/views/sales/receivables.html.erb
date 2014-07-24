@@ -1,0 +1,25 @@
+<h2>Receivables</h2>
+
+<table class='table' style="width:60%">
+  <tr>
+    <th>Customer</th>
+    <th>Sale date</th>
+    <th>Remark</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @sales.each do |sale| %>
+  <tr>
+    <td><%= sale.customer.name %></td>
+    <td><%= sale.sale_date %></td>
+    <td><%= sale.remark %></td>
+    <td><%= link_to 'Show', sale %></td>
+<!--    <td><%= link_to 'Edit', edit_sale_path(sale) %></td>
+    <td><%= link_to 'Destroy', sale, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+-->  </tr>
+<% end %>
+</table>
+
+<br />

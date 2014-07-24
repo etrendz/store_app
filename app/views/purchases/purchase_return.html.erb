@@ -1,0 +1,84 @@
+<style>
+.btn-success-editted {
+visibility: hidden;
+}
+</style>
+		
+	<script type="text/javascript">
+		jQuery(function($) {
+			$(".purchase_return_edit").bind("ajax:success",
+                   function(evt, data, status, xhr){
+                        //this assumes the action returns an HTML snippet
+                        $(".modal-content").html(data);
+           }).bind("ajax:error", function(evt, data, status, xhr){
+                    //do something with the error here
+                    $("div#errors p").text(data);
+           });
+		});
+	</script>
+	
+	
+	<h3>Purchase Report</h3>
+<table class='table' style="width:60%">
+  <tr style = 'background:#cff0d6;color:#468847; border:#d6e9c6 1px solid'>
+    <th>Date</th>
+    <th>Supplier</th>
+    <th>Invoice</th>
+    <th>Paid</th>
+    <th>Product</th>
+    <th>Qty</th>
+    <th style="text-align:center">Price</th>
+    <th style="text-align:center">Sum</th>
+	<td></td>
+	<td></td>
+  </tr>
+
+  <tr class='success'>
+    <td><%= @purchase.purchase_date.strftime('%d %b') %></td>
+    <td><%= @purchase.supplier.name if @purchase.supplier %></td>
+    <td><%= @purchase.invoice %></td>
+    <td><%= @purchase.paid ? "Yes" : "No" %></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+  </tr>
+	
+	<% @purchase.purchase_products.each do |pp| %>
+	<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td><%= pp.product.name %></td>
+    <td><%= pp.qty %></td>
+    <td style="text-align:right"><%= pp.cprice %></td>
+    <td style="text-align:right;font-weight: bold;"><%= pp.cprice * pp.qty %></td>
+	<td><span><a class="purchase_return_edit" data-remote="true" href="/purchase_products/<%=pp.id %>/edit#modal-form" data-toggle="modal">Return few <%=pp.product.name %></a></span></td>
+	<td><span><%= link_to "Return all #{pp.product.name.pluralize}", pp, method: :delete, data: { confirm: 'Are you sure?' } %></span></td>
+	</tr>
+	<% end %>
+<tr class='success'>
+<td style="font-weight: bold;">Total</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td style="text-align:right;font-weight: bold;"><%= @total_purchase %></td>
+	<td></td>
+	<td></td>
+</tr>
+</table>
+
+<br />
+
+<div id="modal-form" class="modal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div>
+	</div>
+</div><!-- PAGE CONTENT ENDS -->

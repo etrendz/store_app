@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  invoice: MyString
+  supplier_id: 1
+  purchase_date: 2013-06-19
+  paid: false
+
+two:
+  invoice: MyString
+  supplier_id: 1
+  purchase_date: 2013-06-19
+  paid: false

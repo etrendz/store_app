@@ -1,0 +1,56 @@
+		<form action='/products/search'>
+			<input id= 'code' name=term />
+			<%= submit_tag "Search", :name => nil, :class => 'btn btn-xs btn-primary' %>
+		</form>
+		
+<div  class="row">
+	<div  class="col-sm-8">
+<h2 class='inline'><%= @category.name %> Products</h2><h2 class='inline pull-right blue'> Rs <%= @total_cprice.round(2) %></h2></br>
+<div  class="table-responsive">
+<table class="table table-striped table-bordered table-hover">
+  <tr>
+    <th>Name</th>
+    <th>Code</th>
+    <th>Qty</th>
+	<th>Action</th>
+  </tr>
+
+<% @products.each do |product| %>
+  <tr>
+    <td><%= link_to "#{product.name}", product %></td>
+    <td><%= product.code %></td>
+	<% if product.qty < 10  %>
+		<td><%= product.qty %><span style='color:#ff0000;font-weight:bold'>  Low Stock!</span></td>
+	<% else %>
+		<td><%= product.qty %></td>
+	<% end%>
+	<td><div class="visible-md visible-lg hidden-sm hidden-xs action-buttons"><%= link_to '<i class="icon-zoom-in"></i> Show '.html_safe, product, class: "blue" %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <%= link_to '<i class="icon-pencil"></i> Edit '.html_safe, edit_product_path(product), class: "green" %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<%= link_to '<i class="icon-trash"></i> Delete '.html_safe, product, method: :delete, data: { confirm: 'Are you sure?' }, class: "red" %></div></td>
+	
+  </tr>
+<% end %>
+</table>
+<%#= will_paginate @products %>
+</div>
+<br />
+
+
+
+
+	</div>
+	<div  class="col-sm-4">
+	
+<h2>Categories</h2></br>
+<table class="table table-striped table-bordered table-hover">
+	<tr>
+		<th>Name</th>
+	</tr>
+  
+	<% @categories.each do |category| %>
+		<tr><td><%= link_to category.name, "/products?category=#{category.id}" %></td></tr>
+	<% end %>
+</table>
+	</div>
+</div>
+

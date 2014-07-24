@@ -1,0 +1,16 @@
+<style>
+.avl_qty {
+	margin-top: 20px;
+	margin-left: 10px;
+    background: #ff0;
+    border: 1px solid #666;
+    box-shadow: 0 0 5px #666 inset;
+    color: #333;
+    float: left;
+    padding: 7px 10px;
+    width: 150px;
+    outline: none;
+}
+</style>
+  Avl Stock : <%= @product.stock_products.length %>
+  <%= hidden_field_tag :avl_qty, @product.stock_products.length %>

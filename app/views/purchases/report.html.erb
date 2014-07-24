@@ -1,0 +1,48 @@
+<form id="purchase_report_form" class="form-search" action="/form_submitted">
+		<div class="col-xs-4 col-sm-4">
+	<label for="id-date-range-picker-1">Start Date</label>
+			<div class="input-group">
+				<span class="input-group-addon">
+					<i class="icon-calendar bigger-110"></i>
+				</span>
+				<input id='from_date' class="form-control date-picker" id="from_date" type="text" data-date-format="dd-mm-yyyy" />
+			</div>
+		</div>
+	
+		<div class="col-xs-4 col-sm-4">
+	<label for="id-date-range-picker-1">End Date</label>
+			<div class="input-group">
+				<input id='to_date' class="form-control date-picker" id="to_date" type="text" data-date-format="dd-mm-yyyy" />
+				<span class="input-group-addon">
+					<i class="icon-calendar bigger-110"></i>
+				</span>
+			</div>
+		</div>
+		
+		<div class="col-xs-4 col-sm-4">
+	<label for="id-date-range-picker-1">&nbsp;</label>
+			<br/>
+			<button id="purchase_report_btn" class="btn btn-info btn-sm" type="button">
+				<i class="icon-ok bigger-110"></i>
+				Submit
+			</button>
+		</div>
+		<input type="submit" style="display:none" />
+</form>
+	
+  <div class="purchase_report" style="clear:both"></div>												
+<script>
+$( "#purchase_report_btn" ).click(function() {
+$( "#purchase_report_form" ).submit();
+});
+
+$( "form" ).submit(function( event ) {
+	$('.purchase_report').html('<br/><br/><br/><img src="/assets/loader.gif"> loading...');
+	
+	$.get('/purchase_report?from='+$("#from_date" ).val()+'&to='+$("#to_date" ).val(), function(data){
+		  $('.purchase_report').empty().append(data);
+	});
+	event.preventDefault();
+});
+</script>
+

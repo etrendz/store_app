@@ -1,0 +1,38 @@
+
+		<script type="text/javascript">
+			jQuery(function($) {
+			$('.spinner').ace_spinner({value:<%= @purchase_product.qty %>,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success-editted' , btn_down_class:'btn-danger'});
+			});
+		</script>
+		
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="blue bigger">Subtract the number of <%= @purchase_product.product.name.pluralize %> returned</h4>
+			</div>
+			
+<%= form_for(@purchase_product) do |f| %>
+  <% if @purchase_product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@purchase_product.errors.count, "error") %> prohibited this purchase_product from being saved:</h2>
+
+      <ul>
+      <% @purchase_product.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <%= f.hidden_field :product_id %>
+    <%= f.hidden_field :purchase_id %>
+	
+  <div class="modal-body overflow-visible">
+    <%= f.label :qty %><br />
+    <%= f.text_field :qty, class: 'spinner' %>
+    <%= f.hidden_field :cprice %>
+    <%= f.hidden_field :price %>
+  </div>
+  <div class="modal-footer">
+	<%= f.submit "Save", :class => 'btn btn-primary btn-sm' %>
+  </div>
+<% end %>
