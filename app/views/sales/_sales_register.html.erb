@@ -1,7 +1,7 @@
 <br/>
 	
 	<h3>Sales Register: <%= @from.strftime('%d %b, %Y') %> - <%= @to.strftime('%d %b, %Y') %></h3>
-<h4>Print </h4>
+<h4>Print <span class="badge badge-danger white" style="padding-top:3.5px"><%= link_to 'Report', {:controller => 'sales', :action => 'sales_register', :format => 'pdf', :from => @from, :to => @to}, :style => "color:white;text-decoration:none" %></span></h4>
 <table class='table table-bordered' style="width:80%">
   <thead>
     <th>Date</th>

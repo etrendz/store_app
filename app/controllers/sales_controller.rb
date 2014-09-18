@@ -353,7 +353,16 @@ class SalesController < ApplicationController
 				@return_on_date[mydate] = total_return.round(2)
 				@total_sale[mydate] = (@cb_sale[mydate] + @cd_sale[mydate] - @return_on_date[mydate]) unless (@cb_sale[mydate] + @cd_sale[mydate]).zero?
 			end
-			render :partial => 'sales_register'
+			
+			respond_to do |format|
+				format.html { render :partial => 'sales_register' }
+#				format.json { render json: @sales }
+				format.pdf do
+					pdf = SalesRegisterPdf.new(@from, @to, @total_sale, @total_cb_sale, @total_cd_sale, @total_return, @cb_sale, @cd_sale, @return_on_date)
+					send_data pdf.render, filename: "sales_register_for_#{@from}_#{@to}.pdf", type: "application/pdf", disposition: "inline"
+				end
+			end
+			
 		end
 	end
 	
