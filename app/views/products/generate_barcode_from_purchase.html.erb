@@ -1,0 +1,50 @@
+<%= javascript_include_tag "all_check.js" %>
+<div  class="table-responsive">
+<table class="table table-striped table-bordered table-hover">
+  <tr>
+    <th>Name</th>
+	<th>Size</th>
+    <th>Code</th>
+    <th>Qty</th>
+	<th>Price</th>
+    <th class=' col-sm-1'><input class="btn btn-success" type="button" id="checkAll" value="Select / Unselect All "/></th>
+  </tr>
+
+<form method='get' id='myform' class="form-search" action='/barby_barcode_generate'>
+<% @purchase.purchase_products.each do |purchase_product| %>
+	<input type='hidden' name='<%="barcode_#{purchase_product.product.id}" %>' value='<%= purchase_product.product.code%>' />
+	
+  <tr>
+    <td><%= link_to "#{purchase_product.product.name}", purchase_product.product %></td>
+	<td><%= purchase_product.product.size %></td>
+    <td><%= purchase_product.product.code %></td>
+	<td><input type='text' name='<%="barcode_qty_#{purchase_product.product.id}" %>' value='<%= purchase_product.qty %>' /></td>
+	<td><%= purchase_product.product.price %></td>
+	<td style='text-align:center'><input class='first' type='checkbox' name='<%="barcode_check_#{purchase_product.product.id}" %>' /></td>
+	
+  </tr>
+<% end %>
+	<div>
+		<select id="labelsize" onchange='labelSelect(this)'>
+			<option value="/barby_barcode_generate">Label 48</option>
+			<option value="/barby_barcode">Label 84</option>
+		</select>
+		<span>Start Printing from Cell : </span>
+		<input type='text' name='start_from' value='1' />
+		<input type='submit' name='submit' value='Submit' class='btn btn-success pull-right'/>
+	</div>
+</form>
+<br/>
+<span class='label label-lg label-pink arrowed-right'>Total Labels : <%=@purchase.purchase_products.sum(:qty)%></span>
+<span class='label label-lg label-pink arrowed pull-right'>Selected Labels : <span class='counting_check'>0</span> </span>
+</table>
+</div>
+
+<script type="text/javascript">
+				function labelSelect(select_box) {
+					form1 = document.getElementById('myform');
+					form1.action = select_box.value;
+				//	alert(form1.action);
+				}
+			
+		</script>

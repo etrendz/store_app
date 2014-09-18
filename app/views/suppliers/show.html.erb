@@ -1,14 +1,64 @@
+<p id="notice"><%= notice %></p>
 
-<p>
-  <b>Name:</b>
-  <%= @supplier.name %>
-</p>
-
-<p>
-  <b>Mobile:</b>
-  <%= @supplier.mobile %>
-</p>
-
+<table style="width:30%" class="table table-bordered">
+	<tr>
+		<th>Code:</th>
+		<td><%= @supplier.code %></td>
+	</tr>
+	<tr>
+		<th>Name:</th>
+		<td><%= @supplier.name %></td>
+	</tr>
+	<tr>
+		<th>Address 1:</th>
+		<td><%= @supplier.address1 %></td>
+	</tr>
+	<tr>
+		<th>Address 2:</th>
+		<td><%= @supplier.address2 %></td>
+	</tr>
+	<tr>
+		<th>City:</th>
+		<td> <%= @supplier.city %></td>
+	</tr>
+	<tr>
+		<th>Pincode:</th>
+		<td><%= @supplier.pincode %></td>
+	</tr>
+	<tr>
+		<th>State:</th>
+		<td><%= @supplier.state %></td>
+	</tr>
+	<tr>
+		<th>Phone:</th>
+		<td><%= @supplier.phone %></td>
+	</tr>
+	<tr>
+		<th>Mobile:</th>
+		<td><%= @supplier.mobile %></td>
+	</tr>
+	<tr>
+		<th>Email:</th>
+		<td><%= @supplier.email %></td>
+	</tr>
+	<tr>
+		<th>Contact Person:</th>
+		<td><%= @supplier.contact_person %></td>
+	</tr>
+	<tr>
+		<th>TIN</th>
+		<td><%= @supplier.tin %></td>
+	</tr>
+	<tr>
+		<th>CST</th>
+		<td> <%= @supplier.cst %></td>
+	</tr>
+	<tr>
+		<th>PAN</th>
+		<td> <%= @supplier.pan %></td>
+	</tr>
+	
+	</table>
 
 <%= link_to 'Edit', edit_supplier_path(@supplier) %> |
 <%= link_to 'Back', suppliers_path %>

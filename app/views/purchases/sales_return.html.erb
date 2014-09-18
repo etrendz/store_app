@@ -1,0 +1,49 @@
+<script>
+
+$(document).ready(function(){
+ $('#myprice').change(function(){ 
+	var margin = (parseFloat($("#myprice").val()) -  parseFloat($("#mycprice").val())) * (100 / parseFloat($("#mycprice").val())) ;
+	$("#margin").val(margin);
+	return false;
+ });
+ 
+$(".vertical").keypress(function(event) {
+	if(event.keyCode == 13) { 
+	textboxes = $("input.vertical");
+	debugger;
+	currentBoxNumber = textboxes.index(this);
+	if (textboxes[currentBoxNumber + 1] != null) {
+		nextBox = textboxes[currentBoxNumber + 1]
+		nextBox.focus();
+		nextBox.select();
+		event.preventDefault();
+		return false 
+		}
+	}
+});
+
+});
+</script>
+<style>
+.content_1{width:860px; height:220px; overflow:auto; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px;}
+.img_del_icon {
+	padding-left: 5px;
+}
+
+</style>
+<div class='enew_table_header' style="position:fixed; left:215px;top:270px;">
+
+<form action='/purchases/add_purchase_products/' method=get data-remote=true class='add_purchase_products'>
+	<input class="col-xs-1 vertical" style="float:left" id='product_code' type='text' placeholder="Barcode">
+	<input class="col-xs-2 vertical" name="product_name" id='product_name' data-autocomplete-source ='/search_products.json' type='text' placeholder="Product Name">
+	<input class="col-xs-1 vertical" id='myqty' name='myqty' type='text' placeholder="Qty" >
+	<input class="col-xs-1 vertical" id='mycprice' name='mycprice' type='text' placeholder="Cost Price" >
+	<input class="col-xs-1 vertical" id= 'margin' type='text' name='margin' placeholder="Margin" >
+	<input class="col-xs-1 vertical" id= 'myprice' type='text' name='myprice' placeholder="Sales Price">
+	<div class="col-xs-1 avl_qty" style="border:#d5d5d5 1px solid;padding: 3px 2px;background:#fff;color:#bbb;">Avl</div>
+	<%= submit_tag "Add" , :class => "btn btn-sm btn-pink", :style =>'padding: 2px 9px 2px 9px;' %>
+</form>
+		<br/>
+</div>		
+
+<%= render 'sales_return_form' %>

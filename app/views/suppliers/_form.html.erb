@@ -1,4 +1,8 @@
-<br/>
+<style>
+td {
+	width: 40%;
+}
+</style>
 <%= form_for(@supplier) do |f| %>
   <% if @supplier.errors.any? %>
     <div id="error_explanation">
@@ -12,13 +16,108 @@
     </div>
   <% end %>
 
+<table>
+<tr>
+ <td>
   <div class="field">
-    <%= f.label :name %><br />
+    <%= f.label :code %><br>
+    <%= f.text_field :code %>
+  </div>
+ </td>
+ <td>
+  <div class="field">
+    <%= f.label :name %><br>
     <%= f.text_field :name %>
-  </div><br/>
+  </div>
+ </td>
+ <td>
   <div class="field">
-    <%= f.label :mobile %><br />
+    <%= f.label :email %><br>
+    <%= f.text_field :email %>
+  </div>
+ </td>
+</tr>
+<tr>
+ <td>
+  <div class="field">
+    <%= f.label :address1, "Address Line 1" %><br>
+    <%= f.text_field :address1 %>
+  </div>
+ </td>
+ <td>
+  <div class="field">
+    <%= f.label :address2, "Address Line 2" %><br>
+    <%= f.text_field :address2 %>
+  </div>
+ </td>
+ <td>
+  <div class="field">
+    <%= f.label :phone %><br>
+    <%= f.text_field :phone %>
+  </div>
+ </td>
+</tr>
+<tr>
+ <td>
+  <div class="field">
+    <%= f.label :city %><br>
+    <%= f.text_field :city %>
+  </div>
+ </td>
+ <td>
+  <div class="field">
+    <%= f.label :pincode %><br>
+    <%= f.text_field :pincode %>
+  </div>
+ </td>
+ <td>
+  <div class="field">
+    <%= f.label :state %><br>
+    <%= f.text_field :state %>
+  </div>
+ </td>
+</tr>
+<tr>
+</tr>
+<tr>
+ <td>
+  <div class="field">
+    <%= f.label :mobile %><br>
     <%= f.text_field :mobile %>
-  </div><br />
+  </div>
+ </td>
+ <td>
+  <div class="field">
+    <%= f.label :contact_person %><br>
+    <%= f.text_field :contact_person %>
+  </div>
+ </td>
+ <td>
+  <div class="field">
+    <%= f.label :tin %><br>
+    <%= f.text_field :tin %>
+  </div>
+ </td>
+</tr>
+<tr>
+ <td>
+  <div class="field">
+    <%= f.label :cst %><br>
+    <%= f.text_field :cst %>
+  </div>
+ </td>
+ <td>
+  <div class="field">
+    <%= f.label :pan %><br>
+    <%= f.text_field :pan %>
+  </div>
+ </td>
+</tr>
+</table>
+  <br/>
+  <div class="actions">
     <%= f.submit class: 'btn btn-success btn-sm' %>
+  </div>
 <% end %>
+
+

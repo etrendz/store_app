@@ -1,0 +1,21 @@
+
+<div class="estyleb" style="clear:both; padding:0px;margin-top:0px;">
+
+ <%= fields_for "sale[new_sale_return_attributes[]]", sale_return_object do |sale_return| %>  
+ <fieldset style="border: 0px; margin:0px; padding:0px;">
+ 
+	<div class="col-xs-6" style='color:blue'><span><%= @product.name %></span></div>
+	<div class="col-xs-1" id='visible_qty' style='color:blue'><%= -@qty %></div>
+    <div id='edittable'>
+		<%= sale_return.hidden_field :product_id,:readonly => true %>
+		<%= sale_return.hidden_field :qty, :class => "col-xs-1",:readonly => true%>
+		<%= sale_return.hidden_field :price, :class => "col-xs-2" %>
+		<%= sale_return.hidden_field :cprice, :class => "col-xs-2" %>
+		&nbsp;
+ <!--	<div class="col-xs-2"><span><%= @product.code %></span></div>  -->
+	<div class="col-xs-2" id='visible_sum_price' style='color:blue'><%= -@price %></div>
+	<div class="col-xs-1"><span><%= link_to image_tag("delete-icon.png", :class => "img_del_icon"), '#', class: "remove_return_field" %></span> </div>
+	</div>
+  </fieldset>
+ <% end %>
+</div>

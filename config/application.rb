@@ -3,6 +3,7 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 require 'csv'
 require 'barby/barcode/code_39'
+require 'barby/barcode/code_25_interleaved'
 require 'barby/outputter/prawn_outputter'
 #require 'rupees'
 
@@ -16,6 +17,7 @@ end
 module Store
   class Application < Rails::Application
     config.encoding = "utf-8"
+	config.time_zone = "Kolkata"
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]

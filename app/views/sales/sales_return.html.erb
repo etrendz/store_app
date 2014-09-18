@@ -22,19 +22,22 @@ visibility: hidden;
   <tr style = 'background:#438EB9;color:#ffffff'>
     <th>Date</th>
     <th>Customer</th>
-    <th>Remark</th>
+    <th>Invoice</th>
     <th>Paid</th>
     <th>Product</th>
     <th>Qty</th>
     <th style="text-align:center">Price</th>
     <th style="text-align:center">Sum</th>
+    <th colspan=2 style="text-align:center">Return</th>
   </tr>
 
   <tr class='success'>
     <td><%= @sale.sale_date.strftime('%d %b') %></td>
     <td><%= @sale.customer.name if @sale.customer %></td>
-    <td><%= @sale.remark %></td>
+    <td><%= @sale.invoice %></td>
     <td><%= @sale.paid ? "Yes" : "No" %></td>
+	<td></td>
+	<td></td>
 	<td></td>
 	<td></td>
 	<td></td>
@@ -51,10 +54,10 @@ visibility: hidden;
     <td><a href="/products#modal-form" role="button" class="blue" data-toggle="modal"><%= sp.qty %></a></td>
     <td style="text-align:right"><%= sp.price / sp.qty %></td>
     <td style="text-align:right"><%= sp.price %></td>
-		<td><span><%#= link_to 'Edit', edit_sale_product_path(sp)+'#modal-form', remote: :true, toggle: 'modal', class: 'sale_return_edit' %>
-		<a class="sale_return_edit" data-remote="true" href="/sale_products/<%=sp.id %>/edit#modal-form" data-toggle="modal">Return few <%=sp.product.name %></a>
+		<td><span class='badge badge-warning'><%#= link_to 'Edit', edit_sale_product_path(sp)+'#modal-form', remote: :true, toggle: 'modal', class: 'sale_return_edit' %>
+		<a class="sale_return_edit" data-remote="true" href="/sale_products/<%=sp.id %>/edit#modal-form" data-toggle="modal" style = "color:white;text-decoration:none">Return few </a>
 		</span></td>
-		<td><span><%= link_to "Return all #{sp.product.name.pluralize}", sp, method: :delete, data: { confirm: 'Are you sure?' } %></span></td>
+		<td><span class='badge badge-danger'><%= link_to "Return all ", sp, method: :delete, data: { confirm: 'Are you sure?' }, :style => "color:white;text-decoration:none" %></span></td>
 	</tr>
 	<% end %>
 	
@@ -68,6 +71,8 @@ visibility: hidden;
     <td></td>
     <td style="text-align:right"></td>
     <td style="text-align:right"><%= @total_sales %></td>
+    <td></td>
+    <td></td>
 	</tr>
 	
 	<tr>
@@ -79,8 +84,10 @@ visibility: hidden;
     <td></td>
     <td style="text-align:right"></td>
     <td style="text-align:right"><%= @discount %></td>
+    <td></td>
+    <td></td>
 	</tr>
-	
+<!--
 	<tr>
 	<td>Total</td>
 	<td></td>
@@ -90,6 +97,8 @@ visibility: hidden;
     <td></td>
     <td style="text-align:right"></td>
     <td style="text-align:right"><%= @total_sales - @discount %></td>
+    <td></td>
+    <td></td>
 	</tr>
 	
 	<tr>
@@ -101,17 +110,21 @@ visibility: hidden;
     <td></td>
     <td style="text-align:right"></td>
     <td style="text-align:right"><%= @vat %></td>
+    <td></td>
+    <td></td>
 	</tr>
-	
-<tr class='success'>
-<td style="font-weight: bold;">Total</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td style="text-align:right;font-weight: bold;"><%= (@total_sales - @discount + @vat).round(2) %></td>
+-->	
+	<tr class='success'>
+	<td style="font-weight: bold;">Total</td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td style="text-align:right;font-weight: bold;"><%= (@total_sales - @discount + @vat).round(2) %></td>
+    <td></td>
+    <td></td>
 </tr>
 </table>
 

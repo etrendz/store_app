@@ -1,0 +1,124 @@
+
+	
+	<h3>Sales </h3>
+<table class='table' style="width:60%">
+  <tr style = 'background:#438EB9;color:#ffffff'>
+    <th>Invoice</th>
+    <th>Date</th>
+    <th>Customer</th>
+    <th>Paid</th>
+    <th>Product</th>
+    <th>Qty</th>
+    <th style="text-align:center">Price</th>
+    <th style="text-align:center">Sum</th>
+  </tr>
+
+  <tr class='success'>
+    <td><%= @sale.invoice %></td>
+    <td><%= @sale.sale_date.strftime('%d %b') %></td>
+    <td><%= @sale.customer.name if @sale.customer %></td>
+    <td><%= @sale.paid ? "Yes" : "No" %></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+  </tr>
+	
+	<% @sale.sale_products.each do |sp| %>
+	<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td><%= sp.product.name %></td>
+    <td><%= sp.qty %></td>
+    <td style="text-align:right"><%= sp.price / sp.qty %></td>
+    <td style="text-align:right"><%= sp.price %></td>
+	</tr>
+	<% end %>
+	
+	<tr>
+	<td>Total</td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right"></td>
+    <td style="text-align:right"><%= @total_sales %></td>
+	</tr>
+	<% if @total_returns > 0 %>
+		<tr>
+		<td><b>Sales Return</b></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		</tr>
+		
+		<% @sale.sale_returns.each do |sp| %>
+		<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td><%= sp.product.name %></td>
+		<td><%= -sp.qty %></td>
+		<td style="text-align:right"><%= -(sp.price / sp.qty) %></td>
+		<td style="text-align:right"><%= -(sp.price) %></td>
+		</tr>
+		<% end %>
+	<% end %>
+	
+	<tr>
+	<td>Discount</td>
+	<td><%= @sale.discount %> %</td>
+	<td></td>
+	<td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right"></td>
+    <td style="text-align:right"><%= @discount %></td>
+	</tr>
+	<!--
+	<tr>
+	<td>Total</td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right"></td>
+    <td style="text-align:right"><%= @total_sales - @discount %></td>
+	</tr>
+	
+	<tr>
+	<td>VAT</td>
+	<td><%= @sale.vat %> %</td>
+	<td></td>
+	<td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right"></td>
+    <td style="text-align:right"><%= @vat %></td>
+	</tr>
+	-->
+<tr class='success'>
+<td style="font-weight: bold;">Total</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td style="text-align:right;font-weight: bold;"><%= (@total_sales - @total_returns - @discount + @vat).round(2) %></td>
+</tr>
+</table>
+
+<br />
+
+<%= @sale.paid ? "Paid" : (link_to "Collect Money Now", "/receive-now/#{@sale.id}")%>  | 
+<%= link_to "Print", sale_path(@sale, format: "pdf") %> | <%= link_to "Exchange", "/sales/#{@sale.id}/exchange" %> | <%= link_to 'Cancel this Sale', @sale, method: :delete, data: { confirm: 'Are you sure?' } %>

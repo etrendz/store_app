@@ -10,6 +10,9 @@ class SaleProduct < ActiveRecord::Base
 		p_total = 0
 		sp.product.decrease_qty(sp.qty)
 		sp.qty.times{ 
+			p "======SP================="
+			p sp.product.stock_products.first
+			p sp.product.stock_products.length
 			first_sp = sp.product.stock_products.first
 			cp_total += first_sp.cprice   #SOME MISTAKE IS HERE
 			SoldProduct.create(:product_id => first_sp.product_id, :purchase_product_id => first_sp.purchase_product_id, :price => first_sp.price, :cprice => first_sp.cprice, :sale_product_id => sp.id, :stock_product_id => first_sp.id)

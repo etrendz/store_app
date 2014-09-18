@@ -1,0 +1,126 @@
+<style>
+
+#etable_header {
+border:#ccc 1px solid;
+padding: 3px 2px;
+background: #438EB9;
+color:#fff;
+text-align:center;
+}
+#etable_header_plain {
+padding: 3px 2px;
+background: #438EB9;
+color:#fff;
+text-align:center;
+}
+#total_purchase_sum{
+padding: 3px 2px;
+background: #438EB9;
+color:#fff;
+}
+#purchase_sum{
+padding: 3px 2px;
+background: #438EB9;
+color:#fff;
+}
+
+/* ADDED BY EHTI ON 2-5-14 TO STYLE THE ERROR MESSAGE  */
+
+#error_explanation {
+	font-size: 12px;
+  ul {
+    list-style: none;
+    margin: 0 0 18px 0;
+  }
+}
+
+
+.field_with_errors {
+  @extend .control-group;
+  @extend .error;
+ }
+ 
+ #error_explanation h2{
+	font-size: 15px;
+}
+</style>
+<%= form_for(@purchase) do |f| %>
+  <% if @purchase.errors.any? %>
+    <div id="error_explanation"  class="alert alert-danger alert-dismissable">
+	  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <h2><%= pluralize(@purchase.errors.count, "error") %> prohibited this purchase from being saved:</h2>
+
+      <ul>
+      <% @purchase.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  
+  <div class="field" style='float:left'>
+    <%= f.label :receipt_type %><br/>
+    <%= f.text_field :receipt_type, value: 'RETURN(EX)' %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :invoice, "Receipt No" %><br/>
+    <%= f.text_field :invoice, style: "width:100px" %>
+	&nbsp;
+  </div>
+  
+  <div class="col-xs-3"><%= f.label :purchase_date %><br/>
+	<div class="input-group input-group-sm"> 
+		<%= f.text_field :purchase_date, class: "form-control", value: Date.today %>
+		<span class="input-group-addon">
+			<i class="icon-calendar"></i>
+		</span>
+	</div>
+  </div>
+      
+  <div class="field" style='float:left'>
+    <%= f.label :supplier_id %><br/>
+    <%= f.collection_select :supplier_id, Supplier.all, :id, :name %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left; margin-left:10px'>
+	<label for="paid">Payment Mode</label><br/>
+		<label class="radio-inline">
+          <%= f.radio_button :paid, 1, :checked => "checked" %>
+		  Cash
+		</label>
+		<label class="radio-inline">
+          <%= f.radio_button :paid, 0 %>
+		  Credit
+		</label>
+  </div>
+  
+  <div id="content_1" class="content_1" style= "position:fixed; left:227px;top:350px;width:860px;padding:0px;margin:0px"> 
+	<div class="result_purchase_product_heading">
+		<div id='etable_header' class="col-xs-2"><span>Product Code</span></div>
+		<div id='etable_header' class="col-xs-2"><span>Product Name</span></div>
+		<div id='etable_header' class="col-xs-1"><span>Qty</span></div>
+		<div id='etable_header' class="col-xs-2"><span>Price</span></div>
+		<div id='etable_header' class="col-xs-2"><span>Sum</span></div>
+		<div id='etable_header' class="col-xs-1"><span>Delete</span></div>
+	</div> 
+	<div class="result_purchase_product">
+	</div> 
+	<div class="sum_purchase_product" style="position:fixed; left:228px;top:550px;width:860px"> <br/>
+		<div id='etable_header_plain' class="col-xs-2"><span>Total</span></div>
+		<div id='etable_header_plain' class="col-xs-2"><span>&nbsp;</span></div>
+		<div id='etable_header_plain' class="col-xs-1"><span>&nbsp;</span></div>
+		<div id='purchase_sum' class="col-xs-2">0</div>
+		<div id='total_purchase_sum' class="col-xs-2">0</div>
+	</div>
+	
+  </div> 
+  
+  
+	<div class='dactions'>
+		<%= f.submit :class => 'btn btn-pink btn-sm', confirm: 'Are You Sure',  style: 'float:right' %>
+	</div>
+<% end %>

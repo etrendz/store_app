@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/barsoom/prawn-print.git
+  revision: a6a987513e88fff94a8c2b9619ab12b75ff7d3a0
+  specs:
+    prawn-print (0.0.3)
+      prawn (>= 0.12.0)
+
 GEM
   specs:
     Ascii85 (1.0.2)
@@ -143,6 +150,7 @@ DEPENDENCIES
   jquery-ui-rails
   mysql2
   prawn-labels
+  prawn-print!
   rails (= 4.0.0.rc1)
   sass-rails (~> 4.0.0.rc1)
   simple_login

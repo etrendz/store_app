@@ -1,0 +1,29 @@
+<br/>
+	
+	<h3>Sales Return Register: <%= @from.strftime('%d %b, %Y') %> - <%= @to.strftime('%d %b, %Y') %></h3>
+<table class='table table-striped' style="width:80%">
+  <tr>
+    <th>Date</th>
+    <th>Day</th>
+    <th>Total</th>
+  </tr>
+	<% i = 1 
+	total_amount = 0 %>
+	
+<% @return.each do |k,v| %>
+  <tr>
+    <td><%= k.strftime('%d %b, %Y') %></td>
+    <td><%= k.strftime("%A") %></td>
+    <td><%= v %></td>
+	<% total_amount += v %>
+  </tr>
+
+<% end %>
+  <tr>
+	<th>Total</th>
+	<td></td>
+	<th><%= total_amount.round(2) %></th>
+  </tr>
+</table>
+
+	

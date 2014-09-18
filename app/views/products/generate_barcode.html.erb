@@ -1,0 +1,58 @@
+<%= javascript_include_tag "all_check.js" %>
+<div class="table-responsive">
+<table class="table table-striped table-bordered table-hover">
+  <tr>
+    <th>Name</th>
+    <th>Size</th>
+    <th>Code</th>
+    <th>Qty</th>
+    <th>Price</th>
+    <th class=' col-sm-1'><input class="btn btn-success" type="button" id="checkAll" value="Select / Unselect All "/></th>
+  </tr>
+<form method='get' id='myform' class="form-search" action='/barby_barcode_generate'>
+	<% sum = 0 %>
+	<% @products.each do |product| %>
+	<input type='hidden' name='<%="barcode_#{product.id}" %>' value='<%= product.code%>' />
+	
+  <tr>
+    <td><%= link_to "#{product.name}", product %></td>
+    <td><%= product.size %></td>
+	<td><%= product.code %></td>
+	<td><input type='text' name='<%="barcode_qty_#{product.id}" %>' value='<%= product.qty %>' /></td>
+    <td><%= product.price %></td>
+	<td style='text-align:center'><input class='first' type='checkbox' name='<%="barcode_check_#{product.id}" %>' /></td>
+	<% sum += product.qty %>
+	
+  </tr>
+<% end %>
+	<div>
+		<select id="labelsize" onchange='labelSelect(this)'>
+			<option value="/barby_barcode_generate">Label 48</option>
+			<option value="/barby_barcode">Label 84</option>
+		</select>
+
+		<span>Start Printing from Cell : </span>
+		<input type='text' name='start_from' value='1' />
+		
+		<input type='submit' name='submit' value='Submit' class='btn btn-success pull-right'/>
+	</div>
+	<br>
+</form>
+<span class='label label-lg label-pink arrowed-right'>Total Labels : <%=sum%></span>
+<span class='label label-lg label-pink arrowed pull-right'>Selected Labels : <span class='counting_check'>0</span> </span>
+</table>
+</div>
+
+<%= will_paginate @products %>
+
+		<script type="text/javascript">
+				function labelSelect(select_box) {
+					form1 = document.getElementById('myform');
+					form1.action = select_box.value;
+				//	alert(form1.action);
+				}
+			jQuery(function($) {
+				$('.pagination').find('ul').addClass('pagination');
+			})
+		</script>
+		

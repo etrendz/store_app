@@ -4,7 +4,7 @@
  <%= fields_for "sale[new_sale_product_attributes[]]",sale_product_object do |sale_product| %>  
  <fieldset style="border: 0px; margin:0px; padding:0px;">
  
-	<div class="col-xs-7"><span><%= @product.name %></span></div>
+	<div class="col-xs-6"><span><%= @product.name %></span></div>
 	<div class="col-xs-1" id='visible_qty'><%= @qty %></div>
     <div id='edittable'>
 		<%= sale_product.hidden_field :product_id,:readonly => true %>

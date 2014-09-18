@@ -1,5 +1,9 @@
 <style>
-
+.dactions{
+	position: absolute;
+	top: 10px;
+	right:10px;
+}
 #etable_header {
 border:#ccc 1px solid;
 padding: 3px 2px;
@@ -12,16 +16,6 @@ padding: 3px 2px;
 background: #438EB9;
 color:#fff;
 text-align:center;
-}
-#total_purchase_sum{
-padding: 3px 2px;
-background: #438EB9;
-color:#fff;
-}
-#purchase_sum{
-padding: 3px 2px;
-background: #438EB9;
-color:#fff;
 }
 
 /* ADDED BY EHTI ON 2-5-14 TO STYLE THE ERROR MESSAGE  */
@@ -43,6 +37,12 @@ color:#fff;
  #error_explanation h2{
 	font-size: 15px;
 }
+#purchase_supplier_id{
+width: 150px;
+}
+#new_purchase{
+margin-top: -40px
+}
 </style>
 <%= form_for(@purchase) do |f| %>
   <% if @purchase.errors.any? %>
@@ -58,19 +58,19 @@ color:#fff;
     </div>
   <% end %>
 
+  
   <div class="field" style='float:left'>
-    <%= f.label :invoice %><br/>
-    <%= f.text_field :invoice, style: "width:100px" %>
+    <%#= f.label :receipt_type %><br/>
+    <%= f.hidden_field :receipt_type, value: 'CBP' %>
 	&nbsp;
   </div>
   
   <div class="field" style='float:left'>
-    <%= f.label :supplier_id %><br/>
-    <%= f.collection_select :supplier_id, Supplier.all, :id, :name %>
-	&nbsp;
+    <%= f.label :invoice, "Receipt No" %><br/>
+    <%= f.text_field :invoice, style: "width:80px", :readonly => true %>
   </div>
   
-  <div class="col-xs-3"><%= f.label :purchase_date %><br/>
+  <div class="col-xs-2"><%= f.label :purchase_date %><br/>
 	<div class="input-group input-group-sm"> 
 		<%= f.text_field :purchase_date, class: "form-control", value: Date.today %>
 		<span class="input-group-addon">
@@ -78,8 +78,14 @@ color:#fff;
 		</span>
 	</div>
   </div>
+      
+  <div class="field" style='float:left'>
+    <%= f.label :supplier_id %><br/>
+    <%= f.collection_select :supplier_id, Supplier.all, :id, :name, style:'width:50%' %>
+	&nbsp;
+  </div>
   
-  <div class="field" style='float:left; margin-left:10px'>
+  <div class="field" style='display:none;float:left; margin-left:10px'>
 	<label for="paid">Payment Mode</label><br/>
 		<label class="radio-inline">
           <%= f.radio_button :paid, 1, :checked => "checked" %>
@@ -91,25 +97,114 @@ color:#fff;
 		</label>
   </div>
   
-  <div id="content_1" class="content_1" style= "position:fixed; left:227px;top:350px;width:860px;padding:0px;margin:0px"> 
+  <div class="field" style='float:left'>
+    <%= f.label :invoice, "Invoice No" %><br/>
+    <%= f.text_field :suppliers_invoice, style: "width:100px" %>
+  </div>
+  
+  <div class="col-xs-2"><%= f.label :invoice_date %><br/>
+	<div class="input-group input-group-sm"> 
+		<%= f.text_field :invoice_date, class: "form-control" %>
+		<span class="input-group-addon">
+			<i class="icon-calendar"></i>
+		</span>
+	</div>
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :amount, "Total Amount" %><br/>
+    <%= f.text_field :amount, style: "width:90px" %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :discount, "Discount %" %><br/>
+    <%= f.text_field :discount, style: "width:70px" %>
+	&nbsp;
+  </div><br><br><br><br>
+  
+    <div class="field" style='float:left'>
+    <%= f.label :transport, "Transport" %><br/>
+    <%= f.text_field :transport, style: "width:160px" %>
+	&nbsp;
+  </div>
+  
+   <div class="field" style='float:left'>
+    <%= f.label :lr_no, "LR. No" %><br/>
+    <%= f.text_field :lr_no, style: "width:70px" %>
+	&nbsp;
+  </div>
+  
+   <div class="field" style='float:left'>
+    <%= f.label :freight, "Freight" %><br/>
+    <%= f.text_field :freight, style: "width:80px" %>
+	&nbsp;
+  </div>
+  
+   <div class="field" style='float:left'>
+    <%= f.label :dc, "Delivery Charges" %><br/>
+    <%= f.text_field :dc, style: "width:110px" %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :vat, "VAT/CST" %><br/>
+    <%= f.text_field :vat, style: "width:50px" %>
+	&nbsp;
+  </div>
+  <!--
+  <div class="field" style='float:left'>
+    <%= f.label :cst, "CST %" %><br/>
+    <%= f.text_field :cst, style: "width:50px" %>
+	&nbsp;
+  </div>
+  -->
+  <div class="field" style='float:left'>
+    <%= f.label :duty, "Duty %" %><br/>
+    <%= f.text_field :duty, style: "width:50px" %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :edu_cess, "Edu. Cess %" %><br/>
+    <%= f.text_field :edu_cess, style: "width:85px" %>
+	&nbsp;
+  </div>
+  
+   <div class="field" style='float:left'>
+    <%= f.label :surcharge, "Surcharge %" %><br/>
+    <%= f.text_field :surcharge, style: "width:85px" %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :round_off, "Round Off" %><br/>
+    <%= f.text_field :round_off, style: "width:80px" %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :debit_note, "Debit Note" %><br/>
+    <%= f.text_field :debit_note, style: "width:80px" %>
+	&nbsp;
+  </div>
+    
+  
+  <div id="content_1" class="content_1" style= "position:inherit;left:227px;top:350px;width:1000px;padding:0px;margin:0px;margin-top:150px;"> 
 	<div class="result_purchase_product_heading">
-		<div id='etable_header' class="col-xs-2"><span>Product Code</span></div>
-		<div id='etable_header' class="col-xs-2"><span>Product Name</span></div>
+		<div id='etable_header' class="col-xs-1"><span>Barcode</span></div>
+		<div id='etable_header' class="col-xs-4"><span>Product Name</span></div>
+		<div id='etable_header' class="col-xs-1"><span>Size</span></div>
+		<div id='etable_header' class="col-xs-1"><span>Style</span></div>
 		<div id='etable_header' class="col-xs-1"><span>Qty</span></div>
-		<div id='etable_header' class="col-xs-2"><span>Price</span></div>
-		<div id='etable_header' class="col-xs-2"><span>Sum</span></div>
+		<div id='etable_header' class="col-xs-1"><span>Cost</span></div>
+		<div id='etable_header' class="col-xs-1"><span>MRP</span></div>
+		<div id='etable_header' class="col-xs-1"><span>Sum</span></div>
 		<div id='etable_header' class="col-xs-1"><span>Delete</span></div>
 	</div> 
 	<div class="result_purchase_product">
-	</div> 
-	<div class="sum_purchase_product" style="position:fixed; left:228px;top:550px;width:860px"> <br/>
-		<div id='etable_header_plain' class="col-xs-2"><span>Total</span></div>
-		<div id='etable_header_plain' class="col-xs-2"><span>&nbsp;</span></div>
-		<div id='etable_header_plain' class="col-xs-1"><span>&nbsp;</span></div>
-		<div id='purchase_sum' class="col-xs-2">0</div>
-		<div id='total_purchase_sum' class="col-xs-2">0</div>
 	</div>
-	
+		
   </div> 
   
   
@@ -117,3 +212,110 @@ color:#fff;
 		<%= f.submit :class => 'btn btn-pink btn-sm', confirm: 'Are You Sure',  style: 'float:right' %>
 	</div>
 <% end %>
+
+	<div class="table-responsive sum_purchase_product">
+	<table style="width:1000px;" class="table table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Total</th>
+					<th></th>
+					<th></th>
+					<th><div id='total_purchase_sum'>0</div></th>
+				</tr>
+			</thead>
+				<tr>
+					<th></th>
+					<td>Discount %</td>
+					<td></td>
+					<td><div id='discount_percent'></div></td>
+					<td><div id='discount_value'>0</div></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>Actual Total</td>
+					<td></td>
+					<td></td>
+					<td><div id='actual_total'>0</div></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>Duty %</td>
+					<td><div id='duty_percent'>0</div></td>
+					<td><div id='duty_value'>0</div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>Educational Cess %</td>
+					<td><div id='edu_cess_percent'>0</div></td>
+					<td><div id='edu_cess_value'>0</div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>Surcharge %</td>
+					<td><div id='surcharge_percent'>0</div></td>
+					<td><div id='surcharge_value'>0</div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>Ex Duty</td>
+					<td></td>
+					<td></td>
+					<td><div id='excise_duty'>0</div></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>Freight</td>
+					<td></td>
+					<td></td>
+					<td><div id='freight'>0</div></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>Delivery Charges</td>
+					<td></td>
+					<td></td>
+					<td><div id='dc'>0</div></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>VAT / CST</td>
+					<td><div id='vat_cst_percent'>0</div></td>
+					<td></td>
+					<td><div id='vat_cst_value'>0</div></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>Round Off</td>
+					<td></td>
+					<td></td>
+					<td><div id='round_off'>0</div></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>Grand Total</td>
+					<td></td>
+					<td></td>
+					<td><div id='grand_total'>0</div></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>Debit Note</td>
+					<td></td>
+					<td></td>
+					<td><div id='debit_amt'>0</div></td>
+				</tr>
+			<thead>
+				<tr>
+					<th></th>
+					<th>Net Total</th>
+					<th></th>
+					<th></th>
+					<td><div id='net_total'>0</div></td>
+				</tr>
+			</thead>
+			</table>
+			</div>

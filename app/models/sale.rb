@@ -1,16 +1,23 @@
 class Sale < ActiveRecord::Base
   has_many :sale_products, dependent: :destroy
+  has_many :sale_returns, dependent: :destroy
   belongs_to :customer
   has_many :products, through: :sale_products
  
   validates :sale_products, presence: true
-	
+	validates :invoice, uniqueness: true
+
  def new_sale_product_attributes=attributes
 	attributes.each do |record|
 	  sale_products.build(record)
 	end
  end
  
+ def new_sale_return_attributes=attributes
+	attributes.each do |record|
+	  sale_returns.build(record)
+	end
+ end
  
 	def customer_name
 		customer.try(:name)

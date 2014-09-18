@@ -1,7 +1,3 @@
-require 'barby'
-require 'barby/barcode/code_39'
-require 'barby/outputter/prawn_outputter'
-
 class MonthlyReportPdf < Prawn::Document
 	def initialize(from, to)
 		super(options = {:margin => [10, 10, 0, 10]})
@@ -20,8 +16,6 @@ class MonthlyReportPdf < Prawn::Document
 	    @to = Date.strptime(to)
 	    issue_number
 		line_items
-		
-		barcode
 	end
 	
 	def issue_number
@@ -41,7 +35,7 @@ class MonthlyReportPdf < Prawn::Document
 	
 	def line_item_rows
 		@items =Array.new
-		@items.push ["Material", "unit", "Qty", "Cost Price", "Amount", "Sales Price", "Amount", "Profit"]
+		@items.push ["Product", "unit", "Qty", "Cost Price", "Amount", "Sales Price", "Amount", "Profit"]
 		profit = 0.0
 		gross_profit = 0.0
 			
@@ -57,8 +51,4 @@ class MonthlyReportPdf < Prawn::Document
 		@items
 	end
 	
-    def barcode
-        barcode = Barby::Code39.new '000001'
-        barcode.annotate_pdf(self)
-    end
 end

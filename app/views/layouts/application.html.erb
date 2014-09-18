@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+#fontfashion {
+  font-family: 'Asia';    
+  url('/assets/asia.ttf') format('truetype'),
+  font-weight: bold;
+  font-size: 130%;
+  font-style: normal;
+}
+</style>
 <head>
-	<title>Store Manager</title>
+	<title>ETrendz POS Developed by ETrendz IT Solutions</title>
 	<%= stylesheet_link_tag  "css/bootstrap.min.css" %>
 	<%= stylesheet_link_tag  "css/font-awesome.min.css" %>
 	<%= stylesheet_link_tag  "css/ace.min.css" %>
+	<%= stylesheet_link_tag  "css/fullcalendar.css" %>
 	
 	<%= stylesheet_link_tag "css/jquery-ui-1.10.3.full.min.css" %>
-	<!--	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />   -->
+	<link rel="stylesheet" href="/assets/font.css?family=Open+Sans:400,300" />  
 	
 	<%#= javascript_include_tag 'application' %>	
 	
@@ -43,10 +53,10 @@
 
 			<div class="navbar-container" id="navbar-container">
 				<div class="navbar-header pull-left">
-					<a href="#" class="navbar-brand">
-						<small>
-							<i class="icon-leaf"></i>
-							Jahwar Plaza
+					<a href="/" class="navbar-brand">
+						<small id="fontfashion">
+							<i class="icon-user"></i>
+							MEN'S FASHION
 						</small>
 					</a><!-- /.brand -->
 				</div><!-- /.navbar-header -->
@@ -113,18 +123,19 @@
 
 					<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 						<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-							<a href="/suppliers/new" class="btn btn-success">
-								<i class="icon-signal"></i>
+							<a href="/suppliers/new" class="btn btn-success" title='New Supplier'>
+								<i class="icon-user"></i>
 							</a>
 
-							<a href="/customers/new"  class="btn btn-info">
-								<i class="icon-pencil"></i>
-							</a>
-							<a href="/purchases/new" class="btn btn-warning">
+							<a href="/customers/new"  class="btn btn-info" title='New Customer'>
 								<i class="icon-group"></i>
+							</a>
+							<a href="/purchases/new" target="_blank" class="btn btn-warning" title='New Purchase'>
+								<i class="icon-briefcase"></i>
 				</a>
 
-							<a href="/sales/new" class="btn btn-danger">								<i class="icon-cogs"></i>
+							<a href="/sales/new" target="_blank" class="btn btn-danger" title='New Sale'>								
+							<i class="icon-gift"></i>
 				</a>
 						</div>
 
@@ -156,6 +167,7 @@
 							</a>
 
 							<ul class="submenu">
+							<% if current_user && (current_user.name == 'admin')%>
 								<li>
 									<a href="/categories" class="dropdown-toggle">
 										<i class="icon-double-angle-right"></i>
@@ -163,24 +175,24 @@
 										Categories
 										<b class="arrow icon-angle-down"></b>
 									</a>
-
 									<ul class="submenu">
 										<li>
 											<a href="/categories">
-												<i class="icon-leaf"></i>
+												<i class="icon-tags"></i>
 												View Categories
 											</a>
 										</li>
 
 										<li>
 											<a href="/categories/new">
-												<i class="icon-pencil"></i>
+												<i class="icon-tag"></i>
 
 												New Category
 											</a>
 										</li>
 									</ul>
 								</li>
+								<% end %>
 								<li>
 									<a href="/products" class="dropdown-toggle">
 										<i class="icon-double-angle-right"></i>
@@ -199,9 +211,16 @@
 
 										<li>
 											<a href="/products/new">
-												<i class="icon-pencil"></i>
+												<i class="icon-leaf"></i>
 
 												New Product
+											</a>
+										</li>
+										<li>
+											<a href="/products/search">
+												<i class="icon-leaf"></i>
+
+												Search Product
 											</a>
 										</li>
 									</ul>
@@ -217,18 +236,27 @@
 									<ul class="submenu">
 										<li>
 											<a href="/suppliers">
-												<i class="icon-leaf"></i>
+												<i class="icon-user"></i>
 												View Suppliers
 											</a>
 										</li>
 
 										<li>
 											<a href="/suppliers/new">
-												<i class="icon-pencil"></i>
+												<i class="icon-user"></i>
 
 												New Suppliers
 											</a>
 										</li>
+										<!--
+										<li>
+											<a href="/suppliers/search">
+												<i class="icon-search"></i>
+
+												Search Supplier
+											</a>
+										</li>
+										-->
 									</ul>
 								</li>
 								<li>
@@ -242,32 +270,42 @@
 									<ul class="submenu">
 										<li>
 											<a href="/customers">
-												<i class="icon-leaf"></i>
+												<i class="icon-user"></i>
 												View Customers
 											</a>
 										</li>
 
 										<li>
 											<a href="/customers/new">
-												<i class="icon-pencil"></i>
+												<i class="icon-user"></i>
 
 												New Customers
 											</a>
 										</li>
+										
+										<!--
+										<li>
+											<a href="/suppliers/search">
+												<i class="icon-search"></i>
+
+												Search Customer
+											</a>
+										</li>
+										-->
 									</ul>
 								</li>
 							</ul>
 						</li>
 						<li>
 							<a href="/purchases/new" class="dropdown-toggle">
-								<i class="icon-text-width"></i>
+								<i class="icon-briefcase"></i>
 								<span class="menu-text"> Purchases </span>
 								<b class="arrow icon-angle-down"></b>
 							</a>
 							
 							<ul class="submenu">
 								<li>
-									<a href="/purchases">
+									<a href="/purchases/report">
 										<i class="icon-double-angle-right"></i>
 										View Purchases
 									</a>
@@ -279,19 +317,33 @@
 										New Purchase
 									</a>
 								</li>
+								
+										<li>
+											<a href="/purchases/search">
+												<i class="icon-pencil"></i>
+
+												Search Purchase
+											</a>
+										</li>
 							</ul>
 						</li>
 
 						<li>
 							<a href="/sales/new" class="dropdown-toggle">
-								<i class="icon-text-width"></i>
+								<i class="icon-gift"></i>
 								<span class="menu-text"> Sales </span>
 								<b class="arrow icon-angle-down"></b>
 							</a>
 							
 							<ul class="submenu">
 								<li>
-									<a href="/sales">
+									<a href="/sales/detailed_report">
+										<i class="icon-double-angle-right"></i>
+										View Detailed Sales
+									</a>
+								</li>
+								<li>
+									<a href="/day_sales">
 										<i class="icon-double-angle-right"></i>
 										View Sales
 									</a>
@@ -303,6 +355,14 @@
 										New Sale
 									</a>
 								</li>
+								
+								<li>
+									<a href="/sales/search">
+										<i class="icon-double-angle-right"></i>
+										Search Sale
+									</a>
+								</li>
+								
 							</ul>
 						</li>
 
@@ -315,6 +375,14 @@
 							</a>
 
 							<ul class="submenu">
+								
+								<li>
+									<a href="/stock-report">
+										<i class="icon-double-angle-right"></i>
+										Stock Report
+									</a>
+								</li>
+								<% if current_user && (current_user.name == 'admin')%>
 								<li>
 									<a href="/purchases/report">
 										<i class="icon-double-angle-right"></i>
@@ -337,14 +405,16 @@
 								</li>
 								
 								<li>
-									<a href="/select_month_range">
+									<a href="/graph">
 										<i class="icon-double-angle-right"></i>
-										Stock Report
+										Sales Graph
 									</a>
 								</li>
+								<% end %>
 							</ul>
 						</li>
 
+						<% if current_user && (current_user.name == 'admin')%>
 						<li>
 							<a href="#" class="dropdown-toggle">
 								<i class="icon-edit"></i>
@@ -368,27 +438,21 @@
 									</a>
 								</li>
 							</ul>
-
 						</li>
-
+						<% end %>
+						
 						<li>
 							<a href="#" class="dropdown-toggle">
-								<i class="icon-edit"></i>
-								<span class="menu-text"> Admin </span>
+								<i class="icon-barcode"></i>
+								<span class="menu-text"> Barcode </span>
 
 								<b class="arrow icon-angle-down"></b>
 							</a>
 
 							<ul class="submenu">
-								<li>
-									<a href="/backup">
-										<i class="icon-double-angle-right"></i>
-										Backup
-									</a>
-								</li>
 
 								<li>
-									<a href="/barcode/barcode">
+									<a href="/generate_barcode">
 										<i class="icon-double-angle-right"></i>
 										Barcode
 									</a>
@@ -400,11 +464,20 @@
 										Single Barcode
 									</a>
 								</li>
+								
+								<li>
+									<a href="/barcode/barcode">
+										<i class="icon-double-angle-right"></i>
+										Barcode Grid
+									</a>
+								</li>
 							</ul>
 
 						</li>
 
 					</ul><!-- /.nav-list -->
+					
+					<img class="img-responsive" src="/assets/store_logo.png">
 
 					<div class="sidebar-collapse" id="sidebar-collapse">
 						<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
@@ -424,26 +497,24 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="icon-home home-icon"></i>
-								<a href="#">Home</a>
+								<a href="/">Home</a>
 							</li>
 							<li class="active"><%= params[:action] %></li>
 						</ul><!-- .breadcrumb -->
 
 						<div class="nav-search" id="nav-search">
-							<form class="form-search" action='/products/'>
-								<span class="input-icon">
-									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" name=term />
-									<i class="icon-search nav-search-icon"></i>
-								</span>
+							<form name="clockForm">
+							<input style='padding:0px 0px; px 0px margin-top:-5px;border-radius:8px;font-size:110%;' type="button" class='btn btn-primary' name="clockButton" value="Loading..."/>
 							</form>
 						</div><!-- #nav-search -->
-						
 					</div>
 
+					
 					<div class="page-content">
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
+								<% unless ((params[:controller] == 'sales') && (params[:action] == 'new')) %>
 								<% flash.each do |key, value| %>
 									<div class="<%= flash_class(key) %>">
 											<button type=button" class="close" data-dismiss="alert">
@@ -452,7 +523,7 @@
 										  <%= value %>
 									</div>
 								<% end %>
-								
+								<% end %>
 									<%= yield %>
 								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
@@ -466,5 +537,14 @@
 				<i class="icon-double-angle-up icon-only bigger-110"></i>
 			</a>
 		</div><!-- /.main-container -->
+		<input type="hidden" id="refreshed" value="no">
+               <script type="text/javascript">
+               onload=function(){
+               var e=document.getElementById("refreshed");
+               if(e.value=="no")e.value="yes";
+               else{e.value="no";location.reload();}
+               }
+			   </script>
 	</body>
+	
 </html>

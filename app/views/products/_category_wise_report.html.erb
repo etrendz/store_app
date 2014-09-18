@@ -1,0 +1,118 @@
+</br>
+<h2>Stock Report (<%= @from %> - <%= @to %>)</h2></br>
+
+<% 
+	opening_price = Hash.new(0)
+	opening_qty = Hash.new(0)
+	purchase_qty = Hash.new(0)
+	purchase_price = Hash.new(0)
+	sale_qty = Hash.new(0)
+	sale_price = Hash.new(0)
+	sale_return_qty = Hash.new(0)
+	sale_return_price = Hash.new(0)
+	closing_qty = Hash.new(0)
+	closing_value = Hash.new(0)
+	
+	
+	total_opening_price = 0
+	total_opening_qty = 0
+	total_purchase_qty = 0
+	total_purchase_price = 0
+	total_sale_qty = 0
+	total_sale_price = 0
+	total_sale_return_qty = 0
+	total_sale_return_price = 0
+	total_closing_qty = 0
+	total_closing_value = 0
+%>
+<% @products.each do |product| %>
+	<% opening_qty[product.category_id] += @opening_stock[product.id]["qty"] %>
+	<% opening_price[product.category_id] += @opening_stock[product.id]["price"] %>
+	<% purchase_qty[product.category_id] += @purchase_stock[product.id]["qty"] %>
+	<% purchase_price[product.category_id] += @purchase_stock[product.id]["price"] %>
+	<% sale_qty[product.category_id] += @sale_stock[product.id]["qty"] %>
+	<% sale_price[product.category_id] += @sale_stock[product.id]["price"] %>
+	<% sale_return_qty[product.category_id] += @sale_return_stock[product.id]["qty"] %>
+	<% sale_return_price[product.category_id] += @sale_return_stock[product.id]["price"] %>
+	<% closing_stock = @opening_stock[product.id]["qty"] + @purchase_stock[product.id]["qty"] + @sale_return_stock[product.id]["qty"] - @sale_stock[product.id]["qty"] %>
+
+	<% closing_price = @opening_stock[product.id]["price"] + @purchase_stock[product.id]["price"] + @sale_return_stock[product.id]["cprice"] - @sale_stock[product.id]["cprice"] %>
+
+	<% closing_qty[product.category_id] += closing_stock %>
+	<% closing_value[product.category_id] += closing_price %>
+<% end %>
+
+<div  class="table-responsive">
+<table class="table table-striped table-bordered table-hover">
+  <tr>
+    <th rowspan=2 style='vertical-align:middle'>S.No</th>
+    <th rowspan=2 style='vertical-align:middle'>Category Name</th>
+    <th colspan=2>Opening Stock</th>
+    <th colspan=2>Purchase</th>
+    <th colspan=2>Sales</th>
+    <th colspan=2>Sales Return</th>
+    <th colspan=2>Closing Stock</th>
+  </tr>
+  <tr>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+  </tr>
+<%  i = 0
+@categories.each do |category| 
+	i +=1
+%>
+
+  <tr>
+    <td><%= i %></td>
+    <td><%= category.name %></td>
+    <td><%= opening_qty[category.id] %></td>
+	<td><%= opening_price[category.id].round(2) %></td>
+    <td><%= purchase_qty[category.id] %></td>
+	<td><%= purchase_price[category.id].round(2)%></td>
+    <td><%= sale_qty[category.id] %> </td>
+	<td><%= sale_price[category.id].round(2) %></td>
+    <td><%= sale_return_qty[category.id] %> </td>
+	<td><%= sale_return_price[category.id].round(2) %></td>
+    <td><%= closing_qty[category.id]%></td>
+    <td><%= closing_value[category.id].round(2) %></td>
+  </tr>
+	<%
+	total_opening_qty += opening_qty[category.id]
+	total_opening_price += opening_price[category.id]
+	total_purchase_qty += purchase_qty[category.id]
+	total_purchase_price += purchase_price[category.id]
+	total_sale_qty += sale_qty[category.id]
+	total_sale_price += sale_price[category.id]
+	total_sale_return_qty += sale_return_qty[category.id]
+	total_sale_return_price += sale_return_price[category.id]
+	total_closing_qty += closing_qty[category.id]
+	total_closing_value += closing_value[category.id]
+	%>
+<% end %>
+
+  <tr>
+    <td></td>
+    <td>Total</td>
+    <td><%= total_opening_qty %></td>
+    <td><%= total_opening_price.round(2) %></td>
+    <td><%= total_purchase_qty %></td>
+	<td><%= total_purchase_price.round(2)%></td>
+    <td><%= total_sale_qty %></td>
+	<td><%= total_sale_price.round(2) %></td>
+    <td><%= total_sale_return_qty %></td>
+	<td><%= total_sale_return_price.round(2) %></td>
+    <td><%= total_closing_qty%></td>
+    <td><%= total_closing_value.round(2) %></td>
+  </tr>
+</table>
+</div>
+
+	<h4 style='position:fixed;top:107px;right:50px;font-weight:bold;background:#438EB9;padding:5px 10px;color:#fff;border:5px solid #6fb3e0 ;'>Profit : Rs. <%= (total_sale_price + total_closing_value - (total_opening_price + total_purchase_price + total_sale_return_price)).round(2) %> </h4>

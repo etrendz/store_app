@@ -1,0 +1,76 @@
+<style>
+.btn-black {
+color: #000;
+}
+</style>
+<script>
+
+function doc_keyUp(e) {
+
+    // this would test for whichever key is 40 and the ctrl key at the same time
+    if (e.ctrlKey && e.shiftKey && e.keyCode) {
+        if($("#report_type").val() == 'CBP'){
+			$("#report_type").val('CDP'); 
+//				$('.btn').toggleClass( 'btn-info' )
+				$('.report').removeClass( 'btn-pink' )
+				$('.report').addClass( 'btn-inverse' )
+			
+		}
+		else if ($("#report_type").val() == 'CDP'){
+			$("#report_type").val('ALL'); 
+	//			$('.btn').toggleClass( 'btn-info' )
+				$('.report').removeClass( 'btn-inverse' )
+				$('.report').addClass( 'btn-info' )
+		}
+		else{
+			$("#report_type").val('CBP'); 
+		//		$('.btn').toggleClass( 'btn-info' )
+				$('.report').removeClass( 'btn-info' )
+				$('.report').addClass( 'btn-pink' )
+		}
+		
+    }
+}
+// register the handler 
+document.addEventListener('keyup', doc_keyUp, false);
+</script>
+
+
+<form id="detailed_day_sale_report_form" class="form-search" action="/form_submitted">
+
+				<%= hidden_field_tag "report_type", 'CBP' %>
+		
+		<div class="col-xs-3 col-sm-3">
+			<label for="id-date-range-picker-1">Start Date</label>
+			<div class="input-group">
+				<span class="input-group-addon">
+					<i class="icon-calendar bigger-110"></i>
+				</span>
+				<input id='from_date' class="form-control date-picker" id="from_date" type="text" data-date-format="dd-mm-yyyy" />
+			</div>
+		</div>
+	
+		<div class="col-xs-3 col-sm-3">
+	<label for="id-date-range-picker-1">&nbsp;</label>
+			<br/>
+			<button id="detailed_day_sale_report_btn" class="btn btn-pink btn-sm report" type="button">
+				<i class="icon-ok bigger-110"></i>
+				Submit
+			</button>
+		</div>
+		<input type="submit" style="display:none" />
+</form>
+
+<div class="detailed_day_sales" style="clear:both"></div>											
+<script>
+$( "#detailed_day_sale_report_btn" ).click(function() {
+$( "#detailed_day_sale_report_form" ).submit();
+});
+
+$( "form" ).submit(function( event ) {
+$.get('/detailed_day_sales?from='+$("#from_date" ).val()+'&to='+$("#from_date" ).val()+'&report_type='+$("#report_type" ).val(), function(data){
+$('.detailed_day_sales').empty().append(data);
+});
+event.preventDefault();
+});
+</script>

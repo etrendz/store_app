@@ -29,8 +29,7 @@ visibility: hidden;
     <th>Qty</th>
     <th style="text-align:center">Price</th>
     <th style="text-align:center">Sum</th>
-	<td></td>
-	<td></td>
+    <th colspan=2 style="text-align:center">Return</th>
   </tr>
 
   <tr class='success'>
@@ -56,8 +55,8 @@ visibility: hidden;
     <td><%= pp.qty %></td>
     <td style="text-align:right"><%= pp.cprice %></td>
     <td style="text-align:right;font-weight: bold;"><%= pp.cprice * pp.qty %></td>
-	<td><span><a class="purchase_return_edit" data-remote="true" href="/purchase_products/<%=pp.id %>/edit#modal-form" data-toggle="modal">Return few <%=pp.product.name %></a></span></td>
-	<td><span><%= link_to "Return all #{pp.product.name.pluralize}", pp, method: :delete, data: { confirm: 'Are you sure?' } %></span></td>
+	<td><span class='badge badge-warning'><a class="purchase_return_edit" data-remote="true" href="/purchase_products/<%=pp.id %>/edit#modal-form" data-toggle="modal" style = "color:white;text-decoration:none">Return few </a></span></td>
+	<td><span class='badge badge-danger' stype='font:16px'><%= link_to "Return all ", pp, method: :delete, data: { confirm: 'Are you sure?' }, :style => "color:white;text-decoration:none" %></span></td>
 	</tr>
 	<% end %>
 <tr class='success'>

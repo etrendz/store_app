@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @variant_item.name %>
+</p>
+
+<p>
+  <strong>Variant:</strong>
+  <%= @variant_item.variant.name %>
+</p>
+
+<%= link_to 'Edit', edit_variant_item_path(@variant_item) %> |
+<%= link_to 'Back', variant_items_path %>

@@ -2,7 +2,7 @@
 	
 	<h3>Purchase Report From <%= @from.strftime('%d %b, %Y') %> - <%= @to.strftime('%d %b, %Y') %></h3>
 <h4>Print <%= link_to 'Report', {:controller => 'purchases', :action => 'purchase_report_pdf', :format => 'pdf', :from => @from, :to => @to} %></h4>
-<table class='table' style="width:60%">
+<table class='table' style="width:80%">
   <tr style = 'background:#438EB9;color:#ffffff'>
     <th>Date</th>
     <th>Supplier</th>
@@ -38,6 +38,7 @@
     <td><%= pp.product.name %></td>
     <td><%= pp.qty %></td>
 	<% sum = pp.cprice.round(2) * pp.qty
+		
 		total_sum += sum %>
     <td style="text-align:right"><%= sum.round(2) %></td>
 	</tr>
@@ -48,12 +49,12 @@
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td><%= purchase.purchase_products.sum(:qty) %></td>
 <%@total_purchase += total_sum %>
 <td style="text-align:right"><%= total_sum.round(2) %></td>
 </tr>
 <% end %>
 </table>
-	<h4 style='position:fixed;top:107px;right:50px;font-weight:bold;background:#438EB9;padding:5px 10px;color:#fff;border:5px solid #6fb3e0 ;'>Total Purchase: Rs. <%= @total_purchase.round(2) %> </h4>
+	<h4 style='position:fixed;top:107px;right:50px;font-weight:bold;background:#438EB9;padding:5px 10px;color:#fff;border:5px solid #6fb3e0 ;'>Total : Rs. <%= @total_purchase.round(2) %> </h4>
 
 <br />

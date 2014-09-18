@@ -1,0 +1,204 @@
+<style>
+.myspace{
+margin-bottom:7px;
+border-radius:4px;
+width:160px;
+text-align:left;
+}
+a{
+color:#ffffff;
+}
+</style>
+
+<div class="row">
+
+	<div class="vspace-sm"></div>
+
+	<div class="col-sm-3">
+		<div class="widget-box">
+			<div class="widget-header widget-header-flat widget-header-small">
+				<h5>
+					<i class="icon-desktop"></i>
+					Master Entry
+				</h5>
+			</div>
+			
+			<div class="widget-body">
+				<div class="widget-main">
+								<center>
+								<% if current_user.name == 'admin'%>
+									<a target="blank" href="/categories/new"<button class="btn btn-primary myspace"><i class="icon-tag align-top bigger-125"></i>New Category</button></a>
+									<a target="blank" href="/categories"<button class="btn btn-pink myspace"><i class="icon-tags align-top bigger-125"></i>All Categories</button></a>
+								<% end %>
+									<a target="blank" href="/products/new"<button class="btn btn-primary myspace"><i class="icon-leaf align-top bigger-125"></i>New Product</button></a>
+									<a target="blank" href="/products"<button class="btn btn-pink myspace"><i class="icon-leaf align-top bigger-125"></i>All Products</button></a>
+									<a target="blank" href="/brand"<button class="btn btn-primary myspace"><i class="icon-leaf align-top bigger-125"></i>All Brands</button></a>
+									</center>
+					<div class="hr hr8 hr-double"></div>
+				</div><!-- /widget-main -->
+			</div><!-- /widget-body -->
+		</div><!-- /widget-box -->
+	</div><!-- /span -->
+	
+	<div class="col-sm-3">
+		<div class="widget-box">
+			<div class="widget-header widget-header-flat widget-header-small">
+				<h5>
+					<i class="icon-briefcase"></i>
+					Purchase
+				</h5>
+			</div>
+			
+			<div class="widget-body">
+				<div class="widget-main">
+								<center>
+									<a target="blank" href="/purchases/new"><button class="btn btn-primary briefcase myspace"><i class="icon-briefcase align-top bigger-125"></i>New Purchase</button></a>
+									<a target="blank" href="/purchases"><button class="btn btn-pink myspace"><i class="icon-tags align-top bigger-125"></i>All Purchases</button></a>
+									<a target="blank" href="/purchases/search"><button class="btn btn-danger myspace"><i class="icon-search align-top bigger-125"></i>Search Purchase</button></a>
+									<a target="blank" href="/purchases/report"><button class="btn btn-pink myspace"><i class="icon-list align-top bigger-125"></i>Purchase Report</button></a>
+								</center>
+					<div class="hr hr8 hr-double"></div>
+				</div><!-- /widget-main -->
+			</div><!-- /widget-body -->
+		</div><!-- /widget-box -->
+		
+		<% if current_user.name != 'admin'%>
+		</div>
+		<div class="col-sm-3">
+		<% end %>
+		
+		<div class="widget-box">
+			<div class="widget-header widget-header-flat widget-header-small">
+				<h5>
+					<i class="icon-gift"></i>
+					Sales
+				</h5>
+			</div>
+			
+			<div class="widget-body">
+				<div class="widget-main">
+								<center>
+									<a target="blank" href="/sales/new"><button class="btn btn-primary myspace"><i class="icon-gift align-top bigger-125"></i>New Sale</button></a>
+									<a target="blank" href="/day_sales"><button class="btn btn-pink myspace"><i class="icon-tags align-top bigger-125"></i>All Sales</button></a>
+									<a target="blank" href="/sales/search"><button class="btn btn-danger myspace"><i class="icon-search align-top bigger-125"></i>Search Sale</button></a>
+									<a target="blank" href="/sales/report"><button class="btn btn-pink myspace"><i class="icon-list align-top bigger-125"></i>Sales Report</button></a>
+								</center>
+					<div class="hr hr8 hr-double"></div>
+				</div><!-- /widget-main -->
+			</div><!-- /widget-body -->
+		</div><!-- /widget-box -->
+	</div><!-- /span -->
+	
+	<div class="col-sm-3">
+			<% if current_user.name == 'admin'%>
+		<div class="widget-box">
+			<div class="widget-header widget-header-flat widget-header-small">
+				<h5>
+					<i class="icon-list"></i>
+					Reports
+				</h5>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main">
+							<center>
+								<a target="blank" href="/purchases/report"><button class="btn btn-primary myspace"><i class="icon-list align-top bigger-125"></i>Purchase Report</button></a>
+								<a target="blank" href="/purchases/supplier_report"><button class="btn btn-danger myspace"><i class="icon-list align-top bigger-125"></i>Supplier Wise</button></a>
+								<a target="blank" href="/sales/report"><button class="btn btn-pink myspace"><i class="icon-list align-top bigger-125"></i>Sales Report</button></a>
+								<a target="blank" href="select_month_range"><button class="btn btn-success myspace"><i class="icon-list align-top bigger-125"></i>Stock Report</button></a>
+								<a target="blank" href="/graph"><button class="btn btn-primary myspace"><i class="icon-list align-top bigger-125"></i>Sales Graph</button></a>
+							</center>
+					<div class="hr hr8 hr-double"></div>
+				</div><!-- /widget-main -->
+			</div><!-- /widget-body -->
+		</div><!-- /widget-box -->
+		
+			<% end %>
+		
+		<div class="widget-box">
+			<div class="widget-header widget-header-flat widget-header-small">
+				<h5>
+					<i class="icon-user"></i>
+					Supplier
+				</h5>
+			</div>
+			
+			<div class="widget-body">
+				<div class="widget-main">
+							<center>
+								<a target="blank" href="/suppliers/new"<button class="btn btn-info myspace"><i class="icon-user align-top bigger-125"></i>New Supplier</button></a>
+								<a target="blank" href="/suppliers"<button class="btn btn-purple myspace"><i class="icon-user align-top bigger-125"></i>All Suppliers</button></a>
+							</center>
+					<div class="hr hr8 hr-double"></div>
+				</div><!-- /widget-main -->
+			</div><!-- /widget-body -->
+		</div><!-- /widget-box -->	
+	</div><!-- /span -->
+	
+	
+	<div class="col-sm-3">
+	<div class="widget-box">
+			<div class="widget-header widget-header-flat widget-header-small">
+				<h5>
+					<i class="icon-user"></i>
+					Customers
+				</h5>
+			</div>
+			
+			<div class="widget-body">
+				<div class="widget-main">
+							<center>
+								<a target="blank" href="/customers/new"<button class="btn btn-info myspace"><i class="icon-user align-top bigger-125"></i>New Customer</button></a>
+								<a target="blank" href="/customers/new"<button class="btn btn-purple myspace"><i class="icon-user align-top bigger-125"></i>All Customers</button></a>
+							</center>
+					<div class="hr hr8 hr-double"></div>
+				</div><!-- /widget-main -->
+			</div><!-- /widget-body -->
+		</div><!-- /widget-box -->	
+	
+		<div class="widget-box">
+			<div class="widget-header widget-header-flat widget-header-small">
+				<h5>
+					<i class="icon-barcode"></i>
+					Barcode
+				</h5>
+			</div>
+			
+			<div class="widget-body">
+				<div class="widget-main">
+								<center>
+									<a target="blank" href="/generate_barcode"><button class="btn btn-pink myspace"><i class="icon-barcode align-top bigger-125"></i>Barcode</button></a>
+									<a target="blank" href="/barcode/barcode_single"><button class="btn btn-danger myspace"><i class="icon-barcode align-top bigger-125"></i>Single Barcode</button></a>
+									<a target="blank" href="/barcode/barcode"><button class="btn btn-pink myspace"><i class="icon-barcode align-top bigger-125"></i>Barcode Grid</button></a>
+								</center>
+					<div class="hr hr8 hr-double"></div>
+				</div><!-- /widget-main -->
+			</div><!-- /widget-body -->
+		</div><!-- /widget-box -->
+		
+		<div class="widget-box">
+			<div class="widget-header widget-header-flat widget-header-small">
+				<h5>
+					<i class="icon-disk"></i>
+					Backup: <%= @ss.strftime('%d/%m/%y %I:%M %p') %> 
+				</h5>
+			</div>
+			
+			<div class="widget-body">
+				<div class="widget-main">
+								<center>
+									<a href="/backup"><button class="btn btn-pink myspace"><i class="icon-file align-top bigger-125"></i>Backup</button></a>
+									
+								<% if current_user.name == 'admin'%>
+									<a href="/signup"><button class="btn btn-pink myspace"><i class="icon-file align-top bigger-125"></i>Create User</button></a>
+								<% end %>
+								</center>
+					<div class="hr hr8 hr-double"></div>
+				</div><!-- /widget-main -->
+			</div><!-- /widget-body -->
+		</div><!-- /widget-box -->
+	</div><!-- /span -->
+	
+	
+</div><!-- /row -->
+
+

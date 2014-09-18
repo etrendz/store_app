@@ -1,0 +1,349 @@
+		
+		<%= javascript_include_tag "js/jquery.easy-pie-chart.min.js" %>
+		<%= javascript_include_tag "js/jquery.sparkline.min.js" %>
+		<%= javascript_include_tag "js/flot/jquery.flot.min.js" %>
+		<%= javascript_include_tag "js/flot/jquery.flot.pie.min.js" %>
+		<%= javascript_include_tag "js/flot/jquery.flot.resize.min.js" %>
+		<%= javascript_include_tag "js/highcharts.js" %>
+		<%#= javascript_include_tag "js/exporting.js" %>
+								
+								
+
+		<script type="text/javascript">
+			jQuery(function($) {
+				$('.easy-pie-chart.percentage').each(function(){
+					var $box = $(this).closest('.infobox');
+					var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+					var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+					var size = parseInt($(this).data('size')) || 50;
+					$(this).easyPieChart({
+						barColor: barColor,
+						trackColor: trackColor,
+						scaleColor: false,
+						lineCap: 'butt',
+						lineWidth: parseInt(size/10),
+						animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
+						size: size
+					});
+				})
+			
+				$('.sparkline').each(function(){
+					var $box = $(this).closest('.infobox');
+					var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+					$(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
+				});
+			
+			
+			
+			
+			  var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
+			  var data = [
+				<%  @categories.each { |category| %>
+				   
+				{ label: '<%=category.name %> - Rs.<%= @price[category.id] %>',  data: <%= @price[category.id] %>, color: '<%="#{@color[category.id]}" %>'}<%="," unless category.id == @categories.last.id %>
+			<%	}   %>
+			  ]
+			  function drawPieChart(placeholder, data, position) {
+			 	  $.plot(placeholder, data, {
+					series: {
+						pie: {
+							show: true,
+							tilt:0.8,
+							highlight: {
+								opacity: 0.25
+							},
+							stroke: {
+								color: '#fff',
+								width: 2
+							},
+							startAngle: 2
+						}
+					},
+					legend: {
+						show: true,
+						position: position || "ne", 
+						labelBoxBorderColor: null,
+						margin:[-30,15]
+					}
+					,
+					grid: {
+						hoverable: true,
+						clickable: true
+					}
+				 })
+			 }
+			 drawPieChart(placeholder, data);
+						
+			 /**
+			 we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+			 so that's not needed actually.
+			 */
+			 placeholder.data('chart', data);
+			 placeholder.data('draw', drawPieChart);
+			
+			
+			
+			  var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+			  var previousPoint = null;
+			
+			  placeholder.on('plothover', function (event, pos, item) {
+				if(item) {
+					if (previousPoint != item.seriesIndex) {
+						previousPoint = item.seriesIndex;
+						var tip = item.series['label'] + " : " + item.series['percent'].toFixed(2)+' %';
+						$tooltip.show().children(0).text(tip);
+					}
+					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
+				} else {
+					$tooltip.hide();
+					previousPoint = null;
+				}
+				
+			 });
+				
+				
+			
+			})
+		</script>
+								<div class="row">
+									<div class="space-6"></div>
+
+									<div class="col-sm-7 infobox-container">
+										<div class="infobox infobox-green  ">
+											<div class="infobox-icon">
+												<i class="icon-comments"></i>
+											</div>
+
+											<div class="infobox-data">
+												<span class="infobox-data-number">Rs. <%= @sale_with_date[Date.today] %></span>
+												<div class="infobox-content">Today's Sales Revenue</div>
+											</div>
+										</div>
+
+										<div class="infobox infobox-blue  ">
+											<div class="infobox-icon">
+												<i class="icon-twitter"></i>
+											</div>
+
+											<div class="infobox-data">
+												<span class="infobox-data-number">Rs. <%= @week_sales %></span>
+												<div class="infobox-content">Weekly Sales Revenue</div>
+											</div>
+
+										</div>
+
+										<div class="infobox infobox-pink  ">
+											<div class="infobox-icon">
+												<i class="icon-shopping-cart"></i>
+											</div>
+
+											<div class="infobox-data">
+												<span class="infobox-data-number">Rs. <%= @month_sales %></span>
+												<div class="infobox-content">Monthly Sales Revenue</div>
+											</div>
+										</div>
+
+										<div class="infobox infobox-red  ">
+											<div class="infobox-icon">
+												<i class="icon-beaker"></i>
+											</div>
+
+											<div class="infobox-data">
+											  
+												<span class="infobox-data-number"><a style='text-decoration:none' href='/sales/new'>Sales</a></span>
+												<div class="infobox-content"><a style='text-decoration:none' href='/sales/new'>Add New</a></div>
+											</div>
+										</div>
+
+										<div class="infobox infobox-orange2  ">
+											<div class="infobox-chart">
+												<span class="sparkline" data-values="196,128,202,177,154,94,100,170,224"></span>
+											</div>
+
+											<div class="infobox-data">
+												<span class="infobox-data-number"><a style='text-decoration:none' href='/purchases/new'>Purchase</a></span>
+												<div class="infobox-content"><a style='text-decoration:none' href='/purchases/new'>Add New</a></div>
+											</div>
+
+										</div>
+
+										<div class="infobox infobox-blue2  ">
+											<div class="infobox-progress">
+												<div class="easy-pie-chart percentage" data-percent='<%= @products.length%>' data-size="46">
+													<span class="percent"><%= @total_products %></span>
+												</div>
+											</div>
+
+											<div class="infobox-data">
+												<span class="infobox-text"><a style='text-decoration:none' href='/products/new'>Items</a></span>
+
+												<div class="infobox-content">
+													<span class="bigger-110"><a style='text-decoration:none' href='/products/new'>Add New</a></span>
+												</div>
+											</div>
+										</div>
+
+										<div class="space-6"></div>
+
+									</div>
+
+									<div class="vspace-sm"></div>
+
+									<div class="col-sm-5">
+										<div class="widget-box">
+											<div class="widget-header widget-header-flat widget-header-small">
+												<h5>
+													<i class="icon-signal"></i>
+													Sales by Category
+												</h5>
+
+												<div class="widget-toolbar no-border">
+													<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
+														One Month
+													</button>
+												</div>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<div id="piechart-placeholder"></div>
+
+													<div class="hr hr8 hr-double"></div>
+
+													<div class="clearfix">
+														<div class="grid9">
+															<h5 class='brown'>
+															  <i class="icon-shopping-cart"></i>
+																Total Sales Revenue : Rs.<%= @g_total%>
+															</h5>
+														</div>
+													</div>
+												</div><!-- /widget-main -->
+											</div><!-- /widget-body -->
+										</div><!-- /widget-box -->
+									</div><!-- /span -->
+								</div><!-- /row -->
+
+								
+								
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%
+weekday = []
+xx = []
+yy = []
+d = Date.today - 7.days
+7.times do 
+	d = d + 1.day
+	xx << (@sale_with_date[d] - @profit_with_date[d])
+	yy << @profit_with_date[d]
+	weekday << d
+end
+%>
+
+
+								
+<script type="text/javascript">
+$(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Sales Chart'
+            },
+            xAxis: {
+                 categories: [
+				<% weekday.each do |wd| %>
+						'<%= wd %>'<%="," unless wd == weekday.last %>
+				<% end %>
+                ],
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Total Sales'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    }
+                }
+            },
+            legend: {
+                align: 'right',
+                x: -70,
+                verticalAlign: 'top',
+                y: 20,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.x +'</b><br/>'+
+                        this.series.name +': '+ this.y +'<br/>'+
+                        'Total: '+ this.point.stackTotal;
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true,
+                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                        style: {
+                            textShadow: '0 0 3px black, 0 0 3px black'
+                        }
+                    }
+                }
+            },
+            series: [{
+						 name: 'Profit',
+						 data: <%= yy %>
+					},
+					{
+						 name: 'Sales',
+						 data: <%= xx %>
+					}]
+        });
+    });
+    
+
+		</script>
+		
+		
+			
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>

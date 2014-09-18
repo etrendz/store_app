@@ -1,53 +1,110 @@
 
 	
-	<h3>Purchase Report</h3>
-<table class='table' style="width:60%">
-  <tr style = 'background:#cff0d6;color:#468847; border:#d6e9c6 1px solid'>
-    <th>Date</th>
-    <th>Supplier</th>
-    <th>Invoice</th>
-    <th>Paid</th>
-    <th>Product</th>
-    <th>Qty</th>
-    <th style="text-align:center">Price</th>
-    <th style="text-align:center">Sum</th>
-  </tr>
-
-  <tr class='success'>
-    <td><%= @purchase.purchase_date.strftime('%d %b') %></td>
-    <td><%= @purchase.supplier.name if @purchase.supplier %></td>
-    <td><%= @purchase.invoice %></td>
-    <td><%= @purchase.paid ? "Yes" : "No" %></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-  </tr>
+	<h3>Purchase</h3>
+	<div class="row">
+		<div class="col-sm-12">
+			<table class='table table-bordered'>
+				  <tr>
+					<th>Receipt No</th>
+					<th>Purchase Date</th>
+					<th>Supplier</th>
+					<th>Receipt Type</th>
+					<th>Paid</th>
+					<th>Invoice No</th>
+					<th>Invoice Date</th>
+					<th>Transport</th>
+					<th>L.R No</th>
+				</tr>
+				<tr class='success'>
+					<td><%= @purchase.invoice %></td>
+					<td><%= @purchase.purchase_date.strftime('%d %b %Y') %></td>
+					<td><%= @purchase.supplier.name if @purchase.supplier %></td>
+					<td><%= @purchase.receipt_type %></td>
+					<td><%= @purchase.paid ? "Yes" : "No" %></td>
+					<td><%= @purchase.suppliers_invoice %></td>
+					<td><%=  @purchase.invoice_date ? @purchase.invoice_date.strftime('%d %b %Y') : '' %></td>
+					<td><%= @purchase.transport %></td>
+					<td><%= @purchase.lr_no %></td>
+				  </tr>
+			  </table>
+			  <table class='table table-bordered'>
+				  <tr>
+					<th>Total Amount</th>
+					<th>Discount %</th>
+					<th>Freight</th>
+					<th>Delivery Charges</th>
+					<th>VAT / CST %</th>
+					<th>Duty %</th>
+					<th>Educational Cess %</th>
+					<th>Surcharge %</th>
+					<th>Round Off </th>
+					<th>Debit Note</th>
+				  </tr>
+				  <tr class='success'>
+					<td><%= @purchase.amount %></td>
+					<td><%= @purchase.discount %></td>
+					<td><%= @purchase.freight %></td>
+					<td><%= @purchase.dc %></td>
+					<td><%= @purchase.vat %></td>
+					<td><%= @purchase.duty %></td>
+					<td><%= @purchase.edu_cess %></td>
+					<td><%= @purchase.surcharge %></td>
+					<td><%= @purchase.round_off %></td>
+					<td><%= @purchase.debit_note %></td>
+				  </tr>
+		  </table>
+	  </div>
+	  <div class="col-sm-3">
+		</div>
+		</div>
+		<br>
 	
+	
+<table class='table'>
+		<tr style = 'background:#438EB9;color:#ffffff'>
+			<th>Product</th>
+			<th>Size</th>
+			<th>Style</th>
+			<th>Invoice Qty</th>
+			<th>Received Qty</th>
+			<th>Accepted Qty</th>
+			<th>Cost Price</th>
+			<th>Amount</th>
+		</tr>
+
 	<% @purchase.purchase_products.each do |pp| %>
-	<tr>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-    <td><%= pp.product.name %></td>
-    <td><%= pp.qty %></td>
-    <td style="text-align:right"><%= pp.cprice %></td>
-    <td style="text-align:right;font-weight: bold;"><%= pp.cprice * pp.qty %></td>
-	</tr>
+		<tr>
+			<td><%= pp.product.name %></td>
+			<td><%= pp.product.size %></td>
+			<td><%= pp.product.style %></td>
+			<td><%= pp.invoice_qty %></td>
+			<td><%= pp.received_qty %></td>
+			<td><%= pp.qty %></td>
+			<td><%= pp.cprice.round(2) %></td>
+			<td><%= (pp.cprice * pp.qty).round(2) %></td>
+		</tr>
 	<% end %>
-<tr class='success'>
-<td style="font-weight: bold;">Total</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td style="text-align:right;font-weight: bold;"><%= @total_purchase %></td>
-</tr>
+	<tr class='success'>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td style="font-weight: bold;">Total</td>
+		<td><%= @purchase.purchase_products.sum(:qty) %></td>
+		<td></td>
+		<td style="font-weight: bold;"><%= @total_purchase.round(2) %></td>
+	</tr>
 </table>
+	<%= link_to '<button style="border-radius:4px" class="btn btn-lg btn-success"><i class="icon-print"></i> Print Barcode</button>'.html_safe, "/barcode_from_purchase/#{@purchase.id}"%>
+	<% if current_user && (current_user.name == 'admin')%>
+	<%= link_to '<button style="border-radius:4px" class="btn btn-lg btn-danger pull-right"><i class="icon-remove"></i> Cancel This Purchase</button>'.html_safe, @purchase, method: :delete, data: { confirm: 'Are you sure?' } %>
+	<%= link_to '<button style="border-radius:4px" class="btn btn-lg btn-pink"><i class="icon-edit"></i>Edit Purchase</button>'.html_safe, "/purchases/#{@purchase.id}/edit"%>
+	<% end %>
 
 <br />
+<!--
 <%= @purchase.paid ? "" : (link_to "Pay Now", "/pay-now/#{@purchase.id}")%>
-<%= link_to "Print", purchase_path(@purchase, format: "pdf") %>| <%= link_to "Return", "/purchases/#{@purchase.id}/return" %> | <%= link_to 'Cancel this Purchase', @purchase, method: :delete, data: { confirm: 'Are you sure?' } %>
+<%= link_to "Print", purchase_path(@purchase, format: "pdf") %> | 
+<%#= link_to "Return", "/purchases/#{@purchase.id}/return" %>
+<%= link_to 'Cancel this Purchase', @purchase, method: :delete, data: { confirm: 'Are you sure?' } %> |
+<%= link_to "Barcode Print", "/barcode_from_purchase/#{@purchase.id}" %>-->

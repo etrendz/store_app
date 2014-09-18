@@ -6,7 +6,7 @@ visibility:hidden;
 
 		<form id="purchase_report_form" class="form-search" action="/form_submitted">
 
-			<div class="col-xs-2 col-sm-2">
+			<div class="col-xs-3 col-sm-3">
 				<label for="id-date-range-picker-1">Supplier</label>
 				<div class="input-group">
 					<%=select_tag "supplierwise", options_from_collection_for_select(Supplier.all, "id", "name"), :include_blank => true %>

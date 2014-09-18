@@ -1,0 +1,11 @@
+
+
+
+<h2>Import Materials <a href='/products.csv' style='font-size:80%'>(Download excel format)</a></h2>
+<%= form_tag import_products_path, multipart: true do %>
+	<div class="col-sm-4">
+	  <input type="file" id="file" name="file" />
+	</div>
+	<%= submit_tag "Import", :class => 'btn btn-xs btn-pink' %>
+<% end %>
+

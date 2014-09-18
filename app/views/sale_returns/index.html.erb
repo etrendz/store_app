@@ -1,0 +1,31 @@
+<h1>Listing Sales Returns</h1>
+
+<table class='table table-striped'>
+  <thead>
+    <tr>
+      <th>S. No</th>
+      <th>Product</th>
+      <th>Qty</th>
+      <th>Cost Price</th>
+      <th>Sale Price</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+
+  <tbody>
+	<% i = 1 %>
+    <% @sale_returns.each do |sale_return| %>
+      <tr>
+        <td><%= i %></td>
+        <td><%= sale_return.product.name %></td>
+        <td><%= sale_return.qty %></td>
+        <td><%= sale_return.cprice %></td>
+        <td><%= sale_return.price %></td>
+        <td><%= sale_return.created_at.to_date %></td>
+		<% i += 1 %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

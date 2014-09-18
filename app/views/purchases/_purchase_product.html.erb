@@ -14,7 +14,9 @@ text-align: center;
     <%= purchase_product.hidden_field :qty%>
     <%= purchase_product.hidden_field :cprice %>
     <%= purchase_product.hidden_field :price %>
-	<div class="col-xs-2"><span><%= @product.code %></span></div><div class="col-xs-2"><span><%= @product.name %></span></div><div class="col-xs-1"><span><%= @qty %></span></div><div class="col-xs-2"><span><%= @cprice %></span></div><div class="col-xs-2"><span><%= @cprice.to_f * @qty.to_i %></span></div><div class="col-xs-1"><span><%= link_to image_tag("delete-icon.png", :class => "img_del_icon"), '#', class: "remove_ext_field" %></span></div>
+    <%= purchase_product.hidden_field :invoice_qty %>
+    <%= purchase_product.hidden_field :received_qty %>
+	<div class="col-xs-1"><span><%= @product.code %></span></div><div class="col-xs-4"><span><%= @product.name %></span></div><div class="col-xs-1"><span><%= @product.size %></span></div><div class="col-xs-1"><span><%= @product.style %></span></div><div class="col-xs-1"><span><%= @qty %></span></div><div class="col-xs-1"><span><%= @cprice %></span></div><div class="col-xs-1"><span><%= @price %></span></div><div class="col-xs-1"><span><%= @cprice.to_f * @qty.to_i %></span></div><div class="col-xs-1"><span><%= link_to image_tag("delete-icon.png", :class => "img_del_icon"), '#', class: "remove_ext_field" %></span></div>
   </fieldset>
  <% end %>
 </div>

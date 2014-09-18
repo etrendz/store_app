@@ -1,0 +1,77 @@
+=========
+not working
+==========
+supplier wise report
+
+=================
+tirupattur requirements
+
+LABEL & PRINT - SHAGHIL
+DISCOUNT WITH AMOUNT
+SALES RETURN - IN OTHER CSV, PDF ETC
+SALES ORDER - SAVE
+PURCHASE/NEW PAGE NEED TO BE FIXED
+
+add brand in new product view
+--------------DONE BUT-------------
+SALES RETURN  - NEED TO ADD IN OTHER CSV, PDF ETC
+AUTHORIZATION - NEED TO DISCUSS WITH FAIZAN
+
+
+
+
+
+CONTROL KEY FOR ODC
+AUTOFILL WITH CPRICE AND PRICE
+
+
+============
+style view added to _new_product
+
+============
+SHAGHIL
+
+format sales/new & purchases/new(.00) for all prices
+add refresh button
+REDESIGN home page with only btns
+
+
+--------------
+ToDo
+format sales/new & purchases/new(.00) for all prices
+slow moving stocks
+non moving stocks
+authorization
+export excel - all other lists
+Discount
+
+
+
+ToDo From Mens park
+
+Company info
+Hidden Estimated sale
+Accounts - Journal, Ledger
+Print Barcode - Label 4, Label 2
+Barcode - Printed, unprinted
+estimate - active inactive
+
+
+
+===========
+ERROR & EXCEPTIONS NEEDED TO BO ADDRESSED
+
+active record - record not found error in supplierwise report if i select a empty-record
+
+=================
+done
+
+add SMS to sales
+with or without on select
+barcode - 84
+search sales
+search purchase by invoice
+purchase/new - setfocus to barcode
+bar diagram in dashboard - graph
+report for sales with or without on select
+

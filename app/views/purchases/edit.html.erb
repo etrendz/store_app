@@ -1,18 +1,182 @@
+<script>
 
-<h1>Editing purchase</h1>
+
+ function change_in_qty(obj) {
+	var qty = obj.value;
+	var tqty = 0;
+	var cprice = parseFloat($(obj).closest('td').next('td').find('input').val());
+	$(obj).closest('td').next('td').next('td').text(qty*cprice);
+	calculate_tpsum();
+	$('.pp_qty').each(function( index ) {
+		tqty += parseInt($(this).val());
+	});
+	$("#qty_sum").empty().append(tqty);
+ }
+
+ function change_in_cprice(obj) {
+	var cprice = obj.value;
+	var qty = parseFloat($(obj).closest('td').prev('td').find('input').val());
+	$(obj).closest('td').next('td').text(qty*cprice);
+	calculate_tpsum();
+ }
+
+ function calculate_tpsum() {
+	var tsum = 0;
+	$('.pp_sum').each(function( index ) {
+		tsum += parseFloat($( this ).text() );
+	});
+	$("#total_purchase_sum").empty().append(tsum);
+	calculate_excise_duty();
+ }
+ 
+	function calculate_excise_duty() {
+		var tsum = parseFloat($("#total_purchase_sum").text()) || 0;
+		var discount_percent = parseFloat($("#purchase_discount").val()) || 0;
+		var discount_value = tsum * discount_percent / 100;
+		$("#discount_percent").empty().append(discount_percent);
+		$("#discount_value").empty().append(discount_value);
+		var atotal = (tsum - discount_value) || 0;
+		$("#actual_total").empty().append(atotal);
+		var duty_percent = parseInt($("#duty_percent").text()) || 0;
+		var duty_value = atotal * duty_percent / 100;
+		var edu_cess_percent = parseInt($("#purchase_edu_cess").val()) || 0;
+		var edu_cess_value = duty_value * edu_cess_percent / 100;
+		var surcharge_percent = parseInt($("#purchase_surcharge").val()) || 0;
+		var surcharge_value = duty_value * surcharge_percent / 100;
+		var excise_duty = duty_value + edu_cess_value + surcharge_value;
+		var vat_cst_percent = parseInt($("#purchase_vat").val()) || 0;
+		var freight = parseInt($("#purchase_freight").val()) || 0;
+		var dc = parseInt($("#purchase_dc").val()) || 0;
+		var vat_cst_value = (atotal + excise_duty + freight + dc)  * vat_cst_percent / 100;
+		var invoice_amount = parseInt($("#purchase_amount").val());
+		$("#duty_value").empty().append(duty_value.toFixed(2));
+		$("#edu_cess_value").empty().append(edu_cess_value.toFixed(2));
+		$("#surcharge_value").empty().append(surcharge_value.toFixed(2));
+		$("#excise_duty").empty().append(excise_duty.toFixed(2));
+		$("#vat_cst_value").empty().append(vat_cst_value.toFixed(2));
+		$("#vat_cst_percent").empty().append(vat_cst_percent);
+		round_off = invoice_amount - (atotal + excise_duty + freight + dc + vat_cst_value) ;
+		$("#round_off").empty().append(round_off.toFixed(2));
+		grand_total = atotal + excise_duty + freight + dc + vat_cst_value + round_off;
+		$("#grand_total").empty().append(grand_total.toFixed(2));
+//		debit_amt = parseInt(Math.abs(round_off.toFixed(2)));
+		var debit_amt = parseFloat($("#purchase_debit_note").val()) || 0;
+		$("#debit_amt").empty().append(debit_amt);
+		net_total = grand_total - debit_amt;
+		$("#net_total").empty().append(net_total.toFixed(2));
+		
+		$("#purchase_round_off").val(round_off.toFixed(2));
+//		$("#purchase_debit_note").val(debit_amt);
+	}
+$(document).ready(function(){
+ calculate_excise_duty();
+
+	
+ $('#purchase_discount').change(function(){ 
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ $('#purchase_vat').change(function(){ 
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ $('#purchase_duty').change(function(){ 
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ $('#purchase_edu_cess').change(function(){ 
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ $('#purchase_surcharge').change(function(){ 
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ 
+ $('#purchase_duty').change(function(){ 
+		var asum = parseFloat($("#actual_total").text()) || 0;
+		var duty_percent = parseFloat($("#purchase_duty").val()) || 0;
+		var duty_value = asum * duty_percent / 100;
+		$("#duty_percent").empty().append(duty_percent);
+		$("#duty_value").empty().append(duty_value);
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ 
+ $('#purchase_edu_cess').change(function(){ 
+		var duty_value = parseFloat($("#duty_value").text()) || 0;
+		var edu_cess_percent = parseFloat($("#purchase_edu_cess").val()) || 0;
+		var edu_cess_value = duty_value * edu_cess_percent / 100;
+		$("#edu_cess_percent").empty().append(edu_cess_percent);
+		$("#edu_cess_value").empty().append(edu_cess_value);
+	return false;
+ });
+ 
+ $('#purchase_surcharge').change(function(){ 
+		var duty_value = parseFloat($("#duty_value").text()) || 0;
+		var surcharge_percent = parseFloat($("#purchase_surcharge").val()) || 0;
+		var surcharge_value = duty_value * surcharge_percent / 100;
+		$("#surcharge_percent").empty().append(surcharge_percent);
+		$("#surcharge_value").empty().append(surcharge_value);
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ $('#purchase_freight').change(function(){ 
+		var freight = parseInt($("#purchase_freight").val()) || 0;
+		$("#freight").empty().append(freight);
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ $('#purchase_dc').change(function(){ 
+		var dc = parseFloat($("#purchase_dc").val()) || 0;
+		$("#dc").empty().append(dc);
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ $('#purchase_debit_note').change(function(){ 
+		var debit_amt = parseFloat($("#purchase_debit_note").val()) || 0;
+		var grand_total = parseFloat($("#grand_total").text()) || 0;
+		$("#debit_amt").empty().append(debit_amt);
+		$("#net_total").empty().append(grand_total - debit_amt);
+	//	calculate_excise_duty();
+	return false;
+ });
+ 
+ 
+
+});
+jQuery(function($) {
+			$(".purchase_return_edit").bind("ajax:success",
+                   function(evt, data, status, xhr){
+                        //this assumes the action returns an HTML snippet
+                        $(".modal-content").html(data);
+           }).bind("ajax:error", function(evt, data, status, xhr){
+                    //do something with the error here
+                    $("div#errors p").text(data);
+           });
+		});
+</script>
+
 <style>
-
+.dactions{
+	position: absolute;
+	top: 10px;
+	right:10px;
+}
 #etable_header {
 border:#ccc 1px solid;
 padding: 3px 2px;
 background: #438EB9;
 color:#fff;
-text-align:center;
-}
-#etable_header1 {
-border:#ccc 1px solid;
-padding: 3px 2px;
-color:#000;
 text-align:center;
 }
 #etable_header_plain {
@@ -21,38 +185,37 @@ background: #438EB9;
 color:#fff;
 text-align:center;
 }
-#total_purchase_sum{
-padding: 3px 2px;
-background: #438EB9;
-color:#fff;
+
+/* ADDED BY EHTI ON 2-5-14 TO STYLE THE ERROR MESSAGE  */
+
+#error_explanation {
+	font-size: 12px;
+  ul {
+    list-style: none;
+    margin: 0 0 18px 0;
+  }
 }
-#total_qty{
-padding: 3px 2px;
-background: #438EB9;
-color:#fff;
+
+
+.field_with_errors {
+  @extend .control-group;
+  @extend .error;
+ }
+ 
+ #error_explanation h2{
+	font-size: 15px;
 }
-#purchase_sum{
-padding: 3px 2px;
-background: #438EB9;
-color:#fff;
+#purchase_supplier_id{
+width: 150px;
 }
-.dactions {
-	position: fixed;
-	width:100px;
-	height:40px;
-	left:228px;
-	top:630px;
+#new_purchase{
+margin-top: -40px
 }
 </style>
-<script>
-	
-	 function inline_edit() {
-		alert('link clicked');
-	 }
-</script>
 <%= form_for(@purchase) do |f| %>
   <% if @purchase.errors.any? %>
-    <div id="error_explanation">
+    <div id="error_explanation"  class="alert alert-danger alert-dismissable">
+	  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       <h2><%= pluralize(@purchase.errors.count, "error") %> prohibited this purchase from being saved:</h2>
 
       <ul>
@@ -63,65 +226,313 @@ color:#fff;
     </div>
   <% end %>
 
+  
   <div class="field" style='float:left'>
-    <%= f.label :invoice %><br/>
-    <%= f.text_field :invoice %>
+    <%#= f.label :receipt_type %><br/>
+    <%= f.hidden_field :receipt_type, value: 'CBP' %>
 	&nbsp;
   </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :invoice, "Receipt No" %><br/>
+    <%= f.text_field :invoice, style: "width:80px", :readonly => true %>
+  </div>
+  
+  <div class="col-xs-2"><%= f.label :purchase_date %><br/>
+	<div class="input-group input-group-sm"> 
+		<%= f.text_field :purchase_date, class: "form-control", value: Date.today %>
+		<span class="input-group-addon">
+			<i class="icon-calendar"></i>
+		</span>
+	</div>
+  </div>
+      
   <div class="field" style='float:left'>
     <%= f.label :supplier_id %><br/>
-    <%= f.collection_select :supplier_id, Supplier.all, :id, :name %>
+    <%= f.collection_select :supplier_id, Supplier.all, :id, :name, style:'width:50%' %>
 	&nbsp;
   </div>
   
-											<div class="col-xs-3"><%= f.label :purchase_date %><br/>
-												<div class="input-group input-group-sm"> 
-													<%= f.text_field :purchase_date, class: "form-control", value: Date.today %>
-													<span class="input-group-addon">
-														<i class="icon-calendar"></i>
-													</span>
-												</div>
-											</div>
-											
-  
-  <div class="field" style='float:left;margin-left:20px'>
-    <%= f.label :paid, "Payment" %>
-	<div><%= f.radio_button :paid, 1, :checked => "checked" %>Cash </div>
-	 <div><%= f.radio_button :paid, 0 %>Credit </div>
+  <div class="field" style='display:none;float:left; margin-left:10px'>
+	<label for="paid">Payment Mode</label><br/>
+		<label class="radio-inline">
+          <%= f.radio_button :paid, 1, :checked => "checked" %>
+		  Cash
+		</label>
+		<label class="radio-inline">
+          <%= f.radio_button :paid, 0 %>
+		  Credit
+		</label>
   </div>
   
-  <div id="content_1" class="content_1" style= "position:fixed; left:227px;top:350px;width:860px"> 
-	<div class="result_purchase_product">
-		<div id='etable_header' class="col-xs-2"><span>Product Code</span></div>
-		<div id='etable_header' class="col-xs-2"><span>Product Name</span></div>
-		<div id='etable_header' class="col-xs-1"><span>Qty</span></div>
-		<div id='etable_header' class="col-xs-2"><span>Price</span></div>
-		<div id='etable_header' class="col-xs-2"><span>Sum</span></div>
-		<div id='etable_header' class="col-xs-1"><span>Delete</span></div>
-	</div> 
-	<% @purchase.purchase_products.each do |pp|  %>
-	<div style='clear:both'>
-		<div id='etable_header1' class="col-xs-2"><span><%= pp.product.code %></span></div>
-		<div id='etable_header1' class="col-xs-2"><span><%= pp.product.name %></span></div>
-		<div id='etable_header1' class="col-xs-1"><span><%= pp.qty %></span></div>
-		<div id='etable_header1' class="col-xs-2"><span><%= pp.cprice %></span></div>
-		<div id='etable_header1' class="col-xs-2"><span><%= pp.cprice * pp.qty %></span></div>
-		<div id='etable_header1' class="col-xs-1"><span><%= link_to 'Edit', edit_purchase_product_path(pp) %></span></div> 
-		<!-- <div id='etable_header1' class="col-xs-1"><span><a href='#' onclick='inline_edit()' >Edit</a></span></div> -->
-	</div>
-	<% end %>
-	<div class="sum_purchase_product" style="position:fixed; left:228px;top:550px;width:860px"> <br/>
-		<div id='etable_header_plain' class="col-xs-2"><span>Total</span></div>
-		<div id='etable_header_plain' class="col-xs-2"><span>&nbsp;</span></div>
-		<div id='total_qty' class="col-xs-1"><%= @purchase.purchase_products.map(&:qty).sum %></div>
-		<div id='purchase_sum' class="col-xs-2">&nbsp;</div>
-		<div id='total_purchase_sum' class="col-xs-2">0</div>
-	</div>
-	
-  </div> 
+  <div class="field" style='float:left'>
+    <%= f.label :invoice, "Invoice No" %><br/>
+    <%= f.text_field :suppliers_invoice, style: "width:100px" %>
+  </div>
   
+  <div class="col-xs-2"><%= f.label :invoice_date %><br/>
+	<div class="input-group input-group-sm"> 
+		<%= f.text_field :invoice_date, class: "form-control" %>
+		<span class="input-group-addon">
+			<i class="icon-calendar"></i>
+		</span>
+	</div>
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :amount, "Total Amount" %><br/>
+    <%= f.text_field :amount, style: "width:90px" %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :discount, "Discount %" %><br/>
+    <%= f.text_field :discount, style: "width:70px" %>
+	&nbsp;
+  </div><br><br><br><br>
+  
+    <div class="field" style='float:left'>
+    <%= f.label :transport, "Transport" %><br/>
+    <%= f.text_field :transport, style: "width:160px" %>
+	&nbsp;
+  </div>
+  
+   <div class="field" style='float:left'>
+    <%= f.label :lr_no, "LR. No" %><br/>
+    <%= f.text_field :lr_no, style: "width:70px" %>
+	&nbsp;
+  </div>
+  
+   <div class="field" style='float:left'>
+    <%= f.label :freight, "Freight" %><br/>
+    <%= f.text_field :freight, style: "width:80px" %>
+	&nbsp;
+  </div>
+  
+   <div class="field" style='float:left'>
+    <%= f.label :dc, "Delivery Charges" %><br/>
+    <%= f.text_field :dc, style: "width:110px" %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :vat, "VAT/CST" %><br/>
+    <%= f.text_field :vat, style: "width:50px" %>
+	&nbsp;
+  </div>
+  <!--
+  <div class="field" style='float:left'>
+    <%= f.label :cst, "CST %" %><br/>
+    <%= f.text_field :cst, style: "width:50px" %>
+	&nbsp;
+  </div>
+  -->
+  <div class="field" style='float:left'>
+    <%= f.label :duty, "Duty %" %><br/>
+    <%= f.text_field :duty, style: "width:50px" %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :edu_cess, "Edu. Cess %" %><br/>
+    <%= f.text_field :edu_cess, style: "width:85px" %>
+	&nbsp;
+  </div>
+  
+   <div class="field" style='float:left'>
+    <%= f.label :surcharge, "Surcharge %" %><br/>
+    <%= f.text_field :surcharge, style: "width:85px" %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :round_off, "Round Off" %><br/>
+    <%= f.text_field :round_off, style: "width:80px" %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
+    <%= f.label :debit_note, "Debit Note" %><br/>
+    <%= f.text_field :debit_note, style: "width:80px" %>
+	&nbsp;
+  </div>
+    
   
 	<div class='dactions'>
 		<%= f.submit :class => 'btn btn-pink btn-sm' %>
 	</div>
+  <div id="content_1" class="content_1" style= "position:inherit;left:227px;top:350px;width:1000px;padding:0px;margin:0px;margin-top:150px;"> 
+  <table style="width:1000px;" class="table table table-striped table-bordered table-hover">
+	<thead>
+		<tr>
+			<th></th>
+			<th>Barcode</th>
+			<th>Product Name</th>
+			<th>Qty</th>
+			<th>Price</th>
+			<th>Sum</th>
+			<th>Delete</th>
+		</tr>
+	</thead>
+  <%= f.fields_for :purchase_products do |pp| %> 
+
+  <%= pp.hidden_field :product_id %>
+		<tr class='purchase_product_attributes'>
+			<td></td>
+			<td><%=pp.object.product.code%></td>
+			<td><%=pp.object.product.name%></td>
+			<td><%= pp.text_field :qty, style: 'width:50px', onchange: 'change_in_qty(this)', class: 'pp_qty' %></td>
+			<td><%= pp.text_field :cprice, style: 'width:50px', onchange: 'change_in_cprice(this)' %></td>
+			<td class='pp_sum'><%=pp.object.qty * pp.object.cprice%></td>
+			<td>Remove</td> 
+		</tr>
+	<% end %>
+		
+	</div>
+  
 <% end %>
+
+
+	<div class="table-responsive sum_purchase_product">
+	
+				<thead>
+					<td></td>
+					<td></td>
+					<th>Total</th>
+					<th id='qty_sum'><%= @purchase.purchase_products.map(&:qty).sum %></th>
+					<th></th>
+					<th><div id='total_purchase_sum'><% tp = 0; @purchase.purchase_products.each { |pp| tp += pp.cprice * pp.qty} %><%=tp %></div></th>
+					<th></th>
+				</thead>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Discount %</td>
+					<td></td>
+					<td><div id='discount_percent'><%= @purchase.discount %></div></td>
+					<td><div id='discount_value'><%= @purchase.discount ? (tp * @purchase.discount / 100) : 0%></div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Actual Total</td>
+					<td></td>
+					<td></td>
+					<td><div id='actual_total'><%=tp - tp * @purchase.discount / 100%></div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Duty %</td>
+					<td><div id='duty_percent'><%= @purchase.duty %></div></td>
+					<td><div id='duty_value'>0</div></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Educational Cess %</td>
+					<td><div id='edu_cess_percent'><%= @purchase.edu_cess %></div></td>
+					<td><div id='edu_cess_value'>0</div></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Surcharge %</td>
+					<td><div id='surcharge_percent'><%= @purchase.surcharge %></div></td>
+					<td><div id='surcharge_value'>0</div></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Ex Duty</td>
+					<td></td>
+					<td></td>
+					<td><div id='excise_duty'>0</div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Freight</td>
+					<td></td>
+					<td></td>
+					<td><div id='freight'><%= @purchase.freight %></div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Delivery Charges</td>
+					<td></td>
+					<td></td>
+					<td><div id='dc'><%= @purchase.dc %></div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>VAT / CST</td>
+					<td><div id='vat_cst_percent'><%= @purchase.vat %></div></td>
+					<td></td>
+					<td><div id='vat_cst_value'>0</div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Round Off</td>
+					<td></td>
+					<td></td>
+					<td><div id='round_off'>0</div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Grand Total</td>
+					<td></td>
+					<td></td>
+					<td><div id='grand_total'>0</div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Debit Note</td>
+					<td></td>
+					<td></td>
+					<td><div id='debit_amt'><%= @purchase.debit_note %></div></td>
+					<td></td>
+				</tr>
+			<thead>
+				<tr>
+					<th></th>
+					<th></th>
+					<th>Net Total</th>
+					<th></th>
+					<th></th>
+					<td><div id='net_total'>0</div></td>
+					<th></th>
+				</tr>
+			</thead>
+			</table>
+			</div>
+			
+			
+
+			
+
+<div id="modal-form" class="modal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div>
+	</div>
+</div><!-- PAGE CONTENT ENDS -->

@@ -1,0 +1,113 @@
+<style>
+td {
+	width: 50%;
+}
+</style>
+		
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="blue bigger">Add New Product</h4>
+			</div>
+	
+  <div class="modal-body overflow-visible">
+<%= form_for(@product, :remote => true) do |f| %>
+  <% if @product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% @product.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<table>
+<tr>
+ <td>
+  <div class="field">
+    <%= f.label :name %><br/>
+    <%= f.text_field :name %>
+  </div><br/>
+ </td>
+ <td class="pull-right">
+  <div class="field">
+    <%= f.label :category_id %><br/>
+    <%= f.collection_select :category_id, Category.all, :id, :name %>
+  </div><br/>
+ </td>
+</tr>
+<tr>
+ <td>
+  <div class="field">
+    <%= f.label :style %><br/>
+    <%= f.select :style, ['', 'JEANS', 'CP', 'FULL', 'HALF'] %>
+  </div><br/>
+ </td>
+ <td class="pull-right">
+  <div class="field">
+    <%= f.label :size %><br/>
+    <%= f.select :size, ['28','30', '32', '34', '36', '38', '40', '42', '44', '46', '48', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '80', '85', '90', '95', '100', '105', '110', 'S 36', 'M 38', 'L 40', 'XL 42', 'XXL 44', '3XL 46']  %>
+  </div><br/>
+ </td>
+</tr>
+<tr>
+ <td>
+  <div class="field">
+    <%= f.label :cprice, 'Cost Price' %><br/>
+    <%= f.text_field :cprice %>
+  </div><br/>
+ </td>
+ <td class="pull-right">
+  <div class="field">
+    <%= f.label :price, 'Sale Price' %><br/>
+    <%= f.text_field :price %>
+  </div><br/>
+ </td>
+</tr>
+<tr>
+ <td>
+  <div class="field">
+    <%= f.label :brand %><br/>
+    <%= f.text_field :brand %>
+  </div><br/>
+ </td>
+ <td class="pull-right">
+  <div class="field">
+    <%= f.hidden_field :unit, :value => 'Nos' %>
+    <%= f.label :code %><br/>
+    <%= f.text_field :code, :readonly => true %>
+  </div><br/>
+    <%= f.hidden_field :qty %>
+ </td>
+</tr>
+</table>
+    <%= f.submit class: 'btn btn-sm btn-success' %>
+<% end %>
+  </div>
+
+<script type="text/javascript">		   
+				   
+$(document).ready(function(){
+	$('form').submit(function(){
+		var valuesToSubmit = $(this).serialize();
+		$.ajax({
+			method:"POST",
+			url: $(this).attr('action'), //sumbits it to the given url of the form
+			data: valuesToSubmit,
+			dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+		}).success(function(json){
+			//act on result.
+			alert(json.name);
+			$('#product_name').val(json.name);
+			$('#product_code').val(json.code);
+			$('#mycprice').val(json.cprice);
+			$('#myprice').val(json.price);
+			$('.modal').modal('hide');
+//			$('#myqty').focus();
+		});
+		return false;
+	});
+});
+</script>
+  </div>

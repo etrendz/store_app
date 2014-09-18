@@ -1,0 +1,100 @@
+<br/>
+	
+<h3>Sales Report: <%= @from.strftime('%d %b, %Y') %> - <%= @to.strftime('%d %b, %Y') %></h3>
+	<% i = 1 %>
+<% @sales.each do |sale| %>
+	<div class="table-header">
+		<div class="col-sm-2">S.No : <%= i %></div>
+		<% i += 1 %>
+		<div class="col-sm-3">Invoice : <%= sale.invoice %></div>
+		<div class="col-sm-3">Date : <%= sale.sale_date.strftime('%d %b') %></div>
+			<% total_sales = sale.sale_products.sum(:price)
+			   total_returns = sale.sale_returns.sum(:price)
+			   discount = (total_sales * (sale.discount).to_f / 100) %>
+			
+			<% 	@total_sale += (sale.sale_products.sum(:price) - sale.sale_returns.sum(:price) - discount)  %>
+		<div class="col-sm-3">Amount : <%= (total_sales - sale.sale_returns.sum(:price) - discount).round(2) %></div>
+		<%= link_to 'Show', sale, :style => 'color:#fff;' %>
+	</div>
+	<table class='table table-striped'>
+		<thead>
+			<tr>
+				<th>Product</th>
+				<th>Code</th>
+				<th>Size</th>
+				<th>Style</th>
+				<th>Qty</th>
+				<th>MRP</th>
+				<th>Amount</th>
+			</tr>
+		</thead>
+	  <% sale.sale_products.each do |pp| %>
+			<tr>
+				<td><%= pp.product.name %></td>
+				<td><%= pp.product.code %></td>
+				<td><%= pp.product.size %></td>
+				<td><%= pp.product.style %></td>
+				<td><%= pp.qty %></td>
+				<td><%= pp.price / pp.qty %></td>
+				<td><%= pp.price %></td>
+			</tr>
+		<% end %>
+		
+		
+		<% if sale.sale_returns.sum(:price) > 0 %>
+		<tr class="danger">
+			<td><b>Sales Return</b></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		
+		<% sale.sale_returns.each do |pp| %>
+		<tr>
+		<td><%= pp.product.name %></td>
+		<td><%= pp.product.code %></td>
+		<td><%= pp.product.size %></td>
+		<td><%= -pp.qty %></td>
+		<td><%= -(pp.price / pp.qty) %></td>
+		<td><%= -(pp.price) %></td>
+		</tr>
+		<% end %>
+	<% end %>
+	
+		<% if (sale.discount > 0.0) %>
+	<tr>
+		<td></td>
+		<td></td>
+		<td><b>Discount</b></td>
+		<td><%= sale.discount %> %</td>
+		<td></td>
+		<td></td>
+		<td><%= (total_sales * (sale.discount).to_f / 100).round(2) %></td>
+	</tr>
+		<% end %>
+		
+		<tr style=";font-weight:bold;color:#330088">
+			<td></td>
+			<td></td>
+			<td>Total</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			
+			<td style="font-weight: bold;"><%= (total_sales - total_returns -discount).round(2) %></td>
+		</tr>
+		
+		
+
+		
+	</table>
+<% end %>
+	<% if (params[:report_type] == "ALL") %>
+		<h3 class='btn btn-pink' style='position:fixed;top:157px;right:50px;'>Total Sales (CB): Rs. <%= @total_cb_sale.round(2) if @total_cb_sale %> </h3>
+		<h3 class='btn btn-inverse' style='position:fixed;top:207px;right:50px;'>Total Sales (CD) : Rs. <%= @total_cd_sale.round(2) if @total_cd_sale %> </h3>
+	<% end %>
+	<h3 class='btn btn-pink' style='position:fixed;top:107px;right:50px;'>Total Sales <%="#{('(' + params[:report_type]+ ')') if (params[:report_type] != 'CBP')}"%>: Rs. <%= @total_sale.round(2) if @total_sale %> </h3>
+<br />

@@ -1,3 +1,22 @@
+<style>
+.btn-CB, .btn-CB:focus {
+background-color: #d6487e!important;
+border-color: #d6487e;
+}
+.btn-CB:hover {
+background-color: #b73766!important;
+border-color: #d6487e;
+}
+.btn-CD:hover {
+background-color: #333!important;
+border-color: #999;
+}
+.btn-CD, .btn-OD:focus {
+background-color: #000!important;
+border-color: #000;
+}
+</style>
+<script src="/assets/js/bootbox.min.js"></script>
 
 <%= form_for(@sale) do |f| %>
   <% if @sale.errors.any? %>
@@ -13,14 +32,21 @@
   <% end %>
 
   <div class="field" style='float:left'>
+    <%#= f.label :sale_type %><br/>
+    <%#= f.select :sale_type, %w[CBP CDP] %>
+    <%= f.hidden_field :sale_type, value: 'CBP' %>
+	&nbsp;
+  </div>
+  
+  <div class="field" style='float:left'>
     <%= f.label :invoice %><br/>
-     <%= f.text_field :invoice, style: "width:150px"  %>
+     <%= f.text_field :invoice, style: "width:150px", :readonly => true  %>
   </div>
 
   <div class="field" style='float:left; margin-left:5px'>
     <%= f.label :sale_date %><br/>
 	<div class="input-group input-group-xs"> 
-		<%= f.text_field :sale_date, value: Date.today  %>
+		<%= f.text_field :sale_date, value: Date.today, readonly: true  %>
 		<span class="input-group-addon" style='width:30px'>
 			<i class="icon-calendar"></i>
 		</span>
@@ -40,23 +66,31 @@
   <div id="content_1" class="content_1" style= "position:fixed;top:250px;background: #eee;"> 
     <div class="result_sale_product1">
 	<!--	<div id='etable_header' class="col-xs-2"><span>Product Code</span></div>  -->
-		<div id='etable_header' class="col-xs-7"><span>Product Name</span></div>
+		<div id='etable_header' class="col-xs-6"><span>Product Name</span></div>
 		<div id='etable_header' class="col-xs-1"><span>Qty</span></div>
 		<div id='etable_header' class="col-xs-2"><span>Price</span></div>
 		<div id='etable_header' class="col-xs-2"><span>Delete</span></div>  
 	</div>
 	<div class="result_sale_product"> 
 	</div>
-	<div class="sum_sales_product" style="position:fixed;top:450px;width:600px;background: #eee;padding-bottom: 5px;"> <hr/>
+	<div class="sum_sales_product" style="position:fixed;top:450px;width:800px;background: #eee;padding-bottom: 5px;"> <hr/>
 		<div>
 			<div id='etable_header_plain' class="col-xs-6"><%= f.label :customer_name, class: "col-xs-5"  %><%= f.text_field :customer_name, data: { autocomplete_source: "/customers.json" }, class: "col-xs-6"  %></div>
-			<div id='etable_header_plain' class="col-xs-2"><span>Total</span></div>
-			<div id='total_sale_price' class="col-xs-2">0</div>
+			<div id='etable_header_plain' class="col-xs-2"><span>Sub Total</span></div>
+			<div id='total_sale_price' class="col-xs-1" style="text-align:right">0</div>
 		</div>
 		<br/>
 		<br/>
 		<div>
-			<div id='etable_header_plain' class="col-xs-5"><%= f.label :remark, class: "col-xs-5" %><%= f.text_field :remark, class: "col-xs-5"  %></div>
+			<div id='etable_header_plain' class="col-xs-6"><%= f.label :remark, class: "col-xs-5" %><%= f.text_field :remark, class: "col-xs-6"  %></div>
+			<div id='etable_header_plain' class="col-xs-5"><a class="btn btn-info btn-sm col-xs-3" id="bootbox-regular">Discount</a><%= f.text_field :discount, class: "col-xs-2", style: 'text-align:right;visibility:hidden'  %><input type='text' id='temp_discount' class='col-xs-2' style='display:none;text-align:right'/></div>
+		</div>
+		<br/>
+		<br/>
+		<div>
+			<div id='etable_header_plain' class="col-xs-6"><%= f.label :customer_name, class: "col-xs-5"  %><%= "Col1"  %></div>
+			<div id='etable_header_plain' class="col-xs-2"><span>Total</span></div>
+			<div id='net_sale_price' class="col-xs-1" style="text-align:right">0</div>
 		</div>
 	</div>
   </div>
@@ -64,7 +98,7 @@
 	
 	
 	 
-		<%= f.submit :class => 'btn btn-pink btn-sm',confirm: 'Are You Sure',  style: 'float:right' %>
+		<%= f.submit :class => 'btn btn-sm',confirm: 'Are You Sure',  style: 'float:right' %>
 
 <% end %>
 

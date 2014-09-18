@@ -1,6 +1,9 @@
+
 <form id="purchase_report_form" class="form-search" action="/form_submitted">
-		<div class="col-xs-4 col-sm-4">
-	<label for="id-date-range-picker-1">Start Date</label>
+				<%= hidden_field_tag "report_type", 'CBP' %>
+		
+		<div class="col-xs-3 col-sm-3">
+			<label for="id-date-range-picker-1">Start Date</label>
 			<div class="input-group">
 				<span class="input-group-addon">
 					<i class="icon-calendar bigger-110"></i>
@@ -9,7 +12,7 @@
 			</div>
 		</div>
 	
-		<div class="col-xs-4 col-sm-4">
+		<div class="col-xs-3 col-sm-3">
 	<label for="id-date-range-picker-1">End Date</label>
 			<div class="input-group">
 				<input id='to_date' class="form-control date-picker" id="to_date" type="text" data-date-format="dd-mm-yyyy" />
@@ -19,7 +22,7 @@
 			</div>
 		</div>
 		
-		<div class="col-xs-4 col-sm-4">
+		<div class="col-xs-3 col-sm-3">
 	<label for="id-date-range-picker-1">&nbsp;</label>
 			<br/>
 			<button id="purchase_report_btn" class="btn btn-info btn-sm" type="button">
@@ -39,7 +42,7 @@ $( "#purchase_report_form" ).submit();
 $( "form" ).submit(function( event ) {
 	$('.purchase_report').html('<br/><br/><br/><img src="/assets/loader.gif"> loading...');
 	
-	$.get('/purchase_report?from='+$("#from_date" ).val()+'&to='+$("#to_date" ).val(), function(data){
+	$.get('/purchase_report?from='+$("#from_date" ).val()+'&to='+$("#to_date" ).val()+'&report_type='+$("#report_type" ).val(), function(data){
 		  $('.purchase_report').empty().append(data);
 	});
 	event.preventDefault();

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+#fontfashion {
+  font-family: 'Asia';    
+  url('/assets/asia.ttf') format('truetype'),
+  font-weight: bold;
+  font-size: 130%;
+  font-style: normal;
+}
+</style>
+<head>
+	<title>ETrendz POS Developed by ETrendz IT Solutions</title>
+	<%= stylesheet_link_tag  "css/bootstrap.min.css" %>
+	<%= stylesheet_link_tag  "css/font-awesome.min.css" %>
+	<%= stylesheet_link_tag  "css/ace.min.css" %>
+	<%= stylesheet_link_tag  "css/fullcalendar.css" %>
+	
+	<%= stylesheet_link_tag "css/jquery-ui-1.10.3.full.min.css" %>
+	<link rel="stylesheet" href="/assets/font.css?family=Open+Sans:400,300" />  
+	
+	<%#= javascript_include_tag 'application' %>	
+	
+	<%= javascript_include_tag "jquery.min.js" %>
+	<%= javascript_include_tag "js/bootstrap.min.js" %>
+	<%= javascript_include_tag "js/ace-elements.min.js" %>
+	<%= javascript_include_tag "js/ace.min.js" %>
+	<%= javascript_include_tag "js/ace-extra.min.js" %>
+	<%= javascript_include_tag "js/jquery-ui-1.10.3.full.min.js" %>
+	<%= javascript_include_tag "script.js" %>
+		<script src="/assets/js/fuelux/fuelux.spinner.min.js"></script>
+		
+	<%= javascript_include_tag "jquery_ujs" %>
+	<%= stylesheet_link_tag  "mCustomScrollbar.css" %>
+	<%= javascript_include_tag  "mCustomScrollbar" %>
+<%= csrf_meta_tag %>
+	
+	<script>
+		(function($){
+			$(window).load(function(){
+				$("#content_1").mCustomScrollbar({
+					scrollButtons:{
+						enable:true
+					}
+				});
+			});
+		})(jQuery);
+	</script>
+	</head>
+
+	<body>
+		<div class="navbar navbar-default" id="navbar">
+
+			<div class="navbar-container" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<a href="/" class="navbar-brand">
+						<small id="fontfashion">
+							<i class="icon-user"></i>
+							MEN'S FASHION
+						</small>
+					</a><!-- /.brand -->
+				</div><!-- /.navbar-header -->
+
+				<div class="navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav">
+
+
+						<li class="light-blue">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<img class="nav-user-photo" src="/assets/avatars/user.png" alt="Users's Photo" />
+								<span class="user-info">
+									<small>Hi! </small>
+									<%= current_user.name if current_user%>
+								</span>
+
+								<i class="icon-caret-down"></i>
+							</a>
+
+							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+								<li>
+									<a href="#">
+										<i class="icon-cog"></i>
+										Settings
+									</a>
+								</li>
+
+								<li>
+									<a href="#">
+										<i class="icon-user"></i>
+										Profile
+									</a>
+								</li>
+
+								<li class="divider"></li>
+
+								<li>
+									<a href="/logout">
+										<i class="icon-off"></i>
+										Logout
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul><!-- /.ace-nav -->
+				</div><!-- /.navbar-header -->
+			</div><!-- /.container -->
+		</div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar">
+					<script type="text/javascript">
+						try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+					</script>
+
+					<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+						<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+							<a href="/suppliers/new" class="btn btn-success" title='New Supplier'>
+								<i class="icon-user"></i>
+							</a>
+
+							<a href="/customers/new"  class="btn btn-info" title='New Customer'>
+								<i class="icon-group"></i>
+							</a>
+							<a href="/purchases/new" class="btn btn-warning" title='New Purchase'>
+								<i class="icon-briefcase"></i>
+				</a>
+
+							<a href="/sales/new" class="btn btn-danger" title='New Sale'>								
+							<i class="icon-gift"></i>
+				</a>
+						</div>
+
+						<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+						<span class="btn btn-success"></span>
+
+							<span class="btn btn-info"></span>
+
+							<span class="btn btn-warning"></span>
+
+							<span class="btn btn-danger"></span>				
+						</div>
+					</div><!-- #sidebar-shortcuts -->
+
+					<ul class="nav nav-list">
+						<li class="active">
+							<a href="/">
+								<i class="icon-dashboard"></i>
+								<span class="menu-text"> Dashboard </span>
+							</a>
+						</li>
+
+						<li>
+							<a href="/products" class="dropdown-toggle">
+								<i class="icon-desktop"></i>
+								<span class="menu-text"> Master Entry </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+							<% if current_user && (current_user.name == 'admin')%>
+								<li>
+									<a href="/categories" class="dropdown-toggle">
+										<i class="icon-double-angle-right"></i>
+
+										Categories
+										<b class="arrow icon-angle-down"></b>
+									</a>
+									<ul class="submenu">
+										<li>
+											<a href="/categories">
+												<i class="icon-tags"></i>
+												View Categories
+											</a>
+										</li>
+
+										<li>
+											<a href="/categories/new">
+												<i class="icon-tag"></i>
+
+												New Category
+											</a>
+										</li>
+									</ul>
+								</li>
+								<% end %>
+								<li>
+									<a href="/products" class="dropdown-toggle">
+										<i class="icon-double-angle-right"></i>
+
+										Products
+										<b class="arrow icon-angle-down"></b>
+									</a>
+
+									<ul class="submenu">
+										<li>
+											<a href="/products">
+												<i class="icon-leaf"></i>
+												View Products
+											</a>
+										</li>
+
+										<li>
+											<a href="/products/new">
+												<i class="icon-leaf"></i>
+
+												New Product
+											</a>
+										</li>
+										<li>
+											<a href="/products/search">
+												<i class="icon-leaf"></i>
+
+												Search Product
+											</a>
+										</li>
+										<li>
+											<a href="/products/new">
+												<i class="icon-leaf"></i>
+
+												New Product
+											</a>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<a href="/suppliers" class="dropdown-toggle">
+										<i class="icon-double-angle-right"></i>
+
+										Suppliers
+										<b class="arrow icon-angle-down"></b>
+									</a>
+
+									<ul class="submenu">
+										<li>
+											<a href="/suppliers">
+												<i class="icon-user"></i>
+												View Suppliers
+											</a>
+										</li>
+
+										<li>
+											<a href="/suppliers/new">
+												<i class="icon-user"></i>
+
+												New Suppliers
+											</a>
+										</li>
+										<!--
+										<li>
+											<a href="/suppliers/search">
+												<i class="icon-search"></i>
+
+												Search Supplier
+											</a>
+										</li>
+										-->
+									</ul>
+								</li>
+								<li>
+									<a href="/customers" class="dropdown-toggle">
+										<i class="icon-double-angle-right"></i>
+
+										Customers
+										<b class="arrow icon-angle-down"></b>
+									</a>
+
+									<ul class="submenu">
+										<li>
+											<a href="/customers">
+												<i class="icon-user"></i>
+												View Customers
+											</a>
+										</li>
+
+										<li>
+											<a href="/customers/new">
+												<i class="icon-user"></i>
+
+												New Customers
+											</a>
+										</li>
+										
+										<!--
+										<li>
+											<a href="/suppliers/search">
+												<i class="icon-search"></i>
+
+												Search Customer
+											</a>
+										</li>
+										-->
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="/purchases/new" class="dropdown-toggle">
+								<i class="icon-briefcase"></i>
+								<span class="menu-text"> Purchases </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+							
+							<ul class="submenu">
+								<li>
+									<a href="/purchases">
+										<i class="icon-double-angle-right"></i>
+										View Purchases
+									</a>
+								</li>
+
+								<li>
+									<a href="/purchases/new">
+										<i class="icon-double-angle-right"></i>
+										New Purchase
+									</a>
+								</li>
+								
+										<li>
+											<a href="/purchases/search">
+												<i class="icon-pencil"></i>
+
+												Search Purchase
+											</a>
+										</li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="/sales/new" class="dropdown-toggle">
+								<i class="icon-gift"></i>
+								<span class="menu-text"> Sales </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+							
+							<ul class="submenu">
+								<li>
+									<a href="/sales/detailed_report">
+										<i class="icon-double-angle-right"></i>
+										View Detailed Sales
+									</a>
+								</li>
+								
+								<li>
+									<a href="/day_sales">
+										<i class="icon-double-angle-right"></i>
+										View Sales
+									</a>
+								</li>
+
+								<li>
+									<a href="/sales/new">
+										<i class="icon-double-angle-right"></i>
+										New Sale
+									</a>
+								</li>
+								
+								<li>
+									<a href="/sales/search">
+										<i class="icon-double-angle-right"></i>
+										Search Sale
+									</a>
+								</li>
+								
+							</ul>
+						</li>
+
+						<li>
+							<a href="/purchases/report" class="dropdown-toggle">
+								<i class="icon-list"></i>
+								<span class="menu-text"> Report </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								
+								<li>
+									<a href="/stock-report">
+										<i class="icon-double-angle-right"></i>
+										Stock Report
+									</a>
+								</li>
+								<% if current_user && (current_user.name == 'admin')%>
+								<li>
+									<a href="/purchases/report">
+										<i class="icon-double-angle-right"></i>
+										Purchase Report
+									</a>
+								</li>
+
+								<li>
+									<a href="/purchases/supplier_report">
+										<i class="icon-double-angle-right"></i>
+										Supplier Wise Report
+									</a>
+								</li>
+
+								<li>
+									<a href="/sales/report">
+										<i class="icon-double-angle-right"></i>
+										Sales Report
+									</a>
+								</li>
+								
+								<li>
+									<a href="/graph">
+										<i class="icon-double-angle-right"></i>
+										Sales Graph
+									</a>
+								</li>
+								<% end %>
+							</ul>
+						</li>
+
+						<% if current_user && (current_user.name == 'admin')%>
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-edit"></i>
+								<span class="menu-text"> Credit </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="/sales/receivables">
+										<i class="icon-double-angle-right"></i>
+										Receivables
+									</a>
+								</li>
+
+								<li>
+									<a href="/purchases/payables">
+										<i class="icon-double-angle-right"></i>
+										Payables
+									</a>
+								</li>
+							</ul>
+						</li>
+						<% end %>
+						
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-barcode"></i>
+								<span class="menu-text"> Barcode </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+
+								<li>
+									<a href="/generate_barcode">
+										<i class="icon-double-angle-right"></i>
+										Barcode
+									</a>
+								</li>
+								
+								<li>
+									<a href="/barcode/barcode_single">
+										<i class="icon-double-angle-right"></i>
+										Single Barcode
+									</a>
+								</li>
+								
+								<li>
+									<a href="/barcode/barcode">
+										<i class="icon-double-angle-right"></i>
+										Barcode Grid
+									</a>
+								</li>
+							</ul>
+
+						</li>
+
+					</ul><!-- /.nav-list -->
+					
+					<img class="img-responsive" src="/assets/store_logo.png">
+
+					<div class="sidebar-collapse" id="sidebar-collapse">
+						<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+					</div>
+
+					<script type="text/javascript">
+						try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+					</script>
+				</div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/">Home</a>
+							</li>
+							<li class="active"><%= params[:action] %></li>
+						</ul><!-- .breadcrumb -->
+
+						<div class="nav-search" id="nav-search">
+							<form class="form-search" action='/products/'>
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" name=term />
+									<i class="icon-search nav-search-icon"></i>
+								</span>
+							</form>
+						</div><!-- #nav-search -->
+					</div>
+
+					
+					<div class="page-content">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<% flash.each do |key, value| %>
+									<div class="<%= flash_class(key) %>">
+											<button type=button" class="close" data-dismiss="alert">
+												<i class="icon-remove"></i>
+											</button>
+										  <%= value %>
+									</div>
+								<% end %>
+								
+									<%= yield %>
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+		<input type="hidden" id="refreshed" value="no">
+               <script type="text/javascript">
+               onload=function(){
+               var e=document.getElementById("refreshed");
+               if(e.value=="no")e.value="yes";
+               else{e.value="no";location.reload();}
+               }
+               </script>
+	</body>
+	
+</html>

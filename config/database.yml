@@ -12,9 +12,8 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-#  database: store_with_return_real
-  database: store_test
-#  database: store_new_with_return
+  database: store_with_variant7
+#  database: store_with_variant6
   pool: 5
   username: root
   password: admin

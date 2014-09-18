@@ -1,0 +1,8 @@
+
+<table class='table table-striped'>
+	<tr><td>Product</td><td>Quantity</td></tr>
+	<% @dead_stocks.each {|p| %>	
+	<tr><td><%= p[0] %></td><td><%= p[1] %></td></tr>
+<% } %>
+
+<%= @dead_products.class%>

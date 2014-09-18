@@ -35,109 +35,114 @@ class Integer
 end
 
 class SalePdf < Prawn::Document
-	def initialize(sale, total_sales)
-		super()
+	def initialize(sale, total_sales, total_returns)
+		super(options = {:margin => [4, 4, 0, 12], :page_size => [290, 1000], :print_scaling => :none})
 		font "Times-Roman"
 		@items =Array.new
 		@sale = sale
 		@total_sales = total_sales
-		@discount = (@total_sales * (@sale.discount).to_i / 100)
+		@total_returns = total_returns
+		@discount = (@total_sales * (@sale.discount).to_f / 100)
 		@vat = (@total_sales - @discount) * (@sale.vat).to_i / 100
-		
-		text "TIN : 33264263729", :size => 10, :align => :left
-		text "Mobile No : 9655583812", :size => 10, :align => :left
-		text "Phone : 04174 244466", :size => 10, :align => :left		
+			
 move_down(10)
-		text "JAWHAR PLAZA", :size => 28, :align => :center
-#		move_up(28)
-#		text "Invoice", :size => 22, :align => :right
-		text "# 194/43 Nethaji Road, Ambur - 635802. Vellore District.", :size => 12, :align => :center
-#		text "Triplicane, Chennai - 03.", :size => 10, :align => :left
-		move_down(10)
-		draw_a_line()
-		move_down(10)
-		text "INVOICE: ##{@sale.id}", :size => 10, :align => :right
+		text "TIN : 33414621625", :size => 9, :align => :left
+		text "CST : 368379 / Dt: 18.08.1999", :size => 9, :align => :left
+		move_up(12)
+		text "Phone : 04179 222896", :size => 9, :align => :right
 		move_down(5)
-		text "DATE: #{@sale.sale_date.strftime('%d-%m-%Y')}", :size => 8, :align => :right
+		
+		font_families.update("Arial" => {
+    :normal => "#{Rails.root}/app/assets/fonts/asia.ttf",
+    :italic => "#{Rails.root}/app/assets/fonts/ariali.ttf",
+    :bold => "#{Rails.root}/app/assets/fonts/arialbd.ttf",
+    :bold_italic => "#{Rails.root}/app/assets/fonts/arialbi.ttf"
+  })
+
+  font "Arial"
+  text "MEN'S FASHION", :size => 30, :align => :center
+  font("Helvetica")
+		
+		text "# 59/1, Vaniyambadi Road,", :size => 10, :align => :center
+		text "Tirupattur - 635 601.", :size => 10, :align => :center
 		move_down(5)
-		text "ORDER NO: #{@sale.customer.id if @sale.customer}", :size => 10, :align => :right
-	#	move_down(10)
-	#	draw_a_line()
+		text "<u>CASH BILL""</u>",  :align => :center, :inline_format => true
+		# draw_a_line()
+		move_down(10)
+		text "Bill No: #{@sale.invoice}", :size => 10, :align => :left
+		move_up(20)
+		text "DATE : #{@sale.sale_date.strftime('%d-%m-%y')}", :size => 10, :align => :right
+		move_down(3)
+		text "TIME: #{@sale.created_at.strftime('%I:%M %p')}", :size => 10, :align => :right
+		move_down(25)
 		move_up(38)
-		add_from
 		move_down(20)
 		line_items
-		move_down(20)
-		
-		bounding_box [bounds.left, bounds.bottom + 125], :width => bounds.width do
-			font "Helvetica"
-		text "For JAWHAR PLAZA", :size => 14, :align => :right
-			move_down(70)
-#		text "Thank you for your business", :size => 12, :align => :center
-#			move_down(10)
-			stroke_horizontal_rule
+		move_down(10)
+		stroke_horizontal_rule
 			move_down(10)
-			text "Goods are dispatched at the purchaser's risk.", :size => 10
+			text "Goods ones sold can not be Taken back or Exchange", :size => 10, :align => :center
+			move_down(3)
+			text "All Credit & Debit Cards Accepted, (No Service Charge).", :size => 10, :align => :center
+			move_down(3)
+			text "***THANK YOU VISIT AGAIN***MENS FASHION TPT", :size => 10, :align => :center
 			move_down(5)
-			text "For all disputes, the legal jurisdiction is Ambur only ", :size => 10
-		end
+			draw_a_line()
 	end
 	
-	def add_from
-		text "Bill to : ", :size => 14, :align => :left
-		move_down(5)
-		text "#{@sale.customer.name if @sale.customer}", :size => 14, :align => :left
-		text "# #{@sale.customer.mobile if @sale.customer}", :size => 14, :align => :left
-		text "Address : #{@sale.customer.address if @sale.customer}", :size => 14, :align => :left
-		text "Tin :  #{@sale.customer.tin if @sale.customer}", :size => 14, :align => :left
-		
-		move_down(5)
-	end
 	def draw_a_line
 		stroke do
-		  stroke_color '990000'
+		  stroke_color '000000'
 		  dash(5, space: 0, phase: 0)
-		  line_width 2
+		  line_width 1
 		  stroke_horizontal_rule
 		end
 	end
 	
 	def line_items
-		icount = 0
-		table line_item_rows,:position => :center, :header => true, :cell_style => {:border_widths => [0, 1, 1, 1],:border_color => "d6e9c6", :size =>12} do
-		  icount += 1
+		table line_item_rows,:position => :center, :header => true,  :cell_style => {:border_widths => [0, 0, 0, 0], :padding => [2, 3, 2, 5], :style => :bold, :size =>8} do
 		  row(0).font_style = :bold
-		  row(0).text_color = "000000"
-		  row(0).background_color = "cff0d6"
-		#  row(1).background_color = "dff0d8"
-		#  self.row_colors = ["DDDDDD", "FFFFFF"]
-		  column(1).width = 300
+		  row(0).border_widths = [1, 0, 1, 0]
+		  column(1).width = 150
 		  column(column_length - 1).align =  :right
-		 row(row_length - 5).column(1).align = :right
-		 row(row_length - 4).column(1).align = :right
-		 row(row_length - 3).column(1).align = :right
-		 row(row_length - 2).column(1).align = :right
-		 row(row_length - 1).background_color = "dff0d8"
+		 row(row_length - 5).column(1).align = :left
+		 row(row_length - 4).column(1).align = :left
+	#	 row(row_length - 3).column(1).align = :right
+#		 row(row_length - 2).column(1).align = :right
+		 row(row_length - 1).font_style = :bold
+		 row(row_length - 1).border_widths = [1, 0, 1, 0]
 		end
-		move_down(40)
-		text "RUPEES IN WORDS : "
 		move_down(20)
-		text (@total_sales - @discount + @vat).to_i.to_english
+		text "Total Qty: #{@sale.sale_products.sum(:qty)}", :size => 11, :align => :left
+		move_up(10)
+		text "Total Item: #{@sale.sale_products.length}", :size => 11, :align => :right
+		#text "Sales Man:", :size => 10, :align => :right
+		text (@total_sales - @discount + @vat).to_i.to_english, :size => 10, :align => :left
+
 	end
 	
 	def line_item_rows
 		i = 1
-		@items.push ["S.No","Product", "Qty", "Price", "Full Price"]
-		#@items.push [@sale.sale_date.strftime('%d %b'), (@sale.customer.name if @sale.customer), @sale.paid ? "Yes" : "No", "", "", "", ""]
+		@items.push ["S.No","Particulars", "Qty", "Rate", "Amount"]
 		@sale.sale_products.each.map do |item| 
-			@items.push ["#{i}.", item.product.name,  item.qty, item.price / item.qty  , item.price]
+			@items.push ["#{i}.", item.product.name,  item.qty, sprintf('%.2f', (item.price / item.qty)), sprintf('%.2f',item.price)]
 			i += 1
 		end
-		@items.push ["", "Total", "", "", (@total_sales.round(2))]
-		@items.push ["", "Discount", "", "", (@sale.discount).to_f.round(2)]
-		@items.push ["", "Total", "", "", (@total_sales - @discount).round(2)]
-		@items.push ["", "VAT #{(@sale.vat)}%", "", "", @vat.round(2)]
-		@items.push ["Total", "", "", "", (@total_sales - @discount + @vat).round(2)]
+		if (@total_returns > 0 )
+			i = 1
+			@items.push ["", ".                       Sales Return", "", "", ""]
+			@sale.sale_returns.each.map do |item| 
+				@items.push ["#{i}.", item.product.name,  "-#{item.qty}", sprintf('%.2f', (item.price / item.qty)), "-#{sprintf('%.2f',item.price)}"]
+				i += 1
+			end
+		end
+		if (@sale.discount > 0 )
+			@items.push ["", "Total", "", "", sprintf('%.2f', (@total_sales))]
+			@items.push ["", "Discount", "", "", sprintf('%.2f', (@discount))]
+		end
+		@items.push ["", "Total", "", "", sprintf('%.2f', (@total_sales - @discount + @vat -@total_returns))]
+
+		@items
 
 		@items
 	end

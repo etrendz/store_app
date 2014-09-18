@@ -1,4 +1,30 @@
+  <script src="/assets/jquery-ui.js"></script>
 <script>
+
+function doc_keyUp(e) {
+
+    // this would test for whichever key is 40 and the ctrl key at the same time
+    if (e.ctrlKey && e.shiftKey && e.keyCode) {
+        if($("#purchase_receipt_type").val() == 'CBP'){
+			$("#purchase_receipt_type").val('ODP');
+			$.get("/purchases/last/ODP.json", function(mydata){
+				$('#purchase_invoice').val(mydata); 
+				$('input[type=submit]').toggleClass( 'btn-pink' )
+			});	
+		}
+		else{
+			$("#purchase_receipt_type").val('CBP');
+			$.get("/purchases/last/CBP.json", function(mydata){
+				$('#purchase_invoice').val(mydata); 
+				$('input[type=submit]').toggleClass( 'btn-pink' )
+			});	
+		}
+		
+    }
+}
+// register the handler 
+document.addEventListener('keyup', doc_keyUp, false);
+
 
 $(document).ready(function(){
  $('#myprice').change(function(){ 
@@ -6,6 +32,72 @@ $(document).ready(function(){
 	$("#margin").val(margin);
 	return false;
  });
+ 
+ 
+ $('#purchase_discount').change(function(){ 
+		var tsum = parseFloat($("#total_purchase_sum").text()) || 0;
+		var discount_percent = parseFloat($("#purchase_discount").val()) || 0;
+		var discount_value = tsum * discount_percent / 100;
+//		alert($("#discount_percent"));
+		$("#discount_percent").empty().append(discount_percent);
+		$("#discount_value").empty().append(discount_value);
+		$("#actual_total").empty().append(tsum - discount_value);
+	return false;
+ });
+ 
+ 
+ $('#purchase_duty').change(function(){ 
+		var asum = parseFloat($("#actual_total").text()) || 0;
+		var duty_percent = parseFloat($("#purchase_duty").val()) || 0;
+		var duty_value = asum * duty_percent / 100;
+		$("#duty_percent").empty().append(duty_percent);
+		$("#duty_value").empty().append(duty_value);
+	return false;
+ });
+ 
+ 
+ $('#purchase_edu_cess').change(function(){ 
+		var duty_value = parseFloat($("#duty_value").text()) || 0;
+		var edu_cess_percent = parseFloat($("#purchase_edu_cess").val()) || 0;
+		var edu_cess_value = duty_value * edu_cess_percent / 100;
+		$("#edu_cess_percent").empty().append(edu_cess_percent);
+		$("#edu_cess_value").empty().append(edu_cess_value);
+	return false;
+ });
+ 
+ $('#purchase_surcharge').change(function(){ 
+		var duty_value = parseFloat($("#duty_value").text()) || 0;
+		var surcharge_percent = parseFloat($("#purchase_surcharge").val()) || 0;
+		var surcharge_value = duty_value * surcharge_percent / 100;
+		$("#surcharge_percent").empty().append(surcharge_percent);
+		$("#surcharge_value").empty().append(surcharge_value);
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ $('#purchase_freight').change(function(){ 
+		var freight = parseInt($("#purchase_freight").val()) || 0;
+		$("#freight").empty().append(freight);
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ $('#purchase_dc').change(function(){ 
+		var dc = parseFloat($("#purchase_dc").val()) || 0;
+		$("#dc").empty().append(dc);
+		calculate_excise_duty();
+	return false;
+ });
+ 
+ $('#purchase_debit_note').change(function(){ 
+		var debit_amt = parseFloat($("#purchase_debit_note").val()) || 0;
+		var grand_total = parseFloat($("#grand_total").text()) || 0;
+		$("#debit_amt").empty().append(debit_amt);
+		$("#net_total").empty().append(grand_total - debit_amt);
+	//	calculate_excise_duty();
+	return false;
+ });
+ 
  
 $(".vertical").keypress(function(event) {
 	if(event.keyCode == 13) { 
@@ -22,28 +114,90 @@ $(".vertical").keypress(function(event) {
 	}
 });
 
+
+
+	$("#product_name").autocomplete({
+	  source: $('#product_name').data('autocomplete-source'),
+	  select: function( event, ui ) {
+			  $('#product_code').val(ui.item.code);
+			  $('#mycprice').val(ui.item.cprice);
+			  $('#myprice').val(ui.item.price);
+			  $('.avl_qty').empty().append(ui.item.qty);
+			  
+			  $.get("/stock_products_price/" + ui.item.id + ".json", function(mydata){
+				if ($('#margin').length == 0) {
+					$("#myprice").val(mydata.price); 
+				my_price = mydata.price;
+				}
+				$("#myqty").focus(); 
+			  });	
+             
+			  $('#product_name').val(ui.item.name);
+			  return false;		
+	  }
+	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+	
+      return $( "<li>" )
+        .append( "<a>" + item.name + " - " + item.size + " - C: " + item.cprice + " - S: " + item.price + "</a>" )
+        .appendTo( ul );
+
+    };
+	
+	
+	$(".add_new_product").bind("ajax:success",
+		   function(evt, data, status, xhr){
+				//this assumes the action returns an HTML snippet
+				$(".modal-content").html(data);
+   }).bind("ajax:error", function(evt, data, status, xhr){
+			//do something with the error here
+			$("div#errors p").text(data);
+   });
 });
 </script>
 <style>
-.content_1{width:860px; height:220px; overflow:auto; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px;}
+.content_1{width:1000px; height:220px; overflow:auto; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px;}
 .img_del_icon {
 	padding-left: 5px;
 }
-
 </style>
-<div class='enew_table_header' style="position:fixed; left:215px;top:270px;">
+<div class='enew_table_header' style="position:inherit;top:190px;">
 
 <form action='/purchases/add_purchase_products/' method=get data-remote=true class='add_purchase_products'>
-	<input class="col-xs-1 vertical" style="float:left" id='product_code' type='text' placeholder="Barode">
-	<input class="col-xs-2 vertical" name="product_name" id='product_name' data-autocomplete-source ='/search_products.json' type='text' placeholder="Product Name">
-	<input class="col-xs-1 vertical" id='myqty' name='myqty' type='text' placeholder="Qty" >
-	<input class="col-xs-1 vertical" id='mycprice' name='mycprice' type='text' placeholder="Cost Price" >
-	<input class="col-xs-1 vertical" id= 'margin' type='text' name='margin' placeholder="Margin" >
-	<input class="col-xs-1 vertical" id= 'myprice' type='text' name='myprice' placeholder="Sales Price">
-	<div class="col-xs-1 avl_qty" style="border:#d5d5d5 1px solid;padding: 3px 2px;background:#fff;color:#bbb;">Avl</div>
+	<input class="col-xs-1 vertical" style="float:left" id='product_code' type='text' placeholder="Barcode">
+	<div class="col-xs-4 input-group input-group-sm" style='padding: 0 1px'> 
+	<input class="vertical form-control" name="product_name" id='product_name' data-autocomplete-source ='/products_name.json' type='text' placeholder="Product Name" autofocus>
+		<span class="input-group-addon">
+			<a class="add_new_product" data-remote="true" href="/products/new_product#modal-form" data-toggle="modal" style = "color:black;text-decoration:none"><i class="icon-plus"></i></a>
+		</span>
+	</div>
+	<input style='width:70px' id='bill_qty' name='bill_qty' type='text' placeholder="Bill Qty" >
+	<input style='width:70px' id='rec_qty' name='rec_qty' type='text' placeholder="Rec Qty" >
+	<input style='width:70px' id='myqty' name='myqty' type='text' placeholder="Acc Qty" >
+	<input style='width:70px' id='mycprice' name='mycprice' type='text' placeholder="Price" >
+	<input style='width:70px' id= 'margin' type='text' readonly=true name='margin' placeholder="Margin" >
+	<input style='width:70px' id= 'myprice' readonly=true type='text' name='myprice' placeholder="MRP">
+	<div class="avl_qty inline" style="width:70px;border:#d5d5d5 1px solid;padding: 3px 2px;background:#fff;color:#bbb;">Avl</div>
 	<%= submit_tag "Add" , :class => "btn btn-sm btn-pink", :style =>'padding: 2px 9px 2px 9px;' %>
 </form>
 		<br/>
 </div>		
-
 <%= render 'form' %>
+<div id="modal-form" class="modal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div>
+	</div>
+</div><!-- PAGE CONTENT ENDS -->
+
+<script>
+$(function(){
+    var rx = /INPUT|SELECT|TEXTAREA/i;
+   $(document).bind("keydown keypress", function(e){
+       if( e.which == 8 ){ // 8 == backspace
+           if(!rx.test(e.target.tagName) || e.target.disabled || e.target.readOnly ){
+               e.preventDefault();
+           }
+       }
+   });
+});
+</script>

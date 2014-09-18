@@ -1,218 +1,277 @@
-						
+<style>
+.myspace{
+margin-bottom:7px;
+border-radius:4px;
+width:170px;
+text-align:left;
+}
+a{
+color:#ffffff;
+}
+</style>
+				<div class="page-content">
+					<div class="page-content-area">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-xs-12 col-sm-3 widget-container-col ui-sortable">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title smaller"><i class="icon-desktop"></i>
+													Master Entry</h5>
+											</div>
 
-<script type="text/javascript">
-	jQuery(function($) {
-		$('.easy-pie-chart.percentage').each(function(){
-			var $box = $(this).closest('.infobox');
-			var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
-			var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
-			var size = parseInt($(this).data('size')) || 50;
-			$(this).easyPieChart({
-				barColor: barColor,
-				trackColor: trackColor,
-				scaleColor: false,
-				lineCap: 'butt',
-				lineWidth: parseInt(size/10),
-				animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
-				size: size
-			});
-		})
-	
-		$('.sparkline').each(function(){
-			var $box = $(this).closest('.infobox');
-			var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
-			$(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
-		});
-	
-	
-	
-	
-	  var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
-	  var data = [
-		<%  @categories.each { |category| %>
-		   
-		{ label: '<%=category.name %> - Rs.<%= @price[category.id] %>',  data: <%= @price[category.id] %>, color: '<%="#{@color[category.id]}" %>'}<%="," unless category.id == @categories.last.id %>
-	<%	}   %>
-	  ]
-	  function drawPieChart(placeholder, data, position) {
-		  $.plot(placeholder, data, {
-			series: {
-				pie: {
-					show: true,
-					tilt:0.8,
-					highlight: {
-						opacity: 0.25
-					},
-					stroke: {
-						color: '#fff',
-						width: 2
-					},
-					startAngle: 2
-				}
-			},
-			legend: {
-				show: true,
-				position: position || "ne", 
-				labelBoxBorderColor: null,
-				margin:[-30,15]
-			}
-			,
-			grid: {
-				hoverable: true,
-				clickable: true
-			}
-		 })
-	 }
-	 drawPieChart(placeholder, data);
+											<div class="widget-body">
+												<div class="widget-main">
+													<center>
+													<% if current_user.name == 'admin'%>
+														<a target="_blank" href="/categories/new"<button class="btn btn-primary myspace"><i class="icon-tag align-top bigger-125"></i>New Category</button></a>
+														<a target="_blank" href="/categories"<button class="btn btn-pink myspace"><i class="icon-tags align-top bigger-125"></i>All Categories</button></a>
+													<% end %>
+														<a target="_blank" href="/products/new"<button class="btn btn-primary myspace"><i class="icon-leaf align-top bigger-125"></i>New Product</button></a>
+														<a target="_blank" href="/products"<button class="btn btn-pink myspace"><i class="icon-leaf align-top bigger-125"></i>All Products</button></a>
+														<a target="_blank" href="/brand"<button class="btn btn-primary myspace"><i class="icon-leaf align-top bigger-125"></i>All Brands</button></a>
+													</center>
+												</div>
+											</div>
+										</div>
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title smaller"><i class="icon-user"></i>
+												Supplier</h5>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<center>
+														<a target="_blank" href="/suppliers/new"<button class="btn btn-info myspace"><i class="icon-user align-top bigger-125"></i>New Supplier</button></a>
+														<a target="_blank" href="/suppliers"<button class="btn btn-purple myspace"><i class="icon-user align-top bigger-125"></i>All Suppliers</button></a>
+													</center>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-xs-12 col-sm-3 widget-container-col ui-sortable">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title smaller"><i class="icon-briefcase"></i>
+													Purchase</h5>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<center>
+														<a target="_blank" href="/purchases/new"><button class="btn btn-primary briefcase myspace"><i class="icon-briefcase align-top bigger-125"></i>New Purchase</button></a>
+														<a target="_blank" href="/purchases/search"><button class="btn btn-danger myspace"><i class="icon-search align-top bigger-125"></i>Search Purchase</button></a>
+														<a target="_blank" href="/purchases/report"><button class="btn btn-pink myspace"><i class="icon-list align-top bigger-125"></i>View Purchase</button></a>
+													</center>
+												</div>
+											</div>
+										</div>
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title smaller"><i class="icon-gift"></i>
+												Sales</h5>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<center>
+														<a target="_blank" href="/sales/new"><button class="btn btn-primary myspace"><i class="icon-gift align-top bigger-125"></i>New Sale</button></a>
+														<a target="_blank" href="/day_sales"><button class="btn btn-pink myspace"><i class="icon-tags align-top bigger-125"></i>All Sales</button></a>
+														<a target="_blank" href="/sales/search"><button class="btn btn-danger myspace"><i class="icon-search align-top bigger-125"></i>Search Sale</button></a>
+														<a target="_blank" href="/sales/report"><button class="btn btn-pink myspace"><i class="icon-list align-top bigger-125"></i>Sales Report</button></a>
+													</center>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									
+									<div class="col-xs-12 col-sm-3 widget-container-col ui-sortable">
+											<% if current_user.name == 'admin'%>
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title smaller"><i class="icon-list"></i>
+												Reports</h5>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<center>
+														<a target="_blank" href="/purchases/report"><button class="btn btn-primary myspace"><i class="icon-list align-top bigger-125"></i>Purchase Report</button></a>
+														<a target="_blank" href="/purchases/supplier_report"><button class="btn btn-danger myspace"><i class="icon-list align-top bigger-125"></i>Supplier Wise</button></a>
+														<a target="_blank" href="/purchase_register"><button class="btn btn-pink myspace"><i class="icon-list align-top bigger-125"></i>Purchase Register</button></a>
+														<a target="_blank" href="/sales/report"><button class="btn btn-pink myspace"><i class="icon-list align-top bigger-125"></i>Sales Report</button></a>
+														<a target="_blank" href="/sales_register"><button class="btn btn-danger myspace"><i class="icon-list align-top bigger-125"></i>Sales Register</button></a>
+														<a target="_blank" href="sales_return_register"><button class="btn btn-danger myspace"><i class="icon-list align-top bigger-125"></i>Return Register</button></a>
+														<a target="_blank" href="select_month_range"><button class="btn btn-success myspace"><i class="icon-list align-top bigger-125"></i>Stock Report</button></a>
+														<a target="_blank" href="/graph"><button class="btn btn-primary myspace"><i class="icon-list align-top bigger-125"></i>Sales Graph</button></a>
+													</center>
+												</div>
+											</div>
+										</div>
+										<% end %>
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title smaller"><i class="icon-user"></i>
+												Customer</h5>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<center>
+														<a target="_blank" href="/customers/new"<button class="btn btn-info myspace"><i class="icon-user align-top bigger-125"></i>New Customer</button></a>
+														<a target="_blank" href="/customers/new"<button class="btn btn-purple myspace"><i class="icon-user align-top bigger-125"></i>All Customers</button></a>
+													</center>
+												</div>
+											</div>
+										</div>									
+									</div>
+									
+										
+									<div class="col-xs-12 col-sm-3 widget-container-col ui-sortable">
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title smaller"><i class="icon-barcode"></i>
+												Barcode</h5>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<center>
+														<a target="_blank" href="/generate_barcode"><button class="btn btn-pink myspace"><i class="icon-barcode align-top bigger-125"></i>Barcode</button></a>
+														<a target="_blank" href="/barcode/barcode_single"><button class="btn btn-danger myspace"><i class="icon-barcode align-top bigger-125"></i>Single Barcode</button></a>
+														<a target="_blank" href="/barcode/barcode"><button class="btn btn-pink myspace"><i class="icon-barcode align-top bigger-125"></i>Barcode Grid</button></a>
+													</center>
+												</div>
+											</div>
+										</div>
+										
+										<div class="widget-box ui-sortable-handle">
+											<div class="widget-header">
+												<h5 class="widget-title smaller"><i class="icon-disk"></i>
+												Backup: <%= @ss.strftime('%d/%m/%y %I:%M %p') %> 
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<center>
+														<a href="/backup"><button class="btn btn-pink myspace"><i class="icon-file align-top bigger-125"></i>Backup</button></a>
+														<% if current_user.name == 'admin'%>
+														<a href="/signup"><button class="btn btn-pink myspace"><i class="icon-file align-top bigger-125"></i>Create User</button></a>
+														<% end %>
+													</center>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+
+									
+
+								<div class="space"></div>
+
+								</div><!-- /.page-content-area -->
+				</div><!-- /.page-content -->
+		
+
+		<!-- page specific plugin scripts -->
+
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+			jQuery(function($) {
+			
+				$('#simple-colorpicker-1').ace_colorpicker({pull_right:true}).on('change', function(){
+					var color_class = $(this).find('option:selected').data('class');
+					var new_class = 'widget-box';
+					if(color_class != 'default')  new_class += ' widget-color-'+color_class;
+					$(this).closest('.widget-box').attr('class', new_class);
+				});
+			
+			
+				// scrollables
+				$('.scrollable').each(function () {
+					var $this = $(this);
+					$(this).ace_scroll({
+						size: $this.data('size') || 100,
+						//styleClass: 'scroll-left scroll-margin scroll-thin scroll-dark scroll-light no-track scroll-visible'
+					});
+				});
+				$('.scrollable-horizontal').each(function () {
+					var $this = $(this);
+					$(this).ace_scroll(
+					  {
+						horizontal: true,
+						styleClass: 'scroll-top',//show the scrollbars on top(default is bottom)
+						size: $this.data('size') || 500,
+						mouseWheelLock: true
+					  }
+					).css({'padding-top': 12});
+				});
 				
-	 /**
-	 we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
-	 so that's not needed actually.
-	 */
-	 placeholder.data('chart', data);
-	 placeholder.data('draw', drawPieChart);
-	
-	
-	
-	  var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
-	  var previousPoint = null;
-	
-	  placeholder.on('plothover', function (event, pos, item) {
-		if(item) {
-			if (previousPoint != item.seriesIndex) {
-				previousPoint = item.seriesIndex;
-				var tip = item.series['label'] + " : " + item.series['percent'].toFixed(2)+' %';
-				$tooltip.show().children(0).text(tip);
-			}
-			$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
-		} else {
-			$tooltip.hide();
-			previousPoint = null;
-		}
-		
-	 });
-		
-		
-	
-	})
-</script>
-
-
-<div class="row">
-	<div class="space-6"></div>
-
-	<div class="col-sm-7 infobox-container">
-		<div class="infobox infobox-green  ">
-			<div class="infobox-icon">
-				<i class="icon-comments"></i>
-			</div>
-
-			<div class="infobox-data">
-				<span class="infobox-data-number">Rs. <%= @day_sales.round(2) %></span>
-				<div class="infobox-content">Today's Sales Revenue</div>
-			</div>
-		</div>
-
-		<div class="infobox infobox-blue  ">
-			<div class="infobox-icon">
-				<i class="icon-twitter"></i>
-			</div>
-
-			<div class="infobox-data">
-				<span class="infobox-data-number">Rs. <%= @week_sales.round(2) %></span>
-				<div class="infobox-content">Weekly Sales Revenue</div>
-			</div>
-
-		</div>
-
-		<div class="infobox infobox-pink  ">
-			<div class="infobox-icon">
-				<i class="icon-shopping-cart"></i>
-			</div>
-
-			<div class="infobox-data">
-				<span class="infobox-data-number">Rs. <%= @month_sales.round(2) %></span>
-				<div class="infobox-content">Monthly Sales Revenue</div>
-			</div>
-		</div>
-
-		<div class="infobox infobox-red  ">
-			<div class="infobox-icon">
-				<i class="icon-beaker"></i>
-			</div>
-
-			<div class="infobox-data">
-			  
-				<span class="infobox-data-number"><a style='text-decoration:none' href='/sales/new'>Sales</a></span>
-				<div class="infobox-content"><a style='text-decoration:none' href='/sales/new'>Add New</a></div>
-			</div>
-		</div>
-
-		<div class="infobox infobox-orange2  ">
-			<div class="infobox-chart">
-				<span class="sparkline" data-values="196,128,202,177,154,94,100,170,224"></span>
-			</div>
-
-			<div class="infobox-data">
-				<span class="infobox-data-number"><a style='text-decoration:none' href='/purchases/new'>Purchase</a></span>
-				<div class="infobox-content"><a style='text-decoration:none' href='/purchases/new'>Add New</a></div>
-			</div>
-
-		</div>
-
-		<div class="infobox infobox-blue2  ">
-			<div class="infobox-progress">
-				<div class="easy-pie-chart percentage" data-percent='<%= @total_products%>' data-size="46">
-					<span class="percent"><%= @total_products%></span>
-				</div>
-			</div>
-
-			<div class="infobox-data">
-				<span class="infobox-text"><a style='text-decoration:none' href='/products/new'>Items</a></span>
-
-				<div class="infobox-content">
-					<span class="bigger-110"><a style='text-decoration:none' href='/products/new'>Add New</a></span>
-				</div>
-			</div>
-		</div>
-
-		<div class="space-6"></div>
-
-	</div>
-
-	<div class="vspace-sm"></div>
-
-	<div class="col-sm-5">
-		<div class="widget-box">
-			<div class="widget-header widget-header-flat widget-header-small">
-				<h5>
-					<i class="icon-signal"></i>
-					Sales by Category
-				</h5>
-
-				<div class="widget-toolbar no-border">
-					<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
-						One Month
-					</button>
-				</div>
-			</div>
-
-			<div class="widget-body">
-				<div class="widget-main">
-					<div id="piechart-placeholder"></div>
-
-					<div class="hr hr8 hr-double"></div>
-
-					<div class="clearfix">
-						<div class="grid9">
-							<h5 class='brown'>
-							  <i class="icon-shopping-cart"></i>
-								Total Sales Revenue : Rs.<%= @g_total%>
-							</h5>
-						</div>
-					</div>
-				</div><!-- /widget-main -->
-			</div><!-- /widget-body -->
-		</div><!-- /widget-box -->
-	</div><!-- /span -->
-</div><!-- /row -->
+				$(window).on('resize.scroll_reset', function() {
+					$('.scrollable-horizontal').ace_scroll('reset');
+				});
+			
+			
+				/**
+				//or use slimScroll plugin
+				$('.slim-scrollable').each(function () {
+					var $this = $(this);
+					$this.slimScroll({
+						height: $this.data('height') || 100,
+						railVisible:true
+					});
+				});
+				*/
+				
+			
+				/**$('.widget-box').on('setting.ace.widget' , function(e) {
+					e.preventDefault();
+				});*/
+			
+				/**
+				$('.widget-box').on('show.ace.widget', function(e) {
+					//e.preventDefault();
+					//this = the widget-box
+				});
+				$('.widget-box').on('reload.ace.widget', function(e) {
+					//this = the widget-box
+				});
+				*/
+			
+				//$('#my-widget-box').widget_box('hide');
+			
+				
+			
+				// widget boxes
+				// widget box drag & drop example
+			    $('.widget-container-col').sortable({
+			        connectWith: '.widget-container-col',
+					items:'> .widget-box',
+					handle: ace.vars['touch'] ? '.widget-header' : false,
+					cancel: '.fullscreen',
+					opacity:0.8,
+					revert:true,
+					forceHelperSize:true,
+					placeholder: 'widget-placeholder',
+					forcePlaceholderSize:true,
+					tolerance:'pointer',
+					start: function(event, ui) {
+						//when an element is moved, it's parent becomes empty with almost zero height.
+						//we set a min-height for it to be large enough so that later we can easily drop elements back onto it
+						ui.item.parent().css({'min-height':ui.item.height()})
+						//ui.sender.css({'min-height':ui.item.height() , 'background-color' : '#F5F5F5'})
+					},
+					update: function(event, ui) {
+						ui.item.parent({'min-height':''})
+						//p.style.removeProperty('background-color');
+					}
+			    });
+			
+			});
+		</script>

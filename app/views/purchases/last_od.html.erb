@@ -1,0 +1,53 @@
+
+	
+	<h3>Purchase Report</h3>
+<table class='table' style="width:60%">
+  <tr style = 'background:#cff0d6;color:#468847; border:#d6e9c6 1px solid'>
+    <th>Date</th>
+    <th>Supplier</th>
+    <th>Invoice</th>
+    <th>Receipt Type</th>
+    <th>Product</th>
+    <th>Qty</th>
+    <th style="text-align:center">Price</th>
+    <th style="text-align:center">Sum</th>
+  </tr>
+
+  <tr class='success'>
+    <td><%= @purchase.purchase_date.strftime('%d %b') %></td>
+    <td><%= @purchase.supplier.name if @purchase.supplier %></td>
+    <td><%= @purchase.invoice %></td>
+    <td><%= @purchase.receipt_type %></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+  </tr>
+	
+	<% @purchase.purchase_products.each do |pp| %>
+	<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+    <td><%= pp.product.name %></td>
+    <td><%= pp.qty %></td>
+    <td style="text-align:right"><%= pp.cprice %></td>
+    <td style="text-align:right;font-weight: bold;"><%= pp.cprice * pp.qty %></td>
+	</tr>
+	<% end %>
+<tr class='success'>
+<td style="font-weight: bold;">Total</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td style="text-align:right;font-weight: bold;"><%= @total_purchase %></td>
+</tr>
+</table>
+
+<br />
+<%= @purchase.paid ? "" : (link_to "Pay Now", "/pay-now/#{@purchase.id}")%>
+<%= link_to "Print", purchase_path(@purchase, format: "pdf") %>| <%= link_to "Return", "/purchases/#{@purchase.id}/return" %> | <%= link_to 'Cancel this Purchase', @purchase, method: :delete, data: { confirm: 'Are you sure?' } %>

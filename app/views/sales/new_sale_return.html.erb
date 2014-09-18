@@ -1,0 +1,76 @@
+<style>
+.content_1{width:600px; height:220px; overflow:auto; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px;}
+.img_del_icon {
+padding-left: 5px;
+}
+hr {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #EEEEEE -moz-use-text-color #FFFFFF;
+  border-style: solid none;
+  border-width: 1px 0;
+  margin: 10px 0;
+}
+</style>
+
+<script>
+
+function doc_keyUp(e) {
+
+    // this would test for whichever key is 40 and the ctrl key at the same time
+    if (e.ctrlKey && e.shiftKey && e.keyCode) {
+        if($("#sale_sale_type").val() == 'OGP'){
+			$("#sale_sale_type").val('ODP');
+			$.get("/sales/last/ODP.json", function(mydata){
+				$('#sale_invoice').val(mydata); 
+				$('input[type=submit]').toggleClass( 'btn-pink' )
+			});	
+		}
+		else{
+			$("#sale_sale_type").val('OGP');
+			$.get("/sales/last/OGP.json", function(mydata){
+				$('#sale_invoice').val(mydata); 
+				$('input[type=submit]').toggleClass( 'btn-pink' )
+			});	
+		}
+		
+    }
+}
+// register the handler 
+document.addEventListener('keyup', doc_keyUp, false);
+
+$(document).ready(function(){ 
+	$(".vertical").keypress(function(event) {
+		if(event.keyCode == 13) { 
+		textboxes = $("input.vertical");
+		debugger;
+		currentBoxNumber = textboxes.index(this);
+		if (textboxes[currentBoxNumber + 1] != null) {
+			nextBox = textboxes[currentBoxNumber + 1]
+			nextBox.focus();
+			nextBox.select();
+			event.preventDefault();
+			return false 
+			}
+		}
+	});
+	
+	
+});
+</script>
+<div class='enew_table_header' style="width:600px;position:fixed;top:215px;">
+
+	<form action='/sales/add_sale_products/' method=get data-remote=true class='add_sale_products form-inline'>
+		<input style='width:10%' class="form-control" id='product_code' type='text' placeholder='Barcode' autofocus>
+		<input style='width:50%' class="form-control" name="product_name" id='product_name' data-autocomplete-source ='/search_products.json' type='text' placeholder='Product Name'>
+		<input style='width:10%' class="form-control vertical" id='myqty' type='text' name='myqty' placeholder='Qty'>
+		<input style='width:10%' class="form-control vertical" id= 'myprice' type='text' name='myprice' placeholder='Price'>
+		<%= submit_tag "Add" , :class => "btn btn-sm btn-pink form-control", :style => 'width:9%;' %>
+		<div  class="avl_qty" style="color:#bbb;width:9%;border:#d5d5d5 1px solid;padding: 5.5px 5px;background:#fff;position:absolute;top:0px; right:0px">Avl</div>
+	</form>
+</div>		
+
+<%= render 'form' %>

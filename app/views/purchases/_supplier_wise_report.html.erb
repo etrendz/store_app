@@ -1,8 +1,8 @@
 <br/>
 	
-	<h3>Purchase Report For <%=@supplier.name%> From <%= @from.strftime('%d %b, %Y') %> - <%= @to.strftime('%d %b, %Y') %></h3>
+	<h3>PURCHASE REPORT: <span class='brown'><%=@supplier.name%> </span></h3><h4><%= @from.strftime('%d %b, %y') %> - <%= @to.strftime('%d %b, %y') %></h4>
 <!-- <h4>Print <%= link_to 'Report', {:controller => 'purchases', :action => 'purchase_report_pdf', :format => 'pdf', :from => @from, :to => @to} %></h4>  -->
-<table class='table' style="width:60%">
+<table class='table' style="width:85%">
   <tr style = 'background:#438EB9;color:#ffffff'>
     <th>Date</th>
     <th>Supplier</th>

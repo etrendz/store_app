@@ -32,7 +32,7 @@ class PurchasePdf < Prawn::Document
 		@items.push ["Date", "Supplier", "Invoice", "Paid","Product", "Qty", "Unit", "Price", "Full Price"]
 		@items.push [@purchase.purchase_date.strftime('%d %b'), (@purchase.supplier.name if @purchase.supplier), @purchase.invoice, @purchase.paid ? "Yes" : "No", "", "", "", "", ""]
 		@purchase.purchase_products.each.map do |item| 
-			@items.push ["", "", "", "", item.product.name, item.product.unit, item.qty, item.cprice, item.cprice * item.qty]
+			@items.push ["", "", "", "", item.product.name, item.product.unit, item.qty, item.cprice / item.qty  , item.cprice]
 		end
 		@items.push ["Total", "", "",  "", "", "", "", "", (@total_purchase)]
 

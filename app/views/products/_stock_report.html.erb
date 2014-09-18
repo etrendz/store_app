@@ -1,5 +1,6 @@
 </br>
 <h2>Stock Report (<%= @from %> - <%= @to %>)</h2></br>
+<h4>Print <span class="badge badge-danger white" style="padding-top:3.5px"><%= link_to 'Report', {:controller => 'products', :action => 'stock_report_pdf', :format => 'pdf', :from => @from, :to => @to}, :style => "color:white;text-decoration:none" %></span> Download <span class="badge badge-success white" style="padding-top:3.5px"><%= link_to 'CSV', {:controller => 'products', :action => 'my_report_csv', :format => 'csv', :from => @from, :to => @to}, :style => "color:white;text-decoration:none" %></span></h4>
 <div  class="table-responsive">
 <table class="table table-striped table-bordered table-hover">
   <tr>
@@ -8,6 +9,7 @@
     <th>Opening Stock</th>
     <th>Purchase</th>
     <th>Sales</th>
+    <th>Sales Return</th>
     <th>Closing Stock</th>
     <th>Closing Value</th>
   </tr>
@@ -15,6 +17,7 @@
 	total_opening_price = 0
 	total_purchase_price = 0
 	total_sale_price = 0
+	total_sale_return_price = 0
 	total_closing_value = 0 
 %>
 <% @products.each do |product| 
@@ -26,12 +29,14 @@
     <td><%= @opening_stock[product.id]["qty"] %> (<%= @opening_stock[product.id]["price"] %>)</td>
     <td><%= @purchase_stock[product.id]["qty"] %> (<%= (@purchase_stock[product.id]["price"]).round(2)%>)</td>
     <td><%= @sale_stock[product.id]["qty"] %> (<%= (@sale_stock[product.id]["price"]).round(2) %>)</td>
+    <td><%= @sale_return_stock[product.id]["qty"] %> (<%= (@sale_return_stock[product.id]["price"]).round(2) %>)</td>
 	<% total_opening_price += @opening_stock[product.id]["price"] %>
 	<% total_purchase_price += @purchase_stock[product.id]["price"] %>
 	<% total_sale_price += @sale_stock[product.id]["price"] %>
-	<% closing_stock = @opening_stock[product.id]["qty"] + @purchase_stock[product.id]["qty"] - @sale_stock[product.id]["qty"] %>
-		<%# closing_value = (product.stock_products && product.stock_products.last) ? (closing_stock * product.stock_products.last.cprice) : 0  %>
-		<% closing_value = @opening_stock[product.id]["price"] + @purchase_stock[product.id]["price"] - @sale_stock[product.id]["cprice"] %>
+	<% total_sale_return_price += @sale_return_stock[product.id]["price"] %>
+	<% closing_stock = @opening_stock[product.id]["qty"] + @purchase_stock[product.id]["qty"] + @sale_return_stock[product.id]["qty"] - @sale_stock[product.id]["qty"] %>
+
+	<% closing_value = @opening_stock[product.id]["price"] + @purchase_stock[product.id]["price"] + @sale_return_stock[product.id]["cprice"] - @sale_stock[product.id]["cprice"] %>
 
 	<% total_closing_value += closing_value %>
     <td><%= closing_stock %></td>
@@ -44,7 +49,8 @@
     <td></td>
     <td><%= total_opening_price.round(2) %></td>
     <td><%= total_purchase_price.round(2) %> </td>
-    <td><%= total_sale_price %></td>
+    <td><%= total_sale_price.round(2) %></td>
+    <td><%= total_sale_return_price.round(2) %></td>
 
     <td></td>
     <td><%= total_closing_value.round(2) %></td>
@@ -52,7 +58,7 @@
 </table>
 
 
-	<h4 style='position:fixed;top:107px;right:50px;font-weight:bold;background:#438EB9;padding:5px 10px;color:#fff;border:5px solid #6fb3e0 ;'>Profit : Rs. <%= (total_sale_price + total_closing_value - (total_opening_price + total_purchase_price)).round(2) %> </h4>
+	<h4 style='position:fixed;top:107px;right:50px;font-weight:bold;background:#438EB9;padding:5px 10px;color:#fff;border:5px solid #6fb3e0 ;'>Profit : Rs. <%= (total_sale_price + total_closing_value - (total_opening_price + total_purchase_price + total_sale_return_price)).round(2) %> </h4>
 	
 	
 </div>

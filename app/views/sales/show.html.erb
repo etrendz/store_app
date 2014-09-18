@@ -1,100 +1,126 @@
 
 	
 	<h3>Sales </h3>
-<table class='table' style="width:60%">
-  <tr style = 'background:#438EB9;color:#ffffff'>
-    <th>Date</th>
-    <th>Customer</th>
-    <th>Remark</th>
-    <th>Paid</th>
-    <th>Product</th>
-    <th>Qty</th>
-    <th style="text-align:center">Price</th>
-    <th style="text-align:center">Sum</th>
-  </tr>
+		<div class="row">
+		<div class="col-sm-9">
+			<table class='table' style="width:40%">
+			  <tr style = 'background:#438EB9;color:#ffffff'>
+				<th>Bill No</th>
+				<th>Date</th>
+				<th>Customer</th>
+				<th>Paid</th>
+			  </tr>
 
-  <tr class='success'>
-    <td><%= @sale.sale_date.strftime('%d %b') %></td>
-    <td><%= @sale.customer.name if @sale.customer %></td>
-    <td><%= @sale.remark %></td>
-    <td><%= @sale.paid ? "Yes" : "No" %></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-  </tr>
+			  <tr class='success'>
+				<td><%= @sale.invoice %></td>
+				<td><%= @sale.sale_date.strftime('%d %b') %></td>
+				<td><%= @sale.customer.name if @sale.customer %></td>
+				<td><%= @sale.paid ? "Yes" : "No" %></td>
+			  </tr>
+		  </table>
+	  </div>
+	  <div class="col-sm-3">
+		<a href="<%= @sale.id %>.pdf"><button style="border-radius:4px" class="btn btn-lg btn-success">
+			<i class="icon-print"></i>
+			Print Bill
+		</button></a>
+		</div>
+		</div>
 	
-	<% @sale.sale_products.each do |sp| %>
-	<tr>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-    <td><%= sp.product.name %></td>
-    <td><%= sp.qty %></td>
-    <td style="text-align:right"><%= sp.price / sp.qty %></td>
-    <td style="text-align:right"><%= sp.price %></td>
-	</tr>
+<table class='table'>
+		<tr style = 'background:#438EB9;color:#ffffff'>
+			<th>Product</th>
+			<th>Code</th>
+			<th>Size</th>
+			<th>Qty</th>
+			<th>Rate</th>
+			<th>Amount</th>
+		</tr>
+
+		<% @sale.sale_products.each do |sp| %>
+		<tr>
+			<td><%= sp.product.name %></td>
+			<td><%= sp.product.code %></td>
+			<td><%= sp.product.size %></td>
+			<td><%= sp.qty %></td>
+			<td><%= sp.price / sp.qty %></td>
+			<td><%= sp.price %></td>
+		</tr>
+		<% end %>
+	
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td style="font-weight: bold;">Total</td>
+			<td style="font-weight: bold;"><%= @total_sales %></td>
+		</tr>
+	
+		<% if @total_returns > 0 %>
+		<tr class="danger">
+			<td><b>Sales Return</b></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		
+		<% @sale.sale_returns.each do |sp| %>
+		<tr>
+		<td><%= sp.product.name %></td>
+		<td><%= sp.product.size %></td>
+		<td><%= -sp.qty %></td>
+		<td><%= -(sp.price / sp.qty) %></td>
+		<td><%= -(sp.price) %></td>
+		</tr>
+		<% end %>
 	<% end %>
 	
-	
+	<% if (@sale.discount > 0.0) %>
 	<tr>
-	<td>Total</td>
-	<td></td>
-	<td></td>
-	<td></td>
-    <td></td>
-    <td></td>
-    <td style="text-align:right"></td>
-    <td style="text-align:right"><%= @total_sales %></td>
+		<td><b>Discount</b></td>
+		<td><%= @sale.discount %> %</td>
+		<td></td>
+		<td></td>
+		<td><%= @discount.round(2) %></td>
 	</tr>
+		<% end %>
+		<!--
+		<tr>
+		<td>Total</td>
+		<td></td>
+		<td></td>
+		<td style="text-align:right"></td>
+		<td style="text-align:right"><%= @total_sales - @discount %></td>
+		</tr>
 	
-	<tr>
-	<td>Discount</td>
-	<td><%= @sale.discount %> %</td>
-	<td></td>
-	<td></td>
-    <td></td>
-    <td></td>
-    <td style="text-align:right"></td>
-    <td style="text-align:right"><%= @discount %></td>
+		<tr>
+		<td>VAT</td>
+		<td><%= @sale.vat %> %</td>
+		<td></td>
+		<td></td>
+		<td><%= @vat %></td>
+		</tr>
+		-->
+	<tr class='success'>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td style="font-weight: bold;">Total</td>
+		<td style="font-weight: bold;"><%= (@total_sales - @total_returns - @discount + @vat).round(2) %></td>
 	</tr>
-	
-	<tr>
-	<td>Total</td>
-	<td></td>
-	<td></td>
-	<td></td>
-    <td></td>
-    <td></td>
-    <td style="text-align:right"></td>
-    <td style="text-align:right"><%= @total_sales - @discount %></td>
-	</tr>
-	
-	<tr>
-	<td>VAT</td>
-	<td><%= @sale.vat %> %</td>
-	<td></td>
-	<td></td>
-    <td></td>
-    <td></td>
-    <td style="text-align:right"></td>
-    <td style="text-align:right"><%= @vat %></td>
-	</tr>
-	
-<tr class='success'>
-<td style="font-weight: bold;">Total</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td style="text-align:right;font-weight: bold;"><%= (@total_sales - @discount + @vat).round(2) %></td>
-</tr>
 </table>
-
+	
 <br />
+<% if current_user && (current_user.name == 'admin')%>
+<%= link_to '<button style="border-radius:4px" class="btn btn-lg btn-danger"><i class="icon-remove"></i> Cancel This Sale</button>'.html_safe, @sale, method: :delete, data: { confirm: 'Are you sure?' } %>
+<% end %>			
 
+		
+<!--
 <%= @sale.paid ? "Paid" : (link_to "Collect Money Now", "/receive-now/#{@sale.id}")%>  | 
-<%= link_to "Print", sale_path(@sale, format: "pdf") %> | <%= link_to "Return", "/sales/#{@sale.id}/return" %> | <%= link_to 'Cancel this Sale', @sale, method: :delete, data: { confirm: 'Are you sure?' } %>
+<%= link_to "Print", sale_path(@sale, format: "pdf") %>
+<%= link_to 'Cancel this Sale', @sale, method: :delete, data: { confirm: 'Are you sure?' } %>-->
