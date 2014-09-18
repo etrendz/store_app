@@ -17,3 +17,6 @@
 
 # Ignore the database backups.
 /dbs/*.sql
+
+# Ignore the CSV files.
+*.csv
