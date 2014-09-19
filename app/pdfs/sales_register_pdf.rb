@@ -42,7 +42,7 @@ move_down(10)
 		
 		bounding_box [bounds.left, bounds.bottom + 125], :width => bounds.width do
 			font "Helvetica"
-		text "For JAWHAR PLAZA", :size => 14, :align => :right
+		text "For MEN'S FASHION", :size => 14, :align => :right
 			move_down(70)
 #		text "Thank you for your business", :size => 12, :align => :center
 #			move_down(10)
