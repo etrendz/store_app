@@ -2,7 +2,12 @@
 
 <form id="sales_register_form" class="form-search" action="/form_submitted">
 
-				<%= hidden_field_tag "report_type", 'CBP' %>
+		<div class="col-xs-2 col-sm-2">
+			<label for="id-date-range-picker-1">Type</label>
+			<div class="input-group">
+				<%=select_tag "report_type", options_for_select(['CB', 'ALL']) %>
+			</div>
+		</div>
 		
 		<div class="col-xs-3 col-sm-3">
 			<label for="id-date-range-picker-1">Start Date</label>
@@ -43,9 +48,14 @@ $( "#sales_register_form" ).submit();
 
 $( "form" ).submit(function( event ) {
 	$('.sales_register').html('<br/><br/><br/><img src="/assets/loader.gif"> loading...');
-$.get('/sales_register?from='+$("#from_date" ).val()+'&to='+$("#to_date" ).val(), function(data){
-$('.sales_register').html(data);
-});
+	if ($("#report_type" ).val() == 'CB')
+		$.get('/cb_sales_register?from='+$("#from_date" ).val()+'&to='+$("#to_date" ).val(), function(data){
+		$('.sales_register').html(data);
+		});
+	else
+		$.get('/sales_register?from='+$("#from_date" ).val()+'&to='+$("#to_date" ).val(), function(data){
+		$('.sales_register').html(data);
+		});
 event.preventDefault();
 });
 </script>

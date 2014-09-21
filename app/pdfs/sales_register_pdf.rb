@@ -1,5 +1,5 @@
 class SalesRegisterPdf < Prawn::Document
-	def initialize(from, to, total_sale, total_cb_sale, total_cd_sale, total_return, cb_sale, cd_sale,return_on_date)
+	def initialize(from, to, total_sale, total_cb_sale, total_cd_sale, cb_sale, cd_sale)
 		super()
 		font "Times-Roman"
 		@items =Array.new
@@ -9,10 +9,8 @@ class SalesRegisterPdf < Prawn::Document
 		@total_sale = total_sale
 		@total_cb_sale = total_cb_sale
 		@total_cd_sale = total_cd_sale
-		@total_return = total_return
 		@cb_sale = cb_sale
 		@cd_sale = cd_sale
-		@return_on_date = return_on_date
 		
 			
 		text "TIN : 33414621625", :size => 10, :align => :left
@@ -40,18 +38,6 @@ move_down(10)
 		line_items
 		move_down(20)
 		
-		bounding_box [bounds.left, bounds.bottom + 125], :width => bounds.width do
-			font "Helvetica"
-		text "For MEN'S FASHION", :size => 14, :align => :right
-			move_down(70)
-#		text "Thank you for your business", :size => 12, :align => :center
-#			move_down(10)
-			stroke_horizontal_rule
-			move_down(10)
-			text "Goods are dispatched at the purchaser's risk.", :size => 10
-			move_down(5)
-			text "For all disputes, the legal jurisdiction is Ambur only ", :size => 10
-		end
 	end
 	
 	def draw_a_line
@@ -70,8 +56,6 @@ move_down(10)
 		  row(0).font_style = :bold
 		  row(0).text_color = "000000"
 		  row(0).background_color = "cff0d6"
-		#  row(1).background_color = "dff0d8"
-		#  self.row_colors = ["DDDDDD", "FFFFFF"]
 		  column(0).width = 90
 		  column(1).width = 90
 		  column(2).width = 90
@@ -81,20 +65,19 @@ move_down(10)
 		  column(column_length - 1).align =  :right
 		  column(column_length - 2).align =  :right
 		  column(column_length - 3).align =  :right
-		  column(column_length - 4).align =  :right
-		 row(row_length - 1).background_color = "dff0d8"
+		  column(column_length - 4).align =  :left
+		  row(row_length - 1).background_color = "dff0d8"
+		  row(0).align = :center
 		end
-		move_down(40)
-		text "RUPEES IN WORDS : "
+		
 	end
 	
 	def line_item_rows
-		@items.push ["Date","Day", "CB Value", "CD Value", "Return Value", "Total"]
-		#@items.push [@sale.sale_date.strftime('%d %b'), (@sale.customer.name if @sale.customer), @sale.paid ? "Yes" : "No", "", "", "", ""]
+		@items.push ["Date","Day", "CB Value", "CD Value", "Total"]
 		@total_sale.each.map do |k,v|
-			@items.push [k, k.strftime("%A"),  @cb_sale[k], @cd_sale[k]  , @return_on_date[k], v ]
+			@items.push [k.strftime('%d-%m-%Y'), k.strftime("%A"),  sprintf('%.2f', @cb_sale[k]), sprintf('%.2f', @cd_sale[k]), sprintf('%.2f', v) ]
 		end
-		@items.push ["Total", "", @total_cb_sale.round(2), @total_cd_sale.round(2), @total_return.round(2), (@total_cb_sale + @total_cd_sale -  @total_return).round(2)]
+		@items.push ["Total", "", sprintf('%.2f', @total_cb_sale), sprintf('%.2f', @total_cd_sale), sprintf('%.2f', (@total_cb_sale + @total_cd_sale))]
 
 		@items
 	end

@@ -8,7 +8,6 @@
     <th>Day</th>
     <th>CB Value</th>
     <th>CD Value</th>
-    <th>Return</th>
     <th>Total</th>
   </thead>
 <% @total_sale.each do |k,v| %>
@@ -17,7 +16,6 @@
     <td><%= k.strftime("%A") %></td>
     <td><%= @cb_sale[k] %></td> 
     <td><%= @cd_sale[k] %></td>
-    <td><%= @return_on_date[k] %></td>
     <td><%= v %></td> 
   </tr>
 <% end %>
@@ -26,8 +24,7 @@
     <th></th>
     <th><%= @total_cb_sale.round(2) %></th> 
     <th><%= @total_cd_sale.round(2) %></th>
-    <th><%= @total_return.round(2) %></th>
-    <th><%= (@total_cb_sale + @total_cd_sale -  @total_return).round(2) %></th> 
+    <th><%= @total_cb_sale + @total_cd_sale %></th> 
   </thead>
 </table>
 

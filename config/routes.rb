@@ -3,6 +3,7 @@ Store::Application.routes.draw do
 
 
 
+  get '/cb_sales_register' => 'sales#cb_sales_register'
   get '/purchase_register' => 'purchases#purchase_register'
   get '/sales_return_register' => 'sales#sales_return_register'
   get '/sales_register' => 'sales#sales_register'
