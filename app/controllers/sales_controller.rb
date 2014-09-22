@@ -347,54 +347,25 @@ class SalesController < ApplicationController
 			end
 			
 			respond_to do |format|
-				format.html { render :partial => 'sales_register' }
-#				format.json { render json: @sales }
-				format.pdf do
-					pdf = SalesRegisterPdf.new(@from, @to, @total_sale, @total_cb_sale, @total_cd_sale, @cb_sale, @cd_sale)
-					send_data pdf.render, filename: "sales_register_for_#{@from}_#{@to}.pdf", type: "application/pdf", disposition: "inline"
+				if params[:report_type] == 'CB'
+					format.html { render :partial => 'cb_sales_register' }
+					format.pdf do
+						pdf = CbSalesRegisterPdf.new(@from, @to, @total_sale, @total_cb_sale, @cb_sale)
+						send_data pdf.render, filename: "cb_sales_register_for_#{@from}_#{@to}.pdf", type: "application/pdf", disposition: "inline"
+					end
+				else
+					format.html { render :partial => 'sales_register' }
+	#				format.json { render json: @sales }
+					format.pdf do
+						pdf = SalesRegisterPdf.new(@from, @to, @total_sale, @total_cb_sale, @total_cd_sale, @cb_sale, @cd_sale)
+						send_data pdf.render, filename: "sales_register_for_#{@from}_#{@to}.pdf", type: "application/pdf", disposition: "inline"
+					end
 				end
 			end
 			
 		end
 	end
-	
-	
-	def cb_sales_register
-			
-			@from = Date.strptime(params[:from])
-			@to = Date.strptime(params[:to])
-			@sales = Sale.includes({sale_products: :product}).where(:sale_date  => @from..@to)
-			@cb_sale = Hash.new
-			@cd_sale = Hash.new
-			@total_cb_sale = 0
-			@total_cd_sale = 0
-			@total_sale = Hash.new
-			@total_return = 0
-			@return_on_date = Hash.new
-			for mydate in @from..@to
-				cb_sales = @sales.where(:sale_date  => mydate, :sale_type => 'CBP')
-				total_sale = 0
-				cb_sales.each do |sale|
-					ts = sale.sale_products.sum(:price)
-					discount = (ts * (sale.discount).to_f / 100)
-					total_sale += ts - discount
-				end
-				@total_cb_sale += total_sale
-				@cb_sale[mydate] = total_sale.round(2)
-				@total_sale[mydate] = @cb_sale[mydate] unless (@cb_sale[mydate]).zero?
-			end
-			
-			respond_to do |format|
-				format.html { render :partial => 'cb_sales_register' }
-#				format.json { render json: @sales }
-				format.pdf do
-					pdf = CbSalesRegisterPdf.new(@from, @to, @total_sale, @total_cb_sale, @cb_sale)
-					send_data pdf.render, filename: "cb_sales_register_for_#{@from}_#{@to}.pdf", type: "application/pdf", disposition: "inline"
-				end
-			end
-	end
-	
-	
+		
 	def sales_return_register
     if (params[:from].present? && params[:to].present?)
 			

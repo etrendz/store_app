@@ -48,14 +48,9 @@ $( "#sales_register_form" ).submit();
 
 $( "form" ).submit(function( event ) {
 	$('.sales_register').html('<br/><br/><br/><img src="/assets/loader.gif"> loading...');
-	if ($("#report_type" ).val() == 'CB')
-		$.get('/cb_sales_register?from='+$("#from_date" ).val()+'&to='+$("#to_date" ).val(), function(data){
+	$.get('/sales_register?from='+$("#from_date" ).val()+'&to='+$("#to_date" ).val()+'&report_type='+$("#report_type" ).val(), function(data){
 		$('.sales_register').html(data);
-		});
-	else
-		$.get('/sales_register?from='+$("#from_date" ).val()+'&to='+$("#to_date" ).val(), function(data){
-		$('.sales_register').html(data);
-		});
+	});
 event.preventDefault();
 });
 </script>

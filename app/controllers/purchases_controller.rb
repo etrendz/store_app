@@ -212,9 +212,49 @@ class PurchasesController < ApplicationController
     if (params[:from].present? && params[:to].present?)
 			@from = Date.strptime(params[:from])
 			@to = Date.strptime(params[:to])
-			suppliers = Purchase.where(:purchase_date  => @from..@to).pluck(:supplier_id).uniq
+			@purchases = Purchase.where(:purchase_date  => @from..@to)
+			@purchases = @purchases.where(:receipt_type  => 'CBP') if params[:report_type] == 'CB'
+			@purchases = @purchases.where(:receipt_type  => 'ODP') if params[:report_type] == 'OD'
+			suppliers = @purchases.pluck(:supplier_id).uniq
 			@suppliers = Supplier.includes(purchases: :purchase_products).find(suppliers)
-			render :partial => 'purchase_register'
+			@purchase = Hash.new
+			@total_purchase = 0
+			
+			for mydate in @from..@to
+				purchases = @purchases.where(:purchase_date  => mydate)
+				total_purchase = 0
+				purchases.each do |purchase|
+					pp = purchase.purchase_products.sum(:cprice)
+					total_purchase += pp
+				end
+				@purchase[mydate] = total_purchase.round(2) unless total_purchase.zero?
+				@total_purchase += total_purchase
+			end
+			
+			respond_to do |format|
+				if params[:report_type] == 'CB'
+					format.html { render :partial => 'cb_purchase_register' }
+					format.pdf do
+						pdf = CbPurchaseRegisterPdf.new(@from, @to, @total_purchase, @purchase)
+						send_data pdf.render, filename: "cb_purchase_register_for_#{@from}_#{@to}.pdf", type: "application/pdf", disposition: "inline"
+					end
+				elsif params[:report_type] == 'OD'
+					format.html { render :partial => 'od_purchase_register' }
+					format.pdf do
+						pdf = OdPurchaseRegisterPdf.new(@from, @to, @total_purchase, @purchase)
+						send_data pdf.render, filename: "od_purchase_register_for_#{@from}_#{@to}.pdf", type: "application/pdf", disposition: "inline"
+					end
+				elsif params[:report_type] == 'supplier wise'
+					format.html { render :partial => 'supplier_wise_register' }
+				else
+					format.html { render :partial => 'purchase_register' }
+	#				format.json { render json: @sales }
+					format.pdf do
+						pdf = PurchaseRegisterPdf.new(@from, @to, @total_purchase, @purchase)
+						send_data pdf.render, filename: "purchase_register_for_#{@from}_#{@to}.pdf", type: "application/pdf", disposition: "inline"
+					end
+				end
+			end			
 		end
   end
 	

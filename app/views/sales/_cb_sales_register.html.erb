@@ -1,0 +1,26 @@
+<br/>
+	
+	<h3>CB Sales Register: <%= @from.strftime('%d %b, %Y') %> - <%= @to.strftime('%d %b, %Y') %></h3>
+<h4>Print <span class="badge badge-danger white" style="padding-top:3.5px"><%= link_to 'Report', {:controller => 'sales', :action => 'sales_register', :format => 'pdf', :from => @from, :to => @to, :report_type => params[:report_type]}, :style => "color:white;text-decoration:none" %></span></h4>
+
+	<table class='table table-bordered' style="width:70%">
+  <thead>
+    <th>Date</th>
+    <th>Day</th>
+    <th><span class='pull-right'>Sales</span></th>
+  </thead>
+<% @total_sale.each do |k,v| %>
+  <tr>
+    <td><%= k %></td>
+    <td><%= k.strftime("%A") %></td>
+    <td><span class='pull-right'><%= sprintf('%.2f', @cb_sale[k]) %></span></td> 
+  </tr>
+<% end %>
+  <thead>
+    <th>Total</th>
+    <th></th>
+    <th><span class='pull-right'><%= sprintf('%.2f', @total_cb_sale) %></span></th> 
+  </thead>
+</table>
+
+	

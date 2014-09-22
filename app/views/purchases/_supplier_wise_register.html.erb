@@ -1,0 +1,57 @@
+<br/>
+	
+	<h3>Purchase Report From <%= @from.strftime('%d %b, %Y') %> - <%= @to.strftime('%d %b, %Y') %></h3>
+<table class='table table-striped'>
+  <tr>
+    <th>Receipt</th>
+    <th>Date</th>
+    <th>Invoice</th>
+    <th>Date</th>
+    <th>Barcode</th>
+    <th>Product</th>
+    <th>Qty</th>
+    <th>Rate</th>
+    <th style="text-align:right">Price</th>
+    <th>Receipt Amount</th>
+  </tr>
+
+  <% @suppliers.each do |supplier| %>
+  <tr class="success">
+    <th colspan=10 style="text-align:center"><%= supplier.name %></th>
+  </tr>
+  
+  <% i = 1
+	total_qty = 0
+	total_amount = 0 %>
+  
+  <% supplier.purchases_between(@from, @to).each do |purchase|  
+  purchase.purchase_products.each do |pp|  %>
+  <tr>
+    <td><%= pp.purchase.invoice %></td>
+    <td><%= pp.purchase.purchase_date.strftime('%d %b') %></td>
+    <td><%= pp.purchase.suppliers_invoice %></td>
+    <td><%= pp.purchase.invoice_date %></td>
+    <td><%= pp.product.code %></td>
+    <td><%= pp.product.name %></td>
+    <td><%= pp.qty %></td>
+    <td><%= pp.cprice %></td>
+    <td><%= pp.price %></td>
+    <td><%= (pp.cprice * pp.qty).round(2) %></td>
+	<% total_qty += pp.qty %>
+	<% total_amount += (pp.cprice.to_f * pp.qty) %>
+  </tr>
+	
+	<% end %>
+	<tr>
+		<th>Total</th>
+		<td colspan=4></td>
+		<td></td>
+		<th><%= total_qty %></th>
+		<td></td>
+		<td></td>
+		<th><%= total_amount.round(2) %></th>
+	</tr>
+	<% end %>
+	<% end %>
+</table>
+<br />

@@ -1,5 +1,11 @@
 
 <form id="purchase_register_form" class="form-search" action="/form_submitted">		
+		<div class="col-xs-2 col-sm-2">
+			<label for="id-date-range-picker-1">Type</label>
+			<div class="input-group">
+				<%=select_tag "report_type", options_for_select(['CB', 'OD','All', 'supplier wise']) %>
+			</div>
+		</div>
 		<div class="col-xs-3 col-sm-3">
 			<label for="id-date-range-picker-1">Start Date</label>
 			<div class="input-group">
@@ -40,7 +46,7 @@ $( "#purchase_register_form" ).submit();
 $( "form" ).submit(function( event ) {
 	$('.purchase_register').html('<br/><br/><br/><img src="/assets/loader.gif"> loading...');
 	
-	$.get('/purchase_register?from='+$("#from_date" ).val()+'&to='+$("#to_date" ).val(), function(data){
+	$.get('/purchase_register?from='+$("#from_date" ).val()+'&to='+$("#to_date" ).val()+'&report_type='+$("#report_type" ).val(), function(data){
 		  $('.purchase_register').html(data);
 	});
 	event.preventDefault();
