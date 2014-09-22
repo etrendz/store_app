@@ -13,4 +13,13 @@ class Purchase < ActiveRecord::Base
 	  purchase_products.build(record)
 	end
  end
+ 
+ def total_amount
+	sum = 0
+	purchase_products.each do |pp|
+		sum += pp.cprice * pp.qty
+	end
+  sum
+ end
+ 
 end

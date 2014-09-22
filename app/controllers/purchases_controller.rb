@@ -224,7 +224,7 @@ class PurchasesController < ApplicationController
 				purchases = @purchases.where(:purchase_date  => mydate)
 				total_purchase = 0
 				purchases.each do |purchase|
-					pp = purchase.purchase_products.sum(:cprice)
+					pp = purchase.total_amount
 					total_purchase += pp
 				end
 				@purchase[mydate] = total_purchase.round(2) unless total_purchase.zero?

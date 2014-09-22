@@ -329,7 +329,7 @@ class SalesController < ApplicationController
 				cb_sales.each do |sale|
 					ts = sale.sale_products.sum(:price)
 					discount = (ts * (sale.discount).to_f / 100)
-					total_sale += ts - discount
+					total_sale += ts - discount - sale.sale_returns.sum(:price)
 				end
 				@total_cb_sale += total_sale
 				@cb_sale[mydate] = total_sale.round(2)
@@ -338,7 +338,7 @@ class SalesController < ApplicationController
 				cd_sales.each do |sale|
 					ts = sale.sale_products.sum(:price)
 					discount = (ts * (sale.discount).to_f / 100)
-					total_sale += ts - discount
+					total_sale += ts - discount - sale.sale_returns.sum(:price)
 				end
 				@total_cd_sale += total_sale
 				@cd_sale[mydate] = total_sale.round(2)
@@ -352,6 +352,12 @@ class SalesController < ApplicationController
 					format.pdf do
 						pdf = CbSalesRegisterPdf.new(@from, @to, @total_sale, @total_cb_sale, @cb_sale)
 						send_data pdf.render, filename: "cb_sales_register_for_#{@from}_#{@to}.pdf", type: "application/pdf", disposition: "inline"
+					end
+				elsif params[:report_type] == 'CD'
+					format.html { render :partial => 'cd_sales_register' }
+					format.pdf do
+						pdf = CdSalesRegisterPdf.new(@from, @to, @total_sale, @total_cd_sale, @cd_sale)
+						send_data pdf.render, filename: "cd_sales_register_for_#{@from}_#{@to}.pdf", type: "application/pdf", disposition: "inline"
 					end
 				else
 					format.html { render :partial => 'sales_register' }

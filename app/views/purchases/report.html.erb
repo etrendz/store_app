@@ -25,7 +25,7 @@
 		<div class="col-xs-3 col-sm-3">
 	<label for="id-date-range-picker-1">&nbsp;</label>
 			<br/>
-			<button id="purchase_report_btn" class="btn btn-info btn-sm" type="button">
+			<button id="purchase_report_btn" class="btn btn-pink btn-sm report" type="button">
 				<i class="icon-ok bigger-110"></i>
 				Submit
 			</button>
@@ -49,3 +49,34 @@ $( "form" ).submit(function( event ) {
 });
 </script>
 
+<script>
+
+function doc_keyUp(e) {
+
+    // this would test for whichever key is 40 and the ctrl key at the same time
+    if (e.ctrlKey && e.shiftKey && (e.keyCode == 122)) {
+        if($("#report_type").val() == 'CBP'){
+			$("#report_type").val('ODP'); 
+//				$('.btn').toggleClass( 'btn-info' )
+				$('.report').removeClass( 'btn-pink' )
+				$('.report').addClass( 'btn-inverse' )
+			
+		}
+		else if ($("#report_type").val() == 'ODP'){
+			$("#report_type").val('ALL'); 
+	//			$('.btn').toggleClass( 'btn-info' )
+				$('.report').removeClass( 'btn-inverse' )
+				$('.report').addClass( 'btn-info' )
+		}
+		else{
+			$("#report_type").val('CBP'); 
+		//		$('.btn').toggleClass( 'btn-info' )
+				$('.report').removeClass( 'btn-info' )
+				$('.report').addClass( 'btn-pink' )
+		}
+		
+    }
+}
+// register the handler 
+document.addEventListener('keyup', doc_keyUp, false);
+</script>
