@@ -37,7 +37,7 @@ else {
 function doc_keyUp(e) {
 
     // this would test for whichever key is 40 and the ctrl key at the same time
-    if (e.ctrlKey && e.shiftKey && e.keyCode) {
+    if (e.ctrlKey && e.shiftKey && (e.keyCode == 122)) {
         if($("#sale_sale_type").val() == 'CBP'){
 			$("#sale_sale_type").val('CDP');
 			localStorage.setItem("current_local_sale", "CD");
